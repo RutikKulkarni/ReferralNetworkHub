@@ -1,3 +1,3 @@
-import { register } from "./auth.controller";
+import { register, login } from "./auth.controller";
 
-export const authController = { register };
+export const authController = { register, login };

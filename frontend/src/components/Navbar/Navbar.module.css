@@ -1,0 +1,31 @@
+.navbar {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 40px;
+  align-items: center;
+  box-shadow: 0 0 0.75rem gray;
+}
+
+.navLinks {
+  display: flex;
+  gap: 25px;
+  color: #0a1d56;
+  list-style-type: none;
+}
+
+.redirectBtns {
+  display: flex;
+  gap: 20px;
+}
+
+.login {
+  background-color: #f2f2f2;
+  color: #0a1d56;
+  border-radius: 10px;
+}
+
+.signup {
+  background-color: #0a1d56;
+  color: #ffffff;
+  border-radius: 10px;
+}

@@ -1,3 +1,5 @@
-import { registerUser } from "./auth.service";
+import { registerUser, loginUser } from "./auth.service";
+import { generateAuthToken } from "./token.service";
 
-export const authService = { registerUser };
+export const authService = { registerUser, loginUser };
+export const tokenService = {generateAuthToken}

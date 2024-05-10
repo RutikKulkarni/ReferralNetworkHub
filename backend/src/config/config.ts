@@ -17,6 +17,7 @@ const envVarsSchema: import("joi").ObjectSchema = Joi.object()
       .description("Node environment"),
     PORT: Joi.number().default(3000).description("Port number"),
     MONGO_URI: Joi.string().required().description("Mongo DB URI"),
+    SECRET_KEY: Joi.string().required().description("Secret key"),
   })
   .unknown();
 
@@ -40,6 +41,7 @@ interface Config {
   NODE_ENV: string;
   MONGO_URI: string;
   PORT: number;
+  SECRET_KEY: string;
 }
 
 /**
@@ -50,6 +52,7 @@ const config: Config = {
   NODE_ENV: envVars.NODE_ENV,
   PORT: envVars.PORT,
   MONGO_URI: envVars.MONGO_URI,
+  SECRET_KEY: envVars.SECRET_KEY,
 };
 
 export { config };

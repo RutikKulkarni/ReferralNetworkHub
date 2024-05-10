@@ -1,3 +1,3 @@
-import { register } from "./auth.validation";
+import { register, login } from "./auth.validation";
 
-export const authValidation = { register };
+export const authValidation = { register, login };

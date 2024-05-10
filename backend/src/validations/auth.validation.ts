@@ -9,4 +9,12 @@ const register: ObjectSchema = Joi.object().keys({
   password: Joi.string().required(),
 });
 
-export { register };
+/**
+ * Validation schema for login user
+ */
+const login: ObjectSchema = Joi.object().keys({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
+export { register, login };

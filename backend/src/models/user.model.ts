@@ -1,18 +1,19 @@
 import mongoose, { Document, Model } from "mongoose";
 import validator from "validator";
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
 import { ApiError } from "../utils/ApiError";
 import httpStatus from "http-status";
 
 /**
  * Interface representing a User document.
  */
-interface UserDocument extends Document{
+interface UserDocument extends Document {
   name: string;
   email: string;
   password: string;
-  _id : string
-  hashPassword(password : string):Promise<string>
+  _id: string;
+  hashPassword(password: string): Promise<string>;
+  comparePassword(password: string): Promise<boolean>;
 }
 
 /**
@@ -28,11 +29,11 @@ const userSchema = new mongoose.Schema<UserDocument>({
     type: String,
     required: true,
     unique: true,
-    validate : function(email:string){
-      if(!validator.isEmail(email)){
-        throw new ApiError('Invalid email format!', httpStatus.BAD_REQUEST)
+    validate: function (email: string) {
+      if (!validator.isEmail(email)) {
+        throw new ApiError("Invalid email format!", httpStatus.BAD_REQUEST);
       }
-    }
+    },
   },
   password: {
     type: String,
@@ -47,17 +48,33 @@ const userSchema = new mongoose.Schema<UserDocument>({
  * @param {string} password - The password to hash.
  * @returns {Promise<string>} A promise that resolves with the hashed password.
  */
-userSchema.methods.hashPassword = async function(password:string):Promise<string>{
-  let salt = await bcrypt.genSalt(10)
+userSchema.methods.hashPassword = async function (
+  password: string
+): Promise<string> {
+  let salt = await bcrypt.genSalt(10);
   let hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
-}
+};
+
+/**
+ * Method to cmpare user's hashed password.
+ * @method comparePassword
+ * @memberof UserDocument
+ * @param {string} password - The password to compare.
+ * @returns {Promise<boolean>} A promise that resolves with the compare password.
+ */
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  let user = this;
+  return await bcrypt.compare(password, user.password);
+};
 
 /**
  * Mongoose model for the User document.
  * @const {Model<UserDocument>}
  */
-const userModel:Model<UserDocument> = mongoose.model("User", userSchema);
+const userModel: Model<UserDocument> = mongoose.model("User", userSchema);
 
 export { userModel };
-export {UserDocument}
+export { UserDocument };

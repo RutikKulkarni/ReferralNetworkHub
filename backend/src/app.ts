@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import cors from "cors";
 import httpStatus from "http-status";
+import router from "./routes";
 
 const app: Application = express();
 
@@ -9,6 +10,9 @@ app.use(express.json());
 
 // Middleware to enable cross-origin requests
 app.use(cors());
+
+// Mounting the router at the "/api" endpoint
+app.use("/api", router);
 
 // Default route handler for the root URL "/"
 app.use("/", (req, res) =>

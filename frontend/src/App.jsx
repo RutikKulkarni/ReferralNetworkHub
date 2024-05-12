@@ -1,9 +1,9 @@
-import LandingPage from "./components/LandingPage/LandingPage";
+import Navbar from "./components/Navbar/Navbar"; 
 
 function App() {
   return (
-    <div>
-      <LandingPage />
+    <div className="App">
+      <Navbar />
     </div>
   );
 }

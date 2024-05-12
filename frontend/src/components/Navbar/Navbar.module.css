@@ -1,31 +1,153 @@
-.navbar {
-  display: flex;
-  justify-content: space-evenly;
-  gap: 40px;
-  align-items: center;
-  box-shadow: 0 0 0.75rem gray;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .navLinks {
   display: flex;
   gap: 25px;
-  color: #0a1d56;
+  color: var(--primary-color);
   list-style-type: none;
 }
 
-.redirectBtns {
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.navbar {
+  background-color: var(--secondary-color);
+  padding: 10px 20px;
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.login {
-  background-color: #f2f2f2;
-  color: #0a1d56;
-  border-radius: 10px;
+.logo {
+  height: 45px;
+  margin-left: 100px;
 }
 
-.signup {
-  background-color: #0a1d56;
-  color: #ffffff;
-  border-radius: 10px;
+.navMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  flex-grow: 1;
+}
+
+.navBtns {
+  gap: 22px;
+  opacity: 0px;
+  margin-right: 100px;
+}
+
+.loginBtn {
+  background-color: var(--button-bg-color);
+  color: #000000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  height: 40px;
+  font-family: Poppins;
+  margin-right: 10px;
+}
+
+.signupBtn {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  height: 40px;
+  font-family: Poppins;
+}
+
+/* media queries */
+@media screen and (max-width: 955px) {
+  /* hamburger */
+  .hamburger {
+    display: block;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  .bar {
+    background-color: var(--text-color);
+    width: 20px;
+    height: 3px;
+    display: block;
+    margin: 5px;
+    -webkit-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+  }
+
+  /* adding active class to the bars  */
+  .hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .logo {
+    height: 45px;
+    margin-left: 0px;
+  }
+
+  .navMenu {
+    position: absolute;
+    flex-direction: column;
+    gap: 0;
+    top: 70px;
+    left: -100%;
+    text-align: start;
+    width: 100%;
+    transition: 0.7s ease-in-out;
+    background-color: var(--secondary-color);
+    padding: 10px;
+  }
+
+  .navMenu.active {
+    left: 0;
+  }
+
+  .navMenu li {
+    margin: 16px 0;
+  }
+
+  .navBtns {
+    display: block;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  .navBtns {
+    gap: 22px;
+    opacity: 0px;
+    margin-right: 0px;
+  }
+
+  .loginBtn {
+    width: 80px;
+    height: 40px;
+  }
+
+  .signupBtn {
+    width: 95px;
+    height: 40px;
+    margin-left: 10px;
+  }
 }

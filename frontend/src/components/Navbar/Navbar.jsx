@@ -1,33 +1,70 @@
-import navbarLogo from "../../assets/logo.svg";
-import { Button } from "@mui/material";
+import { useState } from "react";
+import navLogo from "../../assets/logo.svg";
 import styles from "./Navbar.module.css";
 
-const Navbar = () => {
+function Navbar() {
+  const [isActive, setIsActive] = useState(false);
+  const toggleActiveClass = () => {
+    setIsActive(!isActive);
+  };
+  const removeActive = () => {
+    setIsActive(false);
+  };
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.navbarLogo}>
-        <img src={navbarLogo} alt="Navbar Logo" />
-      </div>
+    <div className="App">
+      <header className="App-header">
+        <nav className={`${styles.navbar}`}>
+          {/* <a href='#home' className={`${styles.logo}`}>Referral Network </a> */}
+          <img src={navLogo} className={`${styles.logo}`} alt="Logo" />
+          <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
+            <li>
+              <a href="#Home" className={`${styles.navLink}`}>
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="#About" className={`${styles.navLink}`}>
+                About
+              </a>
+            </li>
+            <li>
+              <a href="#Services" className={`${styles.navLink}`}>
+                Services
+              </a>
+            </li>
+            <li>
+              <a href="#Review" className={`${styles.navLink}`}>
+                Review
+              </a>
+            </li>
+            <li>
+              <a href="#Help" className={`${styles.navLink}`}>
+                Help
+              </a>
+            </li>
+            <li>
+              <a href="#Contact" className={`${styles.navLink}`}>
+                Contact
+              </a>
+            </li>
+          </ul>
 
-      <ul className={styles.navLinks}>
-        <li>Home</li>
-        <li>About</li>
-        <li>Services</li>
-        <li>Review</li>
-        <li>Help</li>
-        <li>Contact</li>
-      </ul>
+          <div className={styles.navBtns}>
+            <button className={`${styles.loginBtn}`}>Login</button>
+            <button className={`${styles.signupBtn}`}>Sign Up</button>
+          </div>
 
-      <div className={styles.redirectBtns}>
-        <Button variant="outlined" size="large" className={styles.login}>
-          Login
-        </Button>
-        <Button variant="contained" size="large" className={styles.signup}>
-          Signup
-        </Button>
-      </div>
-    </nav>
+          <div
+            className={`${styles.hamburger} ${isActive ? styles.active : ""}`}
+            onClick={toggleActiveClass}
+          >
+            <span className={`${styles.bar}`}></span>
+            <span className={`${styles.bar}`}></span>
+            <span className={`${styles.bar}`}></span>
+          </div>
+        </nav>
+      </header>
+    </div>
   );
-};
-
+}
 export default Navbar;

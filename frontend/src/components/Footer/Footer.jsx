@@ -17,7 +17,7 @@ const Footer = () => {
           </a>
         </div>
         <hr />
-        <div className={styles.alignment}>
+        <div className={styles.alignment2}>
           <p>&copy; 2024 Referral Network, All rights reserved.</p>
           <ul className={styles.footerLinks}>
             <li>

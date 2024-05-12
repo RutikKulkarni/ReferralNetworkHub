@@ -21,11 +21,19 @@ a {
 }
 
 .navbar {
+  /* sticky */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* sticky end */
   background-color: var(--secondary-color);
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* z-index: 1000; */
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .logo {

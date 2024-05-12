@@ -29,13 +29,8 @@ function Navbar() {
               </a>
             </li>
             <li>
-              <a href="#Services" className={`${styles.navLink}`}>
+              <a href="#About" className={`${styles.navLink}`}>
                 Services
-              </a>
-            </li>
-            <li>
-              <a href="#Review" className={`${styles.navLink}`}>
-                Review
               </a>
             </li>
             <li>

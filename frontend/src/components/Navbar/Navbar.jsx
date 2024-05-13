@@ -8,64 +8,34 @@ function Navbar() {
     setIsActive(!isActive);
   };
 
-  // const removeActive = () => {
-  //   setIsActive(false);
-  // };
-
   return (
-    // <div className="App">
-      // <header className="App-header">
-        <nav className={`${styles.navbar}`}>
-          {/* <a href='#home' className={`${styles.logo}`}>Referral Network </a> */}
-          <div className={`${styles.logo}`}>
-          <img src={navLogo}  alt="Logo" />
-          </div>
-          <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
-            <li>
-              <a href="#Home" className={`${styles.navLink}`}>
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#About" className={`${styles.navLink}`}>
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#About" className={`${styles.navLink}`}>
-                Services
-              </a>
-            </li>
-            <li>
-              <a href="#Help" className={`${styles.navLink}`}>
-                Help
-              </a>
-            </li>
-            <li>
-              <a href="#Contact" className={`${styles.navLink}`}>
-                Contact
-              </a>
-            </li>
-          </ul>
-          <div className={styles.navigations}>
+    <nav className={`${styles.navbar}`}>
+      <div className={`${styles.logo}`}>
+        <img src={navLogo} alt="Logo" />
+      </div>
+      <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
+        <li>Home</li>
+        <li>About</li>
+        <li>Services</li>
+        <li>Help</li>
+        <li>Contact</li>
+      </ul>
+      <div className={styles.navigations}>
+        <div className={styles.navBtns}>
+          <button className={`${styles.loginBtn}`}>Login</button>
+          <button className={`${styles.signupBtn}`}>Sign Up</button>
+        </div>
 
-          <div className={styles.navBtns}>
-            <button className={`${styles.loginBtn}`} >Login</button>
-            <button className={`${styles.signupBtn}`}>Sign Up</button>
-          </div>
-
-          <div
-            className={`${styles.hamburger} ${isActive ? styles.active : ""}`}
-            onClick={toggleActiveClass}
-          >
-            <span className={`${styles.bar}`}></span>
-            <span className={`${styles.bar}`}></span>
-            <span className={`${styles.bar}`}></span>
-          </div>
-          </div>
-        </nav>
-      // </header>
-    // </div>
+        <div
+          className={`${styles.hamburger} ${isActive ? styles.active : ""}`}
+          onClick={toggleActiveClass}
+        >
+          <span className={`${styles.bar}`}></span>
+          <span className={`${styles.bar}`}></span>
+          <span className={`${styles.bar}`}></span>
+        </div>
+      </div>
+    </nav>
   );
 }
 export default Navbar;

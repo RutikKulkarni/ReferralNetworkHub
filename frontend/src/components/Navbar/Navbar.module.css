@@ -1,18 +1,6 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
 .navLinks {
-  display: flex;
-  gap: 25px;
   color: var(--primary-color);
   list-style-type: none;
-}
-
-ul {
-  list-style: none;
 }
 
 a {
@@ -21,38 +9,41 @@ a {
 }
 
 .navbar {
+  width: 100vw;
   /* sticky */
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
   /* sticky end */
   background-color: var(--secondary-color);
   padding: 10px 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
-  /* z-index: 1000; */
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-  height: 45px;
-  margin-left: 100px;
+.logo{
+  display: flex;
+  justify-content: center;
+}
+.logo img {
+  height: 60px;
 }
 
 .navMenu {
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 60px;
-  flex-grow: 1;
+  gap: 30px;
+  list-style: none;
 }
 
 .navBtns {
-  gap: 22px;
-  opacity: 0px;
-  margin-right: 100px;
+  gap: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .loginBtn {
@@ -65,11 +56,10 @@ a {
   width: 100px;
   height: 40px;
   font-family: Poppins;
-  margin-right: 10px;
 }
 
 .signupBtn {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color) ;
   color: var(--secondary-color);
   border: none;
   padding: 10px 20px;
@@ -82,6 +72,9 @@ a {
 
 /* media queries */
 @media screen and (max-width: 955px) {
+  .navbar{
+    justify-content: space-between;
+  }
   /* hamburger */
   .hamburger {
     display: block;
@@ -110,11 +103,6 @@ a {
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  .logo {
-    height: 45px;
-    margin-left: 0px;
-  }
-
   .navMenu {
     position: absolute;
     flex-direction: column;
@@ -136,26 +124,22 @@ a {
     margin: 16px 0;
   }
 
-  .navBtns {
-    display: block;
-    cursor: pointer;
-    margin-left: auto;
+  .navBtns{
+    width: auto;
+    gap: 10px;
   }
 
-  .navBtns {
-    gap: 22px;
-    opacity: 0px;
-    margin-right: 0px;
+  .logo img{
+    height: 40px;
   }
 
-  .loginBtn {
+  .navigations{
+    display: flex;
+    align-items: center;
+  }
+
+  .loginBtn, .signupBtn{
     width: 80px;
-    height: 40px;
-  }
-
-  .signupBtn {
-    width: 95px;
-    height: 40px;
-    margin-left: 10px;
+    padding: 10px;
   }
 }

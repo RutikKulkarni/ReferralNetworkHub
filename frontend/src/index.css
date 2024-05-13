@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 :root {
   --primary-color: #0a1d56;
@@ -7,9 +7,13 @@
   --button-bg-color: #f2f2f2;
 }
 
-body {
+* {
+  padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
   font-family: "Poppins", sans-serif;
   color: var(--text-color);
 }

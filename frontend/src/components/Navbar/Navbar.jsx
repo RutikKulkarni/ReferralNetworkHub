@@ -1,11 +1,27 @@
 import { useState } from "react";
 import navLogo from "../../assets/logo.svg";
 import styles from "./Navbar.module.css";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+  let navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const toggleActiveClass = () => {
     setIsActive(!isActive);
+  };
+
+  const handleNavigate = (path) => {
+    const redirects = {
+      home: "/",
+      about: "/about",
+      services: "/services",
+      help: "/help",
+      contact: "/contact",
+      login: "/login",
+      signup: "/signup",
+    };
+
+    navigate(redirects[path]);
   };
 
   return (
@@ -14,16 +30,26 @@ function Navbar() {
         <img src={navLogo} alt="Logo" />
       </div>
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
-        <li>Home</li>
-        <li>About</li>
-        <li>Services</li>
-        <li>Help</li>
-        <li>Contact</li>
+        <li onClick={() => handleNavigate("home")}>Home</li>
+        <li onClick={() => handleNavigate("about")}>About</li>
+        <li onClick={() => handleNavigate("services")}>Services</li>
+        <li onClick={() => handleNavigate("help")}>Help</li>
+        <li onClick={() => handleNavigate("contact")}>Contact</li>
       </ul>
       <div className={styles.navigations}>
         <div className={styles.navBtns}>
-          <button className={`${styles.loginBtn}`}>Login</button>
-          <button className={`${styles.signupBtn}`}>Sign Up</button>
+          <button
+            className={`${styles.loginBtn}`}
+            onClick={() => handleNavigate("login")}
+          >
+            Login
+          </button>
+          <button
+            className={`${styles.signupBtn}`}
+            onClick={() => handleNavigate("signup")}
+          >
+            Sign Up
+          </button>
         </div>
 
         <div

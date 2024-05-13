@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Login-Signup.module.css";
+import styles from "./login-signup.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 

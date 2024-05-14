@@ -1,12 +1,20 @@
+/* Footer Heading */
+.footerHeading {
+  color: black;
+}
+
+/* Footer Container */
 .footer {
   background-color: var(--button-bg-color);
   padding: 20px;
 }
 
+/* Footer Content Wrapper */
 .footerContent {
   margin-bottom: 20px;
 }
 
+/* Footer Heading Styles */
 .footerContent h1 {
   font-size: 2rem;
   margin-bottom: 10px;
@@ -14,16 +22,19 @@
   margin-left: 100px;
 }
 
+/* Horizontal Line Separator */
 .footerContent hr {
   width: 90%;
   margin: 0 auto;
 }
 
+/* Footer Text */
 .footerContent p {
   margin-top: 10px;
   margin-left: 100px;
 }
 
+/* Flexbox Alignment for First Section */
 .alignment {
   display: flex;
   justify-content: space-between;
@@ -33,7 +44,7 @@
   margin-bottom: 0;
 }
 
-/* Footer Links */
+/* Flexbox Alignment for Second Section */
 .alignment2 {
   display: flex;
   justify-content: space-between;
@@ -43,11 +54,13 @@
   margin-bottom: 0;
 }
 
+/* Footer Links Text */
 .alignment2 p {
   margin: 0;
   margin-left: 100px;
 }
 
+/* Footer Links List */
 .alignment2 .footerLinks {
   margin: 0;
   padding: 0;
@@ -64,18 +77,15 @@
   display: inline-block;
   margin-right: 10px;
   font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.footerLinks li:hover {
+  text-decoration: underline;
 }
 
 .footerLinks li:last-child {
   margin-right: 0;
-}
-
-.footerLinks a {
-  text-decoration: none;
-}
-
-.footerLinks a:hover {
-  text-decoration: underline;
 }
 
 /* Media query for tablet screens */

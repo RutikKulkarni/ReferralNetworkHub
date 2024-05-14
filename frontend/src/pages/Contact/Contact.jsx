@@ -3,6 +3,10 @@ import styles from "./Contact.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
+/**
+ * Contact component representing the Contact page.
+ * @returns {JSX.Element} Contact JSX element
+ */
 const Contact = () => {
   return (
     <div>

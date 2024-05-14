@@ -1,8 +1,12 @@
 import React from "react";
-import styles from "./login-signup.module.css";
+import styles from "./Login.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
+/**
+ * Login component representing the Login page.
+ * @returns {JSX.Element} Login JSX element
+ */
 const Login = () => {
   return (
     <div>

@@ -1,3 +1,4 @@
+/* Container Styles */
 .container {
   max-width: 400px;
   margin: 10px auto;
@@ -6,17 +7,20 @@
   border-radius: 5px;
 }
 
+/* Heading Styles */
 h1 {
   font-size: 2rem;
   color: #0a1d56;
   margin-bottom: 20px;
 }
 
+/* Form Styles */
 .form {
   display: flex;
   flex-direction: column;
 }
 
+/* Input Styles */
 .input {
   margin-bottom: 10px;
   padding: 10px;
@@ -24,6 +28,7 @@ h1 {
   border-radius: 5px;
 }
 
+/* Button Styles */
 .button {
   background-color: #0a1d56;
   color: #fff;

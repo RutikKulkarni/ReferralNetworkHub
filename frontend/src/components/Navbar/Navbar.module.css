@@ -1,10 +1,10 @@
+/* Navbar Styles */
 .navbar {
   width: 100vw;
-  /* sticky */
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
-  /* sticky end */
+  z-index: 1000;
   background-color: var(--secondary-color);
   padding: 10px 20px;
   display: flex;
@@ -13,6 +13,7 @@
   box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Logo Styles */
 .logo {
   display: flex;
   justify-content: center;
@@ -21,6 +22,7 @@
   height: 60px;
 }
 
+/* Navigation Menu Styles */
 .navMenu {
   width: 50%;
   display: flex;
@@ -33,6 +35,7 @@
   cursor: pointer;
 }
 
+/* Navigation Buttons Styles */
 .navBtns {
   gap: 20px;
   display: flex;
@@ -63,12 +66,13 @@
   font-family: Poppins;
 }
 
-/* media queries */
+/* Media Queries */
 @media screen and (max-width: 955px) {
   .navbar {
     justify-content: space-between;
   }
-  /* hamburger */
+
+  /* Hamburger Menu Styles */
   .hamburger {
     display: block;
     cursor: pointer;
@@ -85,7 +89,6 @@
     transition: 0.3s ease-in-out;
   }
 
-  /* adding active class to the bars  */
   .hamburger.active .bar:nth-child(2) {
     opacity: 0;
   }
@@ -96,6 +99,7 @@
     transform: translateY(-8px) rotate(-45deg);
   }
 
+  /* Mobile Menu Styles */
   .navMenu {
     position: absolute;
     flex-direction: column;
@@ -117,6 +121,7 @@
     margin: 16px 0;
   }
 
+  /* Adjustments for Mobile View */
   .navBtns {
     width: auto;
     gap: 10px;
@@ -124,11 +129,6 @@
 
   .logo img {
     height: 40px;
-  }
-
-  .navigations {
-    display: flex;
-    align-items: center;
   }
 
   .loginBtn,

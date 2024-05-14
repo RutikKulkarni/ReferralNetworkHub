@@ -1,7 +1,7 @@
 import HeroImg from "../../assets/hero.svg";
 import styles from "./Hero.module.css";
 import { Button } from "@mui/material";
-import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
+import { IoArrowForwardCircleOutline} from 'react-icons/io5'
 
 const Hero = () => {
   return (
@@ -20,7 +20,7 @@ const Hero = () => {
           </p>
           <Button
             variant="contained"
-            endIcon={<ArrowIcon />}
+            endIcon={<IoArrowForwardCircleOutline size={'30px'} />}
             className={styles.joinNow}
           >
             Join Now

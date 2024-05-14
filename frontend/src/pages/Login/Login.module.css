@@ -1,43 +1,104 @@
-/* Container Styles */
-.container {
-  max-width: 400px;
-  margin: 10px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+/* LoginWrapper Styles */
+.loginWrapper {
+  padding-top: 100px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 800px;
 }
 
-/* Heading Styles */
-h1 {
-  font-size: 2rem;
-  color: #0a1d56;
-  margin-bottom: 20px;
-}
-
-/* Form Styles */
-.form {
+/* LoginForm Styles */
+.loginForm {
+  width: 100vw;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Login Text Styles */
+.login {
+  color: #333333;
 }
 
 /* Input Styles */
-.input {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.email,
+.password,
+.continue,
+.orLines {
+  width: 40% !important;
 }
 
-/* Button Styles */
-.button {
-  background-color: #0a1d56;
-  color: #fff;
-  padding: 10px;
+/* Continue Button Styles */
+.continue button {
+  width: 100%;
+  background-color: #111111;
+  opacity: 25%;
+  color: #ffffff;
+  border-radius: 20px;
+  text-align: center;
+  padding: 15px 0;
   border: none;
-  border-radius: 5px;
+  font-size: 22px;
   cursor: pointer;
 }
 
-.button:hover {
-  background-color: #072543;
+/* Line Styles */
+.line {
+  width: 45%;
+  height: 2px;
+  background-color: #66666640;
+  display: inline-block;
+}
+
+/* OrLines Styles */
+.orLines {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LoginAnotherWay Styles */
+.loginAnotherWay {
+  width: 40%;
+}
+
+/* Social Button Styles */
+.linkedIn,
+.google {
+  width: 100%;
+  border: 1px solid #333333 !important;
+  color: #333333 !important;
+  text-transform: none !important;
+  font-size: 20px !important;
+  border-radius: 40px !important;
+  margin-bottom: 20px !important;
+  padding: 20px 0 !important;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 800px) {
+  .email,
+  .password,
+  .continue,
+  .orLines,
+  .loginAnotherWay {
+    width: 85% !important;
+  }
+
+  .line {
+    width: 40%;
+  }
+}
+
+@media (min-width: 801px) and (max-width: 1350px) {
+  .email,
+  .password,
+  .continue,
+  .orLines,
+  .loginAnotherWay {
+    width: 60% !important;
+  }
 }

@@ -43,6 +43,7 @@ const Signup = () => {
             <p>Email</p>
             <OutlinedInput
               type="email"
+              required
               onChange={(e) => handleOnChange(e, "email")}
               value={userData.email}
               fullWidth
@@ -51,6 +52,7 @@ const Signup = () => {
           <div className={styles.password}>
             <p>Password</p>
             <OutlinedInput
+              required
               fullWidth
               value={userData.password}
               onChange={(e) => handleOnChange(e, "password")}

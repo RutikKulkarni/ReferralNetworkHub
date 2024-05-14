@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .heroWrapper {
   display: flex;
   justify-content: space-between;
@@ -5,6 +6,19 @@
   align-items: center;
 }
 
+=======
+/* Styles for HeroWrapper */
+.heroWrapper {
+  display: flex;
+  justify-content: space-around;
+  padding: 80px 40px 20px 20px;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+}
+
+/* Styles for HeroParent */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 .heroParent {
   width: 50%;
   display: flex;
@@ -12,6 +26,10 @@
   align-items: center;
 }
 
+<<<<<<< HEAD
+=======
+/* Styles for JoinNow button */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 .joinNow {
   background-color: var(--primary-color) !important;
   border-radius: 10px !important;
@@ -19,36 +37,67 @@
   box-shadow: 0px 15px 30px var(--primary-color) !important;
 }
 
+<<<<<<< HEAD
+=======
+/* Styles for hero image */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 .hero img {
   height: 500px;
 }
 
+<<<<<<< HEAD
+=======
+/* Styles for smallHero image on smaller screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 .smallHero {
   display: none;
 }
 
+<<<<<<< HEAD
+=======
+/* Styles for welcome and referral text */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 .welcome,
 .referral {
   margin-bottom: 10px;
   font-size: 50px;
 }
+<<<<<<< HEAD
 .referral {
   font-weight: 600;
 }
+=======
+
+/* Styles for referral text */
+.referral {
+  font-weight: 600;
+}
+
+/* Styles for info text */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 .info {
   margin-bottom: 40px;
   font-size: 24px;
 }
 
+<<<<<<< HEAD
+=======
+/* Styles for infos container */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 .infos {
   padding: 40px;
 }
 
+<<<<<<< HEAD
+=======
+/* Media query for screens up to 800px */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
 @media (max-width: 800px) {
   .hero img {
     display: none;
   }
 
+<<<<<<< HEAD
   .heroParent {
     width: 100%;
     height: 55vh;
@@ -59,50 +108,121 @@
     padding: 0;
   }
 
+=======
+  /* Styles for heroParent on smaller screens */
+  .heroParent {
+    width: 100%;
+    height: 60vh;
+    justify-content: start;
+  }
+
+  /* Styles for heroWrapper on smaller screens */
+  .heroWrapper {
+    padding: 80px 0 0 0;
+  }
+
+  /* Styles for smallHero image on smaller screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
   .smallHero {
     display: block;
     width: 100%;
     height: 100%;
     position: absolute;
+<<<<<<< HEAD
+=======
+    left: 0;
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
     z-index: -10;
     opacity: 0.2;
     object-fit: cover;
   }
 
+<<<<<<< HEAD
+=======
+  /* Styles for welcome and referral text on smaller screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
   .welcome,
   .referral {
     margin-bottom: 10px;
     font-size: 30px;
   }
+<<<<<<< HEAD
   .referral {
     font-weight: 600;
   }
+=======
+
+  /* Styles for referral text on smaller screens */
+  .referral {
+    font-weight: 600;
+  }
+
+  /* Styles for info text on smaller screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
   .info {
     margin-bottom: 40px;
     font-size: 18px;
   }
+<<<<<<< HEAD
+=======
+
+  /* Styles for infos container on smaller screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
   .infos {
     padding: 40px 15px;
   }
 }
 
+<<<<<<< HEAD
 @media (min-width: 801px) and (max-width: 1349px) {
   .hero {
     width: 50%;
   }
+=======
+/* Media query for screens between 801px and 1349px */
+@media (min-width: 801px) and (max-width: 1349px) {
+  /* Styles for heroWrapper on medium-sized screens */
+  .heroWrapper {
+    margin: 0;
+    padding: 80px 40px 20px 20px;
+    width: 95%;
+  }
+
+  /* Styles for hero image container on medium-sized screens */
+  .hero {
+    width: 50%;
+  }
+
+  /* Styles for hero image on medium-sized screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
   .hero img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
+<<<<<<< HEAD
+=======
+
+  /* Styles for welcome and referral text on medium-sized screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
   .welcome,
   .referral {
     margin-bottom: 10px;
     font-size: 30px;
   }
+<<<<<<< HEAD
   .referral {
     font-weight: 600;
   }
+=======
+
+  /* Styles for referral text on medium-sized screens */
+  .referral {
+    font-weight: 600;
+  }
+
+  /* Styles for info text on medium-sized screens */
+>>>>>>> 555912c1e8fbdd764747e436384ed79ddf949e51
   .info {
     margin-bottom: 40px;
     font-size: 18px;

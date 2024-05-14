@@ -3,13 +3,25 @@ import navLogo from "../../assets/logo.svg";
 import styles from "./Navbar.module.css";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Navbar component for navigation within the application.
+ * @returns {JSX.Element} Navbar JSX element
+ */
 function Navbar() {
   let navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
+
+  /**
+   * Toggles the active class for mobile menu.
+   */
   const toggleActiveClass = () => {
     setIsActive(!isActive);
   };
 
+  /**
+   * Navigates to the specified path.
+   * @param {string} path - Path to navigate to
+   */
   const handleNavigate = (path) => {
     const redirects = {
       home: "/",

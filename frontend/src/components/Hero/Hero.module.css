@@ -41,11 +41,11 @@
 }
 
 /* Styles for hero image */
-.hero {
+.heroImage {
   margin-top: -30px;
 }
 
-.hero img {
+.heroImage img {
   height: 550px;
 }
 
@@ -80,7 +80,7 @@
 
 /* Media query for screens up to 800px */
 @media (max-width: 800px) {
-  .hero img {
+  .heroImage img {
     display: none;
   }
 
@@ -143,12 +143,12 @@
   }
 
   /* Styles for hero image container on medium-sized screens */
-  .hero {
+  .heroImage {
     width: 50%;
   }
 
   /* Styles for hero image on medium-sized screens */
-  .hero img {
+  .heroImage img {
     width: 100%;
     height: 100%;
     object-fit: contain;

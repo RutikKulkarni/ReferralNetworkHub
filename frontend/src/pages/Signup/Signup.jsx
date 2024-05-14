@@ -3,7 +3,7 @@ import styles from "./Signup.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import { OutlinedInput, IconButton, Button } from "@mui/material";
-import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { ReactComponent as LinkedInIcon } from "../../assets/linkedIn.svg";
 import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
 
@@ -63,7 +63,7 @@ const Signup = () => {
                   onClick={handleClickShowPassword}
                   edge="end"
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
                 </IconButton>
               }
             />

@@ -1,9 +1,10 @@
 .navbar {
   width: 100vw;
   /* sticky */
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
+  z-index: 1000;
   /* sticky end */
   background-color: var(--secondary-color);
   padding: 10px 20px;

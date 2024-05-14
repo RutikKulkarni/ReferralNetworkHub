@@ -1,5 +1,5 @@
+/* Hero Styles */
 .hero {
-  /* background-image: url('path/to/your/image.jpg'); */
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -8,6 +8,7 @@
   align-items: center;
 }
 
+/* Hero Content Styles */
 .heroContent {
   text-align: center;
   color: #000000;

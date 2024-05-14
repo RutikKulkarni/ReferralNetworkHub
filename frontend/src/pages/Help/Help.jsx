@@ -3,6 +3,10 @@ import styles from "./Help.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
+/**
+ * Help component representing the Help page.
+ * @returns {JSX.Element} Help JSX element
+ */
 const Help = () => {
   return (
     <div>

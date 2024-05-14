@@ -1,110 +1,152 @@
+/* Styles for HeroWrapper */
 .heroWrapper {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 40px;
-    align-items: center;
-  }
-  
-  .heroParent {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .joinNow {
-    background-color: var(--primary-color) !important;
-    border-radius: 10px !important;
-    padding: 10px 20px !important;
-    box-shadow: 0px 15px 30px var(--primary-color) !important;
-  }
-  
+  display: flex;
+  justify-content: space-around;
+  padding: 80px 40px 20px 20px;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+}
+
+/* Styles for HeroParent */
+.heroParent {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styles for JoinNow button */
+.joinNow {
+  background-color: var(--primary-color) !important;
+  border-radius: 10px !important;
+  padding: 10px 20px !important;
+  box-shadow: 0px 15px 30px var(--primary-color) !important;
+}
+
+/* Styles for hero image */
+.hero img {
+  height: 500px;
+}
+
+/* Styles for smallHero image on smaller screens */
+.smallHero {
+  display: none;
+}
+
+/* Styles for welcome and referral text */
+.welcome,
+.referral {
+  margin-bottom: 10px;
+  font-size: 50px;
+}
+
+/* Styles for referral text */
+.referral {
+  font-weight: 600;
+}
+
+/* Styles for info text */
+.info {
+  margin-bottom: 40px;
+  font-size: 24px;
+}
+
+/* Styles for infos container */
+.infos {
+  padding: 40px;
+}
+
+/* Media query for screens up to 800px */
+@media (max-width: 800px) {
   .hero img {
-    height: 500px;
-  }
-  
-  .smallHero {
     display: none;
   }
-  
+
+  /* Styles for heroParent on smaller screens */
+  .heroParent {
+    width: 100%;
+    height: 60vh;
+    justify-content: start;
+  }
+
+  /* Styles for heroWrapper on smaller screens */
+  .heroWrapper {
+    padding: 80px 0 0 0;
+  }
+
+  /* Styles for smallHero image on smaller screens */
+  .smallHero {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    z-index: -10;
+    opacity: 0.2;
+    object-fit: cover;
+  }
+
+  /* Styles for welcome and referral text on smaller screens */
   .welcome,
   .referral {
     margin-bottom: 10px;
-    font-size: 50px;
+    font-size: 30px;
   }
+
+  /* Styles for referral text on smaller screens */
   .referral {
     font-weight: 600;
   }
+
+  /* Styles for info text on smaller screens */
   .info {
     margin-bottom: 40px;
-    font-size: 24px;
+    font-size: 18px;
   }
-  
+
+  /* Styles for infos container on smaller screens */
   .infos {
-    padding: 40px;
+    padding: 40px 15px;
   }
-  
-  @media (max-width: 800px) {
-    .hero img {
-      display: none;
-    }
-  
-    .heroParent {
-      width: 100%;
-      height: 55vh;
-      /* position: relative; */
-    }
-  
-    .heroWrapper {
-      padding: 0;
-    }
-  
-    .smallHero {
-      display: block;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      z-index: -10;
-      opacity: 0.2;
-      object-fit: cover;
-    }
-  
-    .welcome,
-    .referral {
-      margin-bottom: 10px;
-      font-size: 30px;
-    }
-    .referral {
-      font-weight: 600;
-    }
-    .info {
-      margin-bottom: 40px;
-      font-size: 18px;
-    }
-    .infos {
-      padding: 40px 15px;
-    }
+}
+
+/* Media query for screens between 801px and 1349px */
+@media (min-width: 801px) and (max-width: 1349px) {
+  /* Styles for heroWrapper on medium-sized screens */
+  .heroWrapper {
+    margin: 0;
+    padding: 80px 40px 20px 20px;
+    width: 95%;
   }
-  
-  @media (min-width: 801px) and (max-width: 1349px) {
-    .hero {
-      width: 50%;
-    }
-    .hero img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    .welcome,
-    .referral {
-      margin-bottom: 10px;
-      font-size: 30px;
-    }
-    .referral {
-      font-weight: 600;
-    }
-    .info {
-      margin-bottom: 40px;
-      font-size: 18px;
-    }
+
+  /* Styles for hero image container on medium-sized screens */
+  .hero {
+    width: 50%;
   }
+
+  /* Styles for hero image on medium-sized screens */
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Styles for welcome and referral text on medium-sized screens */
+  .welcome,
+  .referral {
+    margin-bottom: 10px;
+    font-size: 30px;
+  }
+
+  /* Styles for referral text on medium-sized screens */
+  .referral {
+    font-weight: 600;
+  }
+
+  /* Styles for info text on medium-sized screens */
+  .info {
+    margin-bottom: 40px;
+    font-size: 18px;
+  }
+}

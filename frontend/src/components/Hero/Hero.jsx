@@ -1,8 +1,12 @@
 import HeroImg from "../../assets/hero.svg";
 import styles from "./Hero.module.css";
 import { Button } from "@mui/material";
-import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
+import { IoArrowForwardCircleOutline } from "react-icons/io5";
 
+/**
+ * Hero component for the Referral Network app.
+ * @returns {JSX.Element} Hero component JSX
+ */
 const Hero = () => {
   return (
     <div className={styles.heroWrapper}>
@@ -20,7 +24,7 @@ const Hero = () => {
           </p>
           <Button
             variant="contained"
-            endIcon={<ArrowIcon />}
+            endIcon={<IoArrowForwardCircleOutline size={"30px"} />}
             className={styles.joinNow}
           >
             Join Now

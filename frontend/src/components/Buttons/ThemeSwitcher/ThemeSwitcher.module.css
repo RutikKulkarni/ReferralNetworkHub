@@ -1,0 +1,12 @@
+.themeSwitcher {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  color: var(--text-color);
+  width: 20px;
+  height: 20px;
+}

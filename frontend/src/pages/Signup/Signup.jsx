@@ -1,102 +1,95 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import styles from "./Signup.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { OutlinedInput, IconButton, Button } from "@mui/material";
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { ReactComponent as LinkedInIcon } from "../../assets/svg/linkedIn.svg";
-import { ReactComponent as GoogleIcon } from "../../assets/svg/google.svg";
+import emailIcon from "../../assets/svg/email.svg";
+import passwordIcon from "../../assets/svg/password.svg";
+import googleIcon from "../../assets/svg/google.svg";
+import linkedInIcon from "../../assets/svg/linkedIn.svg";
+import { FiUser } from "react-icons/fi";
 
 /**
- * Signup component representing the Sign Up page.
+ * Signup component representing the Signup page.
  * @returns {JSX.Element} Signup JSX element
  */
 const Signup = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [userData, setUserData] = useState({ email: "", password: "" });
-
-  // Function to toggle password visibility
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  // Function to handle input changes
-  const handleOnChange = (e, type) => {
-    setUserData((prev) => ({
-      ...prev,
-      [type]: e.target.value,
-    }));
-  };
-
-  // Function to handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setUserData({ email: "", password: "" });
-    console.log("Submitted");
-  };
-
   return (
-    <div>
+    <div className={styles.container}>
       <Navbar />
-      <div className={styles.signUpWrapper}>
-        <form className={styles.signUpForm} onSubmit={handleSubmit}>
-          <h1 className={styles.signUp}>Sign Up</h1>
-          <div className={styles.email}>
-            <p>Email</p>
-            <OutlinedInput
-              type="email"
-              required
-              onChange={(e) => handleOnChange(e, "email")}
-              value={userData.email}
-              fullWidth
-            />
+      <div className={styles.loginFormContainer}>
+        <h1 className={styles.formTitle}>Sign Up</h1>
+        <form className={styles.form}>
+          <div className={styles.flexColumn}>
+            <label>Name</label>
           </div>
-          <div className={styles.password}>
-            <p>Password</p>
-            <OutlinedInput
+          <div className={styles.inputForm}>
+            <FiUser className={styles.user} />
+            <input
+              type="text"
+              className={styles.input}
+              placeholder="Enter your Name"
               required
-              fullWidth
-              value={userData.password}
-              onChange={(e) => handleOnChange(e, "password")}
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-                </IconButton>
-              }
             />
           </div>
 
-          <div className={styles.continue}>
-            <button>Continue</button>
+          <div className={styles.flexColumn}>
+            <label>Email</label>
+          </div>
+          <div className={styles.inputForm}>
+            <img src={emailIcon} alt="Email Icon" className={styles.icon} />
+            <input
+              type="text"
+              className={styles.input}
+              placeholder="Enter your Email"
+              required
+            />
+          </div>
+
+          <div className={styles.flexColumn}>
+            <label>Password</label>
+          </div>
+          <div className={styles.inputForm}>
+            <img
+              src={passwordIcon}
+              alt="Password Icon"
+              className={styles.icon}
+            />
+            <input
+              type="password"
+              className={styles.input}
+              placeholder="Enter your Password"
+              required
+            />
+          </div>
+
+          <div className={styles.flexRow}>
+            <div>
+              <input type="checkbox" id="rememberMe" />
+              <label htmlFor="rememberMe">Remember me</label>
+            </div>
+          </div>
+          <button className={styles.buttonSubmit}>Sign up</button>
+          <p className={styles.p}>
+            Already have an account?{" "}
+            <Link to="/login" className={styles.link}>
+              Login
+            </Link>
+          </p>
+          <p className={`${styles.p} ${styles.line}`}>Or With</p>
+          <div className={styles.flexRow}>
+            <button className={styles.btn} disabled>
+              <img src={googleIcon} alt="Google Icon" className={styles.icon} />
+            </button>
+            <button className={styles.btn} disabled>
+              <img
+                src={linkedInIcon}
+                alt="LinkedIn Icon"
+                className={styles.icon}
+              />
+            </button>
           </div>
         </form>
-
-        <div className={styles.orLines}>
-          <span className={styles.line}></span>
-          <span className={styles.or}>OR</span>
-          <span className={styles.line}></span>
-        </div>
-
-        <div className={styles.signUpAnotherWay}>
-          <Button
-            variant="outlined"
-            startIcon={<LinkedInIcon />}
-            className={styles.linkedIn}
-          >
-            Continue With LinkedIn
-          </Button>
-
-          <Button
-            variant="outlined"
-            startIcon={<GoogleIcon />}
-            className={styles.linkedIn}
-          >
-            Continue With Google
-          </Button>
-        </div>
       </div>
       <Footer />
     </div>

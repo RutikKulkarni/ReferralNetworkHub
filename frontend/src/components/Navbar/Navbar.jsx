@@ -1,8 +1,8 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import navLogo from "../../assets/svg/logo.svg";
 import styles from "./Navbar.module.css";
-import { useNavigate } from "react-router-dom";
-// import ThemeSwitcher from "../Buttons/ThemeSwitcher/ThemeSwitcher"
+// import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 
 /**
  * Navbar component for navigation within the application.
@@ -10,7 +10,13 @@ import { useNavigate } from "react-router-dom";
  */
 function Navbar() {
   let navigate = useNavigate();
+  let location = useLocation();
   const [isActive, setIsActive] = useState(false);
+  const [activePath, setActivePath] = useState(location.pathname);
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location]);
 
   /**
    * Toggles the active class for mobile menu.
@@ -43,13 +49,39 @@ function Navbar() {
         <img src={navLogo} alt="Logo" />
       </div>
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
-        <li onClick={() => handleNavigate("home")}>Home</li>
-        <li onClick={() => handleNavigate("about")}>About</li>
-        <li onClick={() => handleNavigate("services")}>Services</li>
-        <li onClick={() => handleNavigate("help")}>Help</li>
-        <li onClick={() => handleNavigate("contact")}>Contact</li>
+        <li
+          className={activePath === "/" ? styles.active : ""}
+          onClick={() => handleNavigate("home")}
+        >
+          Home
+        </li>
+        <li
+          className={activePath === "/about" ? styles.active : ""}
+          onClick={() => handleNavigate("about")}
+        >
+          About
+        </li>
+        <li
+          className={activePath === "/services" ? styles.active : ""}
+          onClick={() => handleNavigate("services")}
+        >
+          Services
+        </li>
+        <li
+          className={activePath === "/help" ? styles.active : ""}
+          onClick={() => handleNavigate("help")}
+        >
+          Help
+        </li>
+        <li
+          className={activePath === "/contact" ? styles.active : ""}
+          onClick={() => handleNavigate("contact")}
+        >
+          Contact
+        </li>
       </ul>
       <div className={styles.navigations}>
+        {/* <ThemeSwitcher /> */}
         <div className={styles.navBtns}>
           <button
             className={`${styles.loginBtn}`}
@@ -63,7 +95,6 @@ function Navbar() {
           >
             Sign Up
           </button>
-          {/* <ThemeSwitcher/> */}
         </div>
 
         <div
@@ -78,4 +109,5 @@ function Navbar() {
     </nav>
   );
 }
+
 export default Navbar;

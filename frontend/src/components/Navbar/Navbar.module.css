@@ -30,8 +30,14 @@
   gap: 30px;
   list-style: none;
 }
+
 .navMenu li {
   cursor: pointer;
+  position: relative;
+}
+
+.navMenu li.active {
+  border-bottom: 0.3px solid var(--primary-color);
 }
 
 .navBtns {

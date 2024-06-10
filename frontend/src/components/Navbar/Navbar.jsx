@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import navLogo from "../../assets/svg/logo.svg";
 import styles from "./Navbar.module.css";
-// import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
+// import ThemeSwitcher from "../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 /**
  * Navbar component for navigation within the application.
@@ -81,7 +81,6 @@ function Navbar() {
         </li>
       </ul>
       <div className={styles.navigations}>
-        {/* <ThemeSwitcher /> */}
         <div className={styles.navBtns}>
           <button
             className={`${styles.loginBtn}`}
@@ -95,6 +94,7 @@ function Navbar() {
           >
             Sign Up
           </button>
+          {/* <ThemeSwitcher /> */}
         </div>
 
         <div

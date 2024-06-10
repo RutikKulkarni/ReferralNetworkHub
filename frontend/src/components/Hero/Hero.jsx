@@ -1,6 +1,6 @@
-import HeroImg from "../../assets/hero.svg";
-import styles from "./Hero.module.css";
 import { IoArrowForwardCircleOutline } from "react-icons/io5";
+import HeroImg from "../../assets/svg/hero.svg";
+import styles from "./Hero.module.css";
 
 /**
  * Hero component for the Referral Network app.

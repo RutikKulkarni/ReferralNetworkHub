@@ -4,8 +4,8 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import { OutlinedInput, IconButton, Button } from "@mui/material";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { ReactComponent as LinkedInIcon } from "../../assets/linkedIn.svg";
-import { ReactComponent as GoogleIcon } from "../../assets/google.svg";
+import { ReactComponent as LinkedInIcon } from "../../assets/svg/linkedIn.svg";
+import { ReactComponent as GoogleIcon } from "../../assets/svg/google.svg";
 
 /**
  * Signup component representing the Sign Up page.

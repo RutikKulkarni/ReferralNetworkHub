@@ -10,12 +10,12 @@
 }
 
 /* dark-theme */
-[data-theme="dark"] {
+/* [data-theme="dark"] {
   --primary-color: #ffffff;
   --secondary-color: #373737;
   --text-color: #ffffff;
   --button-bg-color: #0a1d56;
-}
+} */
 
 /* Global Reset */
 * {

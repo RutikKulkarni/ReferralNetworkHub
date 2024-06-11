@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import styles from "./Login.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import emailIcon from "../../assets/svg/email.svg";
-import passwordIcon from "../../assets/svg/password.svg";
-import googleIcon from "../../assets/svg/google.svg";
-import linkedInIcon from "../../assets/svg/linkedIn.svg";
+import { LuAtSign } from "react-icons/lu";
+import { GoLock } from "react-icons/go";
+import { FcGoogle } from "react-icons/fc";
+import { FaLinkedinIn } from "react-icons/fa6";
 
 /**
  * Login component representing the Login page.
@@ -23,7 +23,7 @@ const Login = () => {
             <label>Email</label>
           </div>
           <div className={styles.inputForm}>
-            <img src={emailIcon} alt="Email Icon" className={styles.icon} />
+            <LuAtSign className={styles.mailIcon}/>
             <input
               type="text"
               className={styles.input}
@@ -36,11 +36,7 @@ const Login = () => {
             <label>Password</label>
           </div>
           <div className={styles.inputForm}>
-            <img
-              src={passwordIcon}
-              alt="Password Icon"
-              className={styles.icon}
-            />
+            <GoLock className={styles.icon}/>
             <input
               type="password"
               className={styles.input}
@@ -66,14 +62,10 @@ const Login = () => {
           <p className={`${styles.p} ${styles.line}`}>Or With</p>
           <div className={styles.flexRow}>
             <button className={styles.btn} disabled>
-              <img src={googleIcon} alt="Google Icon" className={styles.icon} />
+            <FcGoogle className={styles.icon}/>
             </button>
             <button className={styles.btn} disabled>
-              <img
-                src={linkedInIcon}
-                alt="LinkedIn Icon"
-                className={styles.icon}
-              />
+            <FaLinkedinIn className={styles.linkedInIcon}/>
             </button>
           </div>
         </form>

@@ -50,7 +50,7 @@
   align-items: center;
   padding-left: 10px;
   transition: 0.2s ease-in-out;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .input {
@@ -154,4 +154,16 @@
 .icon {
   width: 20px;
   height: 20px;
+}
+
+.mailIcon {
+  color: #3a3a3a;
+  width: 20px;
+  height: 20px;
+}
+
+.linkedInIcon {
+  color: #00659C;
+  width: 18px;
+  height: 18px;
 }

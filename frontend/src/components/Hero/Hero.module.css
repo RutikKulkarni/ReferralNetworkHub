@@ -1,156 +1,88 @@
-/* Styles for HeroWrapper */
-.heroWrapper {
+.heroContainer {
   display: flex;
   justify-content: space-around;
-  padding: 80px 40px 20px 20px;
   align-items: center;
-  width: 90%;
   margin: auto;
 }
 
-/* Styles for HeroParent */
-.heroParent {
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: auto;
-}
-
-/* Styles for hero image */
-.heroImage {
-  margin-top: -30px;
-}
-
-.heroImage img {
-  height: 550px;
-}
-
-/* Styles for smallHero image on smaller screens */
-.smallHero {
-  display: none;
-}
-
-/* Styles for textWelcome and textReferral text */
-.textWelcome,
-.textReferral {
-  margin-bottom: 10px;
-  font-size: 50px;
-}
-
-/* Styles for textReferral text */
-.textReferral {
-  font-weight: 600;
-}
-
-/* Styles for textInfo text */
-.textInfo {
-  margin-bottom: 60px;
-  font-size: 24px;
-}
-
-/* Styles for textContent container */
-.textContent {
+.textContainer {
   padding: 40px;
-  margin-right: auto;
+}
+
+.textContainer h1 {
+  font-weight: 500;
+  margin-bottom: 10px;
+  font-size: 60px;
+}
+
+.textContainer p {
+  font-size: 22px;
+  margin-bottom: 50px;
+}
+
+.imageContainer {
+  padding: 40px;
+}
+
+.imageContainer img {
+  height: 500px;
 }
 
 /* Media query for screens up to 800px */
 @media (max-width: 800px) {
-  .heroImage img {
-    display: none;
+  .heroContainer {
+    flex-direction: column;
   }
 
-  /* Styles for heroParent on smaller screens */
-  .heroParent {
-    width: 100%;
-    height: 60vh;
-    justify-content: start;
+  .textContainer {
+    padding: 20px;
+    text-align: center;
   }
 
-  /* Styles for heroWrapper on smaller screens */
-  .heroWrapper {
-    padding: 80px 0 0 0;
+  .textContainer h1 {
+    font-size: 40px;
   }
 
-  /* Styles for smallHero image on smaller screens */
-  .smallHero {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    z-index: -10;
-    opacity: 0.2;
-    object-fit: cover;
-  }
-
-  /* Styles for textWelcome and textReferral text on smaller screens */
-  .textWelcome,
-  .textReferral {
-    margin-bottom: 10px;
-    font-size: 30px;
-  }
-
-  /* Styles for textReferral text on smaller screens */
-  .textReferral {
-    font-weight: 600;
-  }
-
-  /* Styles for textInfo text on smaller screens */
-  .textInfo {
-    margin-bottom: 40px;
+  .textContainer p {
     font-size: 18px;
+    margin-bottom: 30px;
   }
 
-  /* Styles for textContent container on smaller screens */
-  .textContent {
-    padding: 40px 15px;
+  .imageContainer {
+    padding: 20px;
+  }
+
+  .imageContainer img {
+    height: auto;
+    max-width: 100%;
   }
 }
 
 /* Media query for screens between 801px and 1349px */
 @media (min-width: 801px) and (max-width: 1349px) {
-  /* Styles for heroWrapper on medium-sized screens */
-  .heroWrapper {
-    margin: 0;
-    padding: 80px 40px 20px 20px;
-    width: 95%;
-    margin-top: -50px;
+  .heroContainer {
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  /* Styles for hero image container on medium-sized screens */
-  .heroImage {
-    width: 50%;
+  .textContainer {
+    padding: 30px;
   }
 
-  /* Styles for hero image on medium-sized screens */
-  .heroImage img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  .textContainer h1 {
+    font-size: 50px;
   }
 
-  .textContent {
-    margin-right: auto;
-    margin-left: 50px;
+  .textContainer p {
+    font-size: 20px;
+    margin-bottom: 50px;
   }
 
-  /* Styles for textWelcome and textReferral text on medium-sized screens */
-  .textWelcome,
-  .textReferral {
-    margin-bottom: 10px;
-    font-size: 30px;
+  .imageContainer {
+    padding: 30px;
   }
 
-  /* Styles for textReferral text on medium-sized screens */
-  .textReferral {
-    font-weight: 600;
-  }
-
-  /* Styles for textInfo text on medium-sized screens */
-  .textInfo {
-    margin-bottom: 40px;
-    font-size: 18px;
+  .imageContainer img {
+    height: 450px;
   }
 }

@@ -83,13 +83,13 @@ function Navbar() {
       <div className={styles.navigations}>
         <div className={styles.navBtns}>
           <button
-            className={`${styles.loginBtn}`}
+            className={styles.loginBtn}
             onClick={() => handleNavigate("login")}
           >
             Login
           </button>
           <button
-            className={`${styles.signupBtn}`}
+            className={styles.signupBtn}
             onClick={() => handleNavigate("signup")}
           >
             Sign Up

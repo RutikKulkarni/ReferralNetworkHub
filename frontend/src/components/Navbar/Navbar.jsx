@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import navLogo from "../../assets/svg/logo.svg";
 import styles from "./Navbar.module.css";
 import { handleNavigate } from "../../utility/handleRedirections";
-import UserLogo from "../../assets/svg/user.svg";
-import Info from "../../assets/svg/info.svg";
+import { BiUser } from "react-icons/bi";
+import { LiaInfoCircleSolid } from "react-icons/lia";
 // import ThemeSwitcher from "../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 /**
@@ -88,8 +88,8 @@ function Navbar() {
             </>
           ) : (
             <>
-              <img src={UserLogo} alt="User" />
-              <img src={Info} alt="Info" />
+              <BiUser className={styles.iconUser} />
+              <LiaInfoCircleSolid className={styles.iconInfo} />
             </>
           )}
         </div>

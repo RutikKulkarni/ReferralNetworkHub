@@ -68,6 +68,14 @@
   font-family: Poppins;
 }
 
+.iconUser {
+  font-size: 20px;
+}
+
+.iconInfo {
+  font-size: 24px;
+}
+
 /* media queries */
 @media screen and (max-width: 955px) {
   .navbar {

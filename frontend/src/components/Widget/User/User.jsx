@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./User.module.css";
-// import userSvg from '../../../assets/svg/user.svg'
 import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
 import { BiUser } from "react-icons/bi";
 import { LuLifeBuoy } from "react-icons/lu";

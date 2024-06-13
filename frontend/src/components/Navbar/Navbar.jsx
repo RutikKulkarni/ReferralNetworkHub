@@ -5,20 +5,19 @@ import styles from "./Navbar.module.css";
 import { handleNavigate } from "../../utility/handleRedirections";
 import { BiUser } from "react-icons/bi";
 import { LiaInfoCircleSolid } from "react-icons/lia";
-// import ThemeSwitcher from "../Buttons/ThemeSwitcher/ThemeSwitcher";
+import Widget from "../../components/Widget/User/User";
 
 /**
  * Navbar component for navigation within the application.
  * @returns {JSX.Element} Navbar JSX element
  */
-function Navbar({ toggleWidgetVisibility }) {
+function Navbar() {
   let navigate = useNavigate();
   let location = useLocation();
   const [isActive, setIsActive] = useState(false);
   const [activePath, setActivePath] = useState(location.pathname);
-
-  //TODO: Logic to handle rememberMe and none loginType is pending will Implement later!
   const [userId, setUserId] = useState(localStorage.getItem("userId") || null);
+  const [isWidgetVisible, setIsWidgetVisible] = useState(false);
 
   useEffect(() => {
     setActivePath(location.pathname);
@@ -29,6 +28,13 @@ function Navbar({ toggleWidgetVisibility }) {
    */
   const toggleActiveClass = () => {
     setIsActive(!isActive);
+  };
+
+  /**
+   * Toggles the visibility of the user widget.
+   */
+  const toggleWidgetVisibility = () => {
+    setIsWidgetVisible(!isWidgetVisible);
   };
 
   return (
@@ -84,7 +90,6 @@ function Navbar({ toggleWidgetVisibility }) {
               >
                 Sign Up
               </button>
-              {/* <ThemeSwitcher /> */}
             </>
           ) : (
             <>
@@ -95,6 +100,7 @@ function Navbar({ toggleWidgetVisibility }) {
               <LiaInfoCircleSolid className={styles.iconInfo} />
             </>
           )}
+          {isWidgetVisible && <Widget />}
         </div>
         <div
           className={`${styles.hamburger} ${isActive ? styles.active : ""}`}

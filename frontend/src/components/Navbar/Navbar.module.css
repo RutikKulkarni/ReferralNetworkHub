@@ -1,11 +1,9 @@
 .navbar {
   width: 100vw;
-  /* sticky */
-  position: sticky;
+  /* position: sticky;
   top: 0;
   left: 0;
-  z-index: 1000;
-  /* sticky end */
+  z-index: 1000; */
   background-color: var(--secondary-color);
   padding: 10px 20px;
   display: flex;
@@ -71,7 +69,6 @@
 }
 
 /* media queries */
-
 @media screen and (max-width: 955px) {
   .navbar {
     justify-content: space-between;
@@ -106,7 +103,7 @@
     flex-direction: column;
     gap: 0;
     top: 70px;
-    left: -100%;
+    right: -100%;
     text-align: start;
     width: 100%;
     transition: 0.7s ease-in-out;
@@ -114,7 +111,7 @@
     padding: 10px;
   }
   .navMenu.active {
-    left: 0;
+    right: 0;
   }
   .navMenu li {
     margin: 16px 0;

@@ -1,5 +1,5 @@
 import React from "react";
-import { IoLogoGithub } from "react-icons/io";
+import { SiGithub } from "react-icons/si";
 import styles from "./Footer.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -35,7 +35,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <IoLogoGithub style={{ width: "30px", height: "30px" }} />
+            <SiGithub className={styles.gitLogo} />
           </a>
         </div>
         <hr />

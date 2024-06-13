@@ -1,36 +1,27 @@
-import { IoArrowForwardCircleOutline } from "react-icons/io5";
+import React from "react";
 import HeroImg from "../../assets/svg/hero.svg";
 import styles from "./Hero.module.css";
+import JoinNow from "../Buttons/JoinNow/JoinNow";
 
-/**
- * Hero component for the Referral Network app.
- * @returns {JSX.Element} Hero component JSX
- */
 const Hero = () => {
   return (
-    <div className={styles.heroWrapper}>
-      <div className={styles.heroParent}>
-        <img src={HeroImg} alt="Mobile Hero" className={styles.smallHero} />
-        <div className={styles.textContent}>
-          <p className={styles.textWelcome}>Welcome to</p>
-          <p className={styles.textReferral}>Referral Network..!</p>
-          <p className={styles.textInfo}>
-            Connecting Professionals, Streamlining Referrals
-          </p>
-          <button variant="contained" className={styles.joinButton}>
-            Join Now{" "}
-            <IoArrowForwardCircleOutline
-              size={"30px"}
-              className={styles.arrowIcon}
-            />
-          </button>
+    <>
+      <div className={styles.heroContainer}>
+        <div>
+          <div className={styles.textContainer}>
+            <h1>Welcome to</h1>
+            <h1>
+              <b>Referral Network..!</b>
+            </h1>
+            <p>Connecting Professionals, Streamlining Referrals </p>
+            <JoinNow />
+          </div>
+        </div>
+        <div className={styles.imageContainer}>
+          <img src={HeroImg} alt="Hero" />
         </div>
       </div>
-
-      <div className={styles.heroImage}>
-        <img src={HeroImg} alt="Hero" />
-      </div>
-    </div>
+    </>
   );
 };
 

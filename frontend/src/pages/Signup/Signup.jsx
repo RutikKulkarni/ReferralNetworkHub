@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import styles from "./Signup.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import emailIcon from "../../assets/svg/email.svg";
-import passwordIcon from "../../assets/svg/password.svg";
-import googleIcon from "../../assets/svg/google.svg";
-import linkedInIcon from "../../assets/svg/linkedIn.svg";
+import { LuAtSign } from "react-icons/lu";
+import { GoLock } from "react-icons/go";
+import { FcGoogle } from "react-icons/fc";
+import { FaLinkedinIn } from "react-icons/fa6";
 import { FiUser } from "react-icons/fi";
 import axios from "axios";
 import { Config } from "../../App";
@@ -71,7 +71,7 @@ const Signup = () => {
   return (
     <div className={styles.container}>
       <Navbar />
-      <div className={styles.loginFormContainer}>
+      <div className={styles.signupFormContainer}>
         <h1 className={styles.formTitle}>Sign Up</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.flexColumn}>
@@ -94,7 +94,7 @@ const Signup = () => {
             <label>Email</label>
           </div>
           <div className={styles.inputForm}>
-            <img src={emailIcon} alt="Email Icon" className={styles.icon} />
+            <LuAtSign className={styles.mailIcon} />
             <input
               type="text"
               className={styles.input}
@@ -110,11 +110,7 @@ const Signup = () => {
             <label>Password</label>
           </div>
           <div className={styles.inputForm}>
-            <img
-              src={passwordIcon}
-              alt="Password Icon"
-              className={styles.icon}
-            />
+            <GoLock className={styles.icon} />
             <input
               type="password"
               className={styles.input}
@@ -147,14 +143,10 @@ const Signup = () => {
           <p className={`${styles.p} ${styles.line}`}>Or With</p>
           <div className={styles.flexRow}>
             <button className={styles.btn} disabled>
-              <img src={googleIcon} alt="Google Icon" className={styles.icon} />
+              <FcGoogle className={styles.icon} />
             </button>
             <button className={styles.btn} disabled>
-              <img
-                src={linkedInIcon}
-                alt="LinkedIn Icon"
-                className={styles.icon}
-              />
+              <FaLinkedinIn className={styles.linkedInIcon} />
             </button>
           </div>
         </form>

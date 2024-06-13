@@ -9,7 +9,11 @@ const app: Application = express();
 app.use(express.json());
 
 // Middleware to enable cross-origin requests
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 // Mounting the router at the "/api" endpoint
 app.use("/api", router);

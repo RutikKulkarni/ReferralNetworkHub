@@ -18,6 +18,7 @@
   display: flex;
   justify-content: center;
 }
+
 .logo img {
   height: 60px;
 }
@@ -44,6 +45,7 @@
   gap: 20px;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .loginBtn {
@@ -71,6 +73,7 @@
 }
 
 /* media queries */
+
 @media screen and (max-width: 955px) {
   .navbar {
     justify-content: space-between;
@@ -81,7 +84,6 @@
     cursor: pointer;
     margin-left: 10px;
   }
-
   .bar {
     background-color: var(--text-color);
     width: 20px;
@@ -91,7 +93,6 @@
     -webkit-transition: 0.3s ease-in-out;
     transition: 0.3s ease-in-out;
   }
-
   /* adding active class to the bars  */
   .hamburger.active .bar:nth-child(2) {
     opacity: 0;
@@ -102,7 +103,6 @@
   .hamburger.active .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
-
   .navMenu {
     position: absolute;
     flex-direction: column;
@@ -115,29 +115,23 @@
     background-color: var(--secondary-color);
     padding: 10px;
   }
-
   .navMenu.active {
     left: 0;
   }
-
   .navMenu li {
     margin: 16px 0;
   }
-
   .navBtns {
     width: auto;
     gap: 10px;
   }
-
   .logo img {
     height: 40px;
   }
-
   .navigations {
     display: flex;
     align-items: center;
   }
-
   .loginBtn,
   .signupBtn {
     width: 80px;

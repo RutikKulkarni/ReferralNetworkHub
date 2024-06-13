@@ -15,7 +15,7 @@ const register = catchAsync(async (req: Request, res: Response) => {
   const user = await authService.registerUser(userData);
   return res
     .status(httpStatus.CREATED)
-    .send({ message: "User created successfully", user });
+    .send({ message: "User registered successfully", user });
 });
 
 /**

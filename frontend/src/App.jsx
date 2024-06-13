@@ -7,6 +7,10 @@ import Contact from "./pages/Contact/Contact";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 
+export const Config = {
+  endpoint: "http://localhost:1001/api/",
+};
+
 function App() {
   return (
     <Router>

@@ -1,0 +1,51 @@
+/* Styles for joinButton button */
+.joinButton {
+  padding: 10px 20px;
+  padding-left: 1.2em;
+  font-size: 17px;
+  font-weight: 500;
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0px 15px 20px var(--primary-color);
+  display: inline-flex;
+  align-items: center;
+  font-family: Poppins;
+}
+
+.joinButton:hover {
+  background-color: darken(10%);
+}
+
+.arrowIcon {
+  margin-left: 10px;
+  font-size: 30px;
+}
+
+/* Media query for max-width: 800px */
+@media (max-width: 800px) {
+  .joinButton {
+    padding: 8px 16px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+
+  .arrowIcon {
+    margin-left: 8px;
+  }
+}
+
+/* Media query for min-width: 801px and max-width: 1349px */
+@media (min-width: 801px) and (max-width: 1349px) {
+  .joinButton {
+    padding: 9px 18px;
+    font-size: 16px;
+    border-radius: 9px;
+  }
+
+  .arrowIcon {
+    margin-left: 9px;
+  }
+}

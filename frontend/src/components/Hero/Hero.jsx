@@ -1,6 +1,6 @@
-import { IoArrowForwardCircleOutline } from "react-icons/io5";
 import HeroImg from "../../assets/svg/hero.svg";
 import styles from "./Hero.module.css";
+import JoinNow from "../Buttons/JoinNow/JoinNow";
 
 /**
  * Hero component for the Referral Network app.
@@ -17,13 +17,7 @@ const Hero = () => {
           <p className={styles.textInfo}>
             Connecting Professionals, Streamlining Referrals
           </p>
-          <button variant="contained" className={styles.joinButton}>
-            Join Now{" "}
-            <IoArrowForwardCircleOutline
-              size={"30px"}
-              className={styles.arrowIcon}
-            />
-          </button>
+          <JoinNow />
         </div>
       </div>
 

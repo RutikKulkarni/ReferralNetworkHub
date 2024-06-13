@@ -14,6 +14,12 @@
   margin-bottom: 20px;
 }
 
+.gitLogo {
+  width: 30px;
+  height: 30px;
+  color: black;
+}
+
 /* Footer Heading Styles */
 .footerContent h1 {
   font-size: 2rem;

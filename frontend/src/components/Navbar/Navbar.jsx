@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import navLogo from "../../assets/svg/logo.svg";
 import styles from "./Navbar.module.css";
+import { handleNavigate } from "../../utility/handleRedirections";
+import UserLogo from "../../assets/svg/user.svg";
+import Info from "../../assets/svg/info.svg";
 // import ThemeSwitcher from "../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 /**
@@ -14,6 +17,9 @@ function Navbar() {
   const [isActive, setIsActive] = useState(false);
   const [activePath, setActivePath] = useState(location.pathname);
 
+  //TODO: Logic to handle rememberMe and none loginType is pending will Implement later!
+  const [userId, setUserId] = useState(localStorage.getItem("userId") || null);
+
   useEffect(() => {
     setActivePath(location.pathname);
   }, [location]);
@@ -25,24 +31,6 @@ function Navbar() {
     setIsActive(!isActive);
   };
 
-  /**
-   * Navigates to the specified path.
-   * @param {string} path - Path to navigate to
-   */
-  const handleNavigate = (path) => {
-    const redirects = {
-      home: "/",
-      about: "/about",
-      services: "/services",
-      help: "/help",
-      contact: "/contact",
-      login: "/login",
-      signup: "/signup",
-    };
-
-    navigate(redirects[path]);
-  };
-
   return (
     <nav className={`${styles.navbar}`}>
       <div className={`${styles.logo}`}>
@@ -51,52 +39,60 @@ function Navbar() {
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
         <li
           className={activePath === "/" ? styles.active : ""}
-          onClick={() => handleNavigate("home")}
+          onClick={() => handleNavigate("home", navigate)}
         >
           Home
         </li>
         <li
           className={activePath === "/about" ? styles.active : ""}
-          onClick={() => handleNavigate("about")}
+          onClick={() => handleNavigate("about", navigate)}
         >
           About
         </li>
         <li
           className={activePath === "/services" ? styles.active : ""}
-          onClick={() => handleNavigate("services")}
+          onClick={() => handleNavigate("services", navigate)}
         >
           Services
         </li>
         <li
           className={activePath === "/help" ? styles.active : ""}
-          onClick={() => handleNavigate("help")}
+          onClick={() => handleNavigate("help", navigate)}
         >
           Help
         </li>
         <li
           className={activePath === "/contact" ? styles.active : ""}
-          onClick={() => handleNavigate("contact")}
+          onClick={() => handleNavigate("contact", navigate)}
         >
           Contact
         </li>
       </ul>
       <div className={styles.navigations}>
         <div className={styles.navBtns}>
-          <button
-            className={styles.loginBtn}
-            onClick={() => handleNavigate("login")}
-          >
-            Login
-          </button>
-          <button
-            className={styles.signupBtn}
-            onClick={() => handleNavigate("signup")}
-          >
-            Sign Up
-          </button>
-          {/* <ThemeSwitcher /> */}
+          {!userId ? (
+            <>
+              <button
+                className={`${styles.loginBtn}`}
+                onClick={() => handleNavigate("login", navigate)}
+              >
+                Login
+              </button>
+              <button
+                className={`${styles.signupBtn}`}
+                onClick={() => handleNavigate("signup", navigate)}
+              >
+                Sign Up
+              </button>
+              {/* <ThemeSwitcher /> */}
+            </>
+          ) : (
+            <>
+              <img src={UserLogo} alt="User" />
+              <img src={Info} alt="Info" />
+            </>
+          )}
         </div>
-
         <div
           className={`${styles.hamburger} ${isActive ? styles.active : ""}`}
           onClick={toggleActiveClass}

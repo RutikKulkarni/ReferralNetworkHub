@@ -1,0 +1,183 @@
+.widgetContainer {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  z-index: 9999;
+  margin-top: 30px;
+  margin-right: 20vh;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 20px;
+  width: 260px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profileSection {
+  display: flex;
+  align-items: center;
+}
+
+.profileImage {
+  background-color: rgba(220, 220, 220, 0.7);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userSvg {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileName {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.profileLocation {
+  margin: 0;
+  color: gray;
+}
+
+.divider {
+  border-top: 1px solid #eee;
+  margin: 10px 0;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.menuItem i {
+  margin-right: 10px;
+}
+
+.switch {
+  margin-left: auto;
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  font-family: Arial, Poppins, sans-serif;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
+}
+
+.icon {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.helpIcon {
+  color: rgb(60, 60, 60);
+  font-size: 18px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.logoutIcon {
+  color: rgb(60, 60, 60);
+  font-size: 18px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.themeIcon {
+  color: rgb(60, 60, 60);
+  font-size: 22px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+/* Media query for max-width: 800px */
+@media (max-width: 800px) {
+  .widgetContainer {
+    width: 260px;
+    z-index: 9999;
+    margin-top: 60px;
+    margin-left: auto;
+    margin-right: 40px;
+    right: 0;
+    left: 0;
+    top: 10px;
+  }
+
+  .profileName {
+    font-size: 1em;
+  }
+
+  .profileLocation {
+    font-size: 0.9em;
+  }
+}
+
+/* Media query for min-width: 801px and max-width: 1349px */
+@media (min-width: 801px) and (max-width: 1349px) {
+  .widgetContainer {
+    width: 260px;
+    z-index: 9999;
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: 40px;
+    right: 0;
+    left: 0;
+    top: 10px;
+  }
+
+  .profileName {
+    font-size: 1.1em;
+  }
+
+  .profileLocation {
+    font-size: 1em;
+  }
+}

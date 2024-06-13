@@ -11,7 +11,7 @@ import { LiaInfoCircleSolid } from "react-icons/lia";
  * Navbar component for navigation within the application.
  * @returns {JSX.Element} Navbar JSX element
  */
-function Navbar() {
+function Navbar({ toggleWidgetVisibility }) {
   let navigate = useNavigate();
   let location = useLocation();
   const [isActive, setIsActive] = useState(false);
@@ -88,7 +88,10 @@ function Navbar() {
             </>
           ) : (
             <>
-              <BiUser className={styles.iconUser} />
+              <BiUser
+                className={styles.iconUser}
+                onClick={toggleWidgetVisibility}
+              />
               <LiaInfoCircleSolid className={styles.iconInfo} />
             </>
           )}

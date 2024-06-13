@@ -70,10 +70,12 @@
 
 .iconUser {
   font-size: 20px;
+  cursor: pointer;
 }
 
 .iconInfo {
   font-size: 24px;
+  cursor: pointer;
 }
 
 /* media queries */

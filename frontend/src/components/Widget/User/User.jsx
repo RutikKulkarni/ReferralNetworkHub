@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./User.module.css";
 import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
 import { BiUser } from "react-icons/bi";
@@ -10,6 +11,17 @@ import ThemeSwitcher from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 const Widget = () => {
   const { theme } = useContext(ThemeContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
+  const handleMyAccount = () => {
+    navigate("/MyAccount");
+  };
 
   return (
     <div className={styles.widgetContainer}>
@@ -23,7 +35,7 @@ const Widget = () => {
         </div>
       </div>
       <div className={styles.divider}></div>
-      <div className={styles.menuItem}>
+      <div className={styles.menuItem} onClick={handleMyAccount}>
         <i className="fa fa-user"></i>
         <BiUser className={styles.icon} />
         <span>My Account</span>
@@ -38,7 +50,7 @@ const Widget = () => {
         <LuLifeBuoy className={styles.helpIcon} />
         <span>Help</span>
       </div>
-      <div className={styles.menuItem}>
+      <div className={styles.menuItem} onClick={handleLogout}>
         <FiLogOut className={styles.logoutIcon} />
         <span>Log out</span>
       </div>

@@ -6,6 +6,7 @@ import Help from "./pages/Help/Help";
 import Contact from "./pages/Contact/Contact";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
+import MyAccount from "./pages/MyAccount/MyAccount";
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 
 export const Config = {
@@ -31,6 +32,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           {/* Route for the Login page */}
           <Route path="/login" element={<Login />} />
+          {/* Route for the MyAccount page */}
+          <Route path="/MyAccount" element={<MyAccount />} />
         </Routes>
       </ThemeProvider>
     </Router>

@@ -44,7 +44,7 @@ To set up ReferralNetworkHub locally for development or testing purposes, follow
 5. Start the backend server:
    ```bash
    cd ../backend
-   npm start
+   npm run dev
    ```
 
 6. Start the frontend development server:

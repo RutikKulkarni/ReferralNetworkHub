@@ -98,6 +98,7 @@
     -webkit-transition: 0.3s ease-in-out;
     transition: 0.3s ease-in-out;
   }
+
   /* adding active class to the bars  */
   .hamburger.active .bar:nth-child(2) {
     opacity: 0;
@@ -108,21 +109,25 @@
   .hamburger.active .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
+
+  /* navMenu */
   .navMenu {
     position: absolute;
     flex-direction: column;
     gap: 0;
     top: 70px;
-    right: -100%;
+    left: -100%;
     text-align: start;
     width: 100%;
     transition: 0.7s ease-in-out;
     background-color: var(--secondary-color);
     padding: 10px;
   }
+
   .navMenu.active {
-    right: 0;
+    left: 0;
   }
+
   .navMenu li {
     margin: 16px 0;
   }

@@ -1,6 +1,6 @@
 # ReferralNetworkHub
 
-Welcome to ReferralNetworkHub - The Open-source platform for connecting professionals and facilitating job referrals within companies.
+Welcome to ReferralNetworkHub - The open-source platform for connecting professionals and facilitating job referrals within companies.
 
 ## Overview
 
@@ -8,11 +8,36 @@ ReferralNetworkHub is a web-based platform designed to streamline the job referr
 
 ## Features
 
-- User registration and authentication
-- Job listings with detailed information
-- Referral tracking and management
-- Communication features for referrers and candidates
-- Responsive design for seamless user experience across devices
+- **User Registration and Authentication:** Secure user sign-up and login functionality for both referrers and candidates.
+- **Professional Networking:** Allows candidates to connect with employees who can provide referrals for job opportunities within their companies.
+- **Referral Tracking and Management:** Tools to track and manage the status of referrals.
+- **Communication Features:** Messaging system for referrers and candidates to communicate directly.
+- **Responsive Design:** Seamless user experience across various devices (desktops, tablets, and mobile phones).
+
+## Technologies Used
+
+To develop ReferralNetworkHub, the following technologies we are using:
+
+### Frontend
+
+- **HTML/CSS/JavaScript:** Basic building blocks for the web interface.
+- **React.js:** A powerful JavaScript library for building web/user interfaces.
+- **React JSX & Module CSS:** For component-based architecture and scoped styling.
+
+### Backend
+
+- **Node.js:** A JavaScript runtime for building fast and scalable server-side applications.
+- **Express.js:** A web application framework for Node.js.
+- **MongoDB:** A NoSQL database for storing user data, job listings, and referrals.
+- **Mongoose:** An ODM (Object Data Modeling) library for MongoDB and Node.js.
+
+### Authentication
+
+- **JWT (JSON Web Tokens):** For secure authentication and authorization.
+
+### Other Tools
+
+- **Git:** Version control system for tracking changes and collaboration.
 
 ## Getting Started
 
@@ -31,3 +56,8 @@ For more information or inquiries, you can contact at [rutikkulkarni2001@gmail.c
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## Legal Notice
+
+ReferralNetworkHub is an open-source project developed by [GyamaTech](https://gyamatech.com/) Company. All rights to the original content and name are reserved. Unauthorized use of the GyamaTech brand or name for purposes outside the scope of this project is prohibited. For more details, please refer to the [MIT License](LICENSE).
+

@@ -3,6 +3,7 @@
   justify-content: space-around;
   align-items: center;
   margin: auto;
+  background-color: var(--hero-bg-color);
 }
 
 .textContainer {

@@ -5,6 +5,7 @@ import { BiUser } from "react-icons/bi";
 import { LuLifeBuoy } from "react-icons/lu";
 import { FiLogOut } from "react-icons/fi";
 import { HiOutlineLightBulb } from "react-icons/hi";
+import ThemeSwitcher from "../../Buttons/ThemeSwitcher/ThemeSwitcher"
 
 const Widget = () => {
   return (
@@ -28,10 +29,7 @@ const Widget = () => {
       <div className={styles.menuItem}>
         <HiOutlineLightBulb className={styles.themeIcon} />
         <span>Dark Theme</span>
-        <label className={styles.switch}>
-          <input type="checkbox" checked />
-          <span className={styles.slider}></span>
-        </label>
+        <ThemeSwitcher/>
       </div>
       <div className={styles.menuItem}>
         <LuLifeBuoy className={styles.helpIcon} />

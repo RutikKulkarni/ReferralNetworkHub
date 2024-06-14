@@ -1,11 +1,11 @@
 /* Footer Heading */
 .footerHeading {
-  color: black;
+  color: var(--text-color);
 }
 
 /* Footer Container */
 .footer {
-  background-color: var(--button-bg-color);
+  background-color: var(--footer-bg-color);
   padding: 20px;
 }
 
@@ -17,7 +17,7 @@
 .gitLogo {
   width: 30px;
   height: 30px;
-  color: black;
+  color: var(--text-color);
 }
 
 /* Footer Heading Styles */

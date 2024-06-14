@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import navLogo from "../../assets/svg/logo.svg";
+import navDarklogo from "../../assets/svg/dark-logo.svg";
+import navWhitelogo from "../../assets/svg/white-logo.svg";
 import styles from "./Navbar.module.css";
 import { handleNavigate } from "../../utility/handleRedirections";
 import { BiUser } from "react-icons/bi";
@@ -40,7 +41,7 @@ function Navbar() {
   return (
     <nav className={`${styles.navbar}`}>
       <div className={`${styles.logo}`}>
-        <img src={navLogo} alt="Logo" />
+        <img src={navDarklogo} alt="Logo" />
       </div>
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
         <li

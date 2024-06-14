@@ -12,8 +12,8 @@ Thank you to all the contributors who have helped make ReferralNetworkHub better
 - GitHub: [GitHub profile](https://github.com/AbuQamar7379)
 - Portfolio Link: [Portfolio](https://abuqamar-portfolio.netlify.app/)
 
-### Name: John Doe
+### Name: Rutik Kulkarni
 - Email: john.doe@example.com
-- LinkedIn: [LinkedIn Profile](https://linkedin.com/in/<username>)
-- GitHub: [GitHub profile](https://github.com/<username>)
-- Portfolio Link: [Portfolio](https://example.com/portfolio)
+- LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/rutikkulkarni)
+- GitHub: [GitHub profile](https://github.com/RutikKulkarni)
+- Portfolio Link: [Portfolio](https://www.crio.do/learn/portfolio/rutikkulkarni2001/)

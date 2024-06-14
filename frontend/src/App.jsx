@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Services from "./pages/Services/Services";
@@ -11,11 +14,11 @@ import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 export const Config = {
   endpoint: "http://localhost:1001/api/",
 };
-
 function App() {
   return (
     <Router>
       <ThemeProvider>
+        <ToastContainer />
         <Routes>
           {/* Route for the Home page */}
           <Route path="/" element={<Home />} />
@@ -38,3 +41,9 @@ function App() {
 }
 
 export default App;
+
+  
+
+
+
+

@@ -14,6 +14,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { useNavigate } from "react-router-dom";
 import { validateUserData } from "../../utility/validateUserInput";
 import { generateSnackbar } from "../../utility/snackbarGenerator";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 /**
  * Signup component representing the Signup page.
@@ -37,7 +39,8 @@ const Signup = () => {
 
   const signupUser = async () => {
     try {
-      if (validateUserData(userData) === true) {
+      const validationMessage = validateUserData(userData);
+      if (validationMessage === true) {
         setIsLoading(true);
         let response = await axios.post(
           `${Config.endpoint}auth/register`,
@@ -51,7 +54,7 @@ const Signup = () => {
           navigate("/login");
         }
       } else {
-        generateSnackbar(validateUserData(userData), "warning", 2000);
+        generateSnackbar(validationMessage, "warning", 2000);
       }
     } catch (err) {
       if (err.response?.status === 500) {
@@ -122,12 +125,6 @@ const Signup = () => {
             />
           </div>
 
-          {/* <div className={styles.flexRow}>
-            <div>
-              <input type="checkbox" id="rememberMe" />
-              <label htmlFor="rememberMe">Remember me</label>
-            </div>
-          </div> */}
           {isLoading && (
             <div style={{ marginTop: "10px" }}>
               <LinearProgress color="success" />
@@ -152,6 +149,7 @@ const Signup = () => {
         </form>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 };

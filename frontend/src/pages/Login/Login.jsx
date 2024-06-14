@@ -8,7 +8,8 @@ import { Config } from "../../App";
 import { LinearProgress } from "@mui/material";
 import { validateUserData } from "../../utility/validateUserInput";
 import { persistUser } from "../../utility/userPersistence";
-import { generateSnackbar } from "../../utility/snackbarGenerator";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { LuAtSign } from "react-icons/lu";
 import { GoLock } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
@@ -33,42 +34,42 @@ const Login = () => {
 
   const loginUser = async () => {
     try {
-      if (validateUserData(userData) === true) {
-        setIsLoading(true);
-        let response = await axios.post(
-          `${Config.endpoint}auth/login`,
-          userData
-        );
-
-        if (response.status === 200) {
-          setIsLoading(false);
-          generateSnackbar(response.data.message, "success", 2000);
-        }
-
-        if (rememberMe) {
-          persistUser(
-            response.data.user._id,
-            response.data.token.token,
-            "rememberMe"
-          );
-        } else {
-          persistUser(
-            response.data.user._id,
-            response.data.token.token,
-            "none"
-          );
-        }
-
-        setUserData({ email: "", password: "" });
-        navigate("/");
-      } else {
-        generateSnackbar(validateUserData(userData), "warning", 2000);
+      const validation = validateUserData(userData);
+      if (validation !== true) {
+        toast.warning(validation);
+        setIsLoading(false);
+        return;
       }
-    } catch (err) {
-      if (err.response?.status === 500) {
-        generateSnackbar(err.response.data.message, "error", 2000);
+
+      setIsLoading(true);
+      let response = await axios.post(`${Config.endpoint}auth/login`, userData);
+
+      if (response.status === 200) {
+        setIsLoading(false);
+        toast.success(response.data.message);
+      }
+
+      if (rememberMe) {
+        persistUser(
+          response.data.user._id,
+          response.data.token.token,
+          "rememberMe"
+        );
       } else {
-        generateSnackbar(err.response.statusText, "error", 2000);
+        persistUser(response.data.user._id, response.data.token.token, "none");
+      }
+
+      setUserData({ email: "", password: "" });
+      navigate("/");
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 500) {
+          toast.error(err.response.data.message);
+        } else {
+          toast.error(err.response.statusText);
+        }
+      } else {
+        toast.error("An unexpected error occurred.");//snackbar
       }
 
       setIsLoading(false);
@@ -156,6 +157,7 @@ const Login = () => {
         </form>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 };

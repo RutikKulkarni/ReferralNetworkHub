@@ -1,18 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { setTheme, getTheme } from "../../../utility/themeUtils";
+import React, { useContext } from "react";
+import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
 import styles from "./ThemeSwitcher.module.css";
 
 const ThemeSwitcher = () => {
-  const [theme, setThemeState] = useState(getTheme());
-
-  useEffect(() => {
-    setTheme(theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setThemeState(newTheme);
-  };
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <label className={styles.switch}>

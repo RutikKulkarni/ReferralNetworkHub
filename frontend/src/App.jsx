@@ -6,6 +6,7 @@ import Help from "./pages/Help/Help";
 import Contact from "./pages/Contact/Contact";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
+import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 
 export const Config = {
   endpoint: "http://localhost:1001/api/",
@@ -14,22 +15,24 @@ export const Config = {
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Route for the Home page */}
-        <Route path="/" element={<Home />} />
-        {/* Route for the About page */}
-        <Route path="/about" element={<About />} />
-        {/* Route for the Services page */}
-        <Route path="/services" element={<Services />} />
-        {/* Route for the Help page */}
-        <Route path="/help" element={<Help />} />
-        {/* Route for the Contact page */}
-        <Route path="/contact" element={<Contact />} />
-        {/* Route for the Signup page */}
-        <Route path="/signup" element={<Signup />} />
-        {/* Route for the Login page */}
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      <ThemeProvider>
+        <Routes>
+          {/* Route for the Home page */}
+          <Route path="/" element={<Home />} />
+          {/* Route for the About page */}
+          <Route path="/about" element={<About />} />
+          {/* Route for the Services page */}
+          <Route path="/services" element={<Services />} />
+          {/* Route for the Help page */}
+          <Route path="/help" element={<Help />} />
+          {/* Route for the Contact page */}
+          <Route path="/contact" element={<Contact />} />
+          {/* Route for the Signup page */}
+          <Route path="/signup" element={<Signup />} />
+          {/* Route for the Login page */}
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </ThemeProvider>
     </Router>
   );
 }

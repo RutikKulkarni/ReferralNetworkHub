@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./User.module.css";
 import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
 import { BiUser } from "react-icons/bi";
 import { LuLifeBuoy } from "react-icons/lu";
 import { FiLogOut } from "react-icons/fi";
 import { HiOutlineLightBulb } from "react-icons/hi";
-import ThemeSwitcher from "../../Buttons/ThemeSwitcher/ThemeSwitcher"
+import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
+import ThemeSwitcher from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 const Widget = () => {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <div className={styles.widgetContainer}>
       <div className={styles.profileSection}>
@@ -29,7 +32,7 @@ const Widget = () => {
       <div className={styles.menuItem}>
         <HiOutlineLightBulb className={styles.themeIcon} />
         <span>Dark Theme</span>
-        <ThemeSwitcher/>
+        <ThemeSwitcher />
       </div>
       <div className={styles.menuItem}>
         <LuLifeBuoy className={styles.helpIcon} />

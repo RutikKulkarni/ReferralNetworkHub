@@ -48,7 +48,7 @@
 
 .loginBtn {
   background-color: var(--button-bg-color);
-  color: #000000;
+  color: var(--text-color);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;

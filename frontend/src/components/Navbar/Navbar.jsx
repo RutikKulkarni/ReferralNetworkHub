@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import navDarklogo from "../../assets/svg/dark-logo.svg";
 import navWhitelogo from "../../assets/svg/white-logo.svg";
@@ -7,12 +7,15 @@ import { handleNavigate } from "../../utility/handleRedirections";
 import { BiUser } from "react-icons/bi";
 import { LiaInfoCircleSolid } from "react-icons/lia";
 import Widget from "../../components/Widget/User/User";
+import { ThemeContext } from "../../context/ThemeProvider/ThemeProvider";
+// import ThemeSwitcher from "../Buttons/ThemeSwitcher/ThemeSwitcher"
 
 /**
  * Navbar component for navigation within the application.
  * @returns {JSX.Element} Navbar JSX element
  */
-function Navbar() {
+const Navbar = () => {
+  const { theme } = useContext(ThemeContext);
   let navigate = useNavigate();
   let location = useLocation();
   const [isActive, setIsActive] = useState(false);
@@ -41,7 +44,7 @@ function Navbar() {
   return (
     <nav className={`${styles.navbar}`}>
       <div className={`${styles.logo}`}>
-        <img src={navDarklogo} alt="Logo" />
+        <img src={theme === "dark" ? navWhitelogo : navDarklogo} alt="Logo" />
       </div>
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
         <li
@@ -101,6 +104,7 @@ function Navbar() {
               <LiaInfoCircleSolid className={styles.iconInfo} />
             </>
           )}
+          {/* <ThemeSwitcher/> */}
           {isWidgetVisible && <Widget />}
         </div>
         <div
@@ -114,6 +118,6 @@ function Navbar() {
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

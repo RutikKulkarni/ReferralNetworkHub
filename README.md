@@ -59,5 +59,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Legal Notice
 
-ReferralNetworkHub is an open-source project developed by [GyamaTech](https://gyamatech.com/) Company. All rights to the original content and name are reserved. Unauthorized use of the GyamaTech brand or name for purposes outside the scope of this project is prohibited. For more details, please refer to the [MIT License](LICENSE).
+ReferralNetworkHub is an open-source project developed by [GyamaTech](https://gyamatech.com/). All rights to the original content and name are reserved. Unauthorized use of the GyamaTech brand or name for purposes outside the scope of this project is prohibited. For more details, please refer to the [MIT License](LICENSE).
 

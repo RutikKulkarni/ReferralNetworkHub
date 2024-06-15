@@ -6,6 +6,7 @@ import httpStatus from "http-status";
 
 /**
  * Interface representing a User document.
+ * @interface UserDocument
  */
 interface UserDocument extends Document {
   name: string;
@@ -20,26 +21,29 @@ interface UserDocument extends Document {
  * Mongoose schema for the User document.
  * @const {mongoose.Schema<UserDocument>}
  */
-const userSchema = new mongoose.Schema<UserDocument>({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: function (email: string) {
-      if (!validator.isEmail(email)) {
-        throw new ApiError("Invalid email format!", httpStatus.BAD_REQUEST);
-      }
+const userSchema = new mongoose.Schema<UserDocument>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: function (email: string) {
+        if (!validator.isEmail(email)) {
+          throw new ApiError("Invalid email format!", httpStatus.BAD_REQUEST);
+        }
+      },
+    },
+    password: {
+      type: String,
+      required: true,
     },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 /**
  * Method to hash the user's password.
@@ -57,11 +61,11 @@ userSchema.methods.hashPassword = async function (
 };
 
 /**
- * Method to cmpare user's hashed password.
+ * Method to compare user's hashed password.
  * @method comparePassword
  * @memberof UserDocument
  * @param {string} password - The password to compare.
- * @returns {Promise<boolean>} A promise that resolves with the compare password.
+ * @returns {Promise<boolean>} A promise that resolves with the comparison result.
  */
 userSchema.methods.comparePassword = async function (
   password: string

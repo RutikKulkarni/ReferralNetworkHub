@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import styles from "./MyAccount.module.css";
-import Profile from "../Profile/Profile";
+import Profile from "../../components/Profile/Profile";
 
 /**
  * Home component representing the Home page.

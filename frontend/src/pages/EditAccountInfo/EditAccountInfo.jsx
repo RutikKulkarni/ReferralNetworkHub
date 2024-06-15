@@ -12,7 +12,7 @@ const EditAccountInfo = () => {
   return (
     <div>
       <Navbar />
-      <Form />
+        <Form />
       <Footer />
     </div>
   );

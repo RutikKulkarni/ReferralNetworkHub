@@ -19,8 +19,31 @@ const getUserDetails = catchAsync(async (req: Request, res: Response) => {
       .send({ message: "User not authorized to access this resource" });
   }
 
-  let user = await userService.getUserDetailsById(userId);
+  const user = await userService.getDetailsById(userId);
   return res.status(httpStatus.OK).send(user);
 });
 
-export { getUserDetails };
+/**
+ * Post user details for a specific user.
+ *
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object.
+ * @returns {Response} The response with a success message and user info.
+ */
+const postUserDetails = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const details = req.body;
+
+  if (userId !== req.user.sub) {
+    return res
+      .status(httpStatus.FORBIDDEN)
+      .send({ message: "User not authorized to access this resource" });
+  }
+
+  const user = await userService.postDetails(userId, details);
+  return res
+    .status(httpStatus.OK)
+    .send({ message: "Details added successfully", userInfo: user });
+});
+
+export { getUserDetails, postUserDetails };

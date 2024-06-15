@@ -11,7 +11,7 @@ app.use(express.json());
 // Middleware to enable cross-origin requests
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://referral-network-hub.vercel.app/",
   })
 );
 

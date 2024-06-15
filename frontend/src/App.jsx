@@ -10,8 +10,16 @@ import MyAccount from "./pages/MyAccount/MyAccount";
 import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 
+// If you are developing then set this to 'development', if you are pushing your code make sure it is set to 'deployment'
+const REACT_ENV = "deployment";
+
 export const Config = {
-  endpoint: "https://referralnetworkhub.onrender.com/api/",
+  endpoint:
+    REACT_ENV === "development"
+      ? "http://localhost:1001/api/"
+      : REACT_ENV === "deployment"
+      ? "https://referralnetworkhub.onrender.com/api/"
+      : "",
 };
 
 function App() {

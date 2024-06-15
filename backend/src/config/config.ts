@@ -12,12 +12,13 @@ dotenv.config({ path: path.join(__dirname, "../../.env") });
 const envVarsSchema: import("joi").ObjectSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string()
-      .valid("production", "development", "test")
+      .valid("development", "deployment", "test")
       .required()
       .description("Node environment"),
     PORT: Joi.number().default(3000).description("Port number"),
     MONGO_URI: Joi.string().required().description("Mongo DB URI"),
     SECRET_KEY: Joi.string().required().description("Secret key"),
+    CLIENT_URL: Joi.string().required().description("Client"),
   })
   .unknown();
 
@@ -38,10 +39,10 @@ if (error) {
  * @property {string | undefined} [PORT] - Port number for the server.
  */
 interface Config {
-  NODE_ENV: string;
   MONGO_URI: string;
   PORT: number;
   SECRET_KEY: string;
+  CLIENT_URL: string;
 }
 
 /**
@@ -49,10 +50,20 @@ interface Config {
  * @type {Config}
  */
 const config: Config = {
-  NODE_ENV: envVars.NODE_ENV,
   PORT: envVars.PORT,
-  MONGO_URI: envVars.MONGO_URI,
+  MONGO_URI:
+    envVars.NODE_ENV === "development"
+      ? envVars.MONGO_URI
+      : envVars.NODE_ENV === "deployment"
+      ? envVars.REMOTE_MONGO_URI
+      : "",
   SECRET_KEY: envVars.SECRET_KEY,
+  CLIENT_URL:
+    envVars.NODE_ENV === "development"
+      ? envVars.CLIENT_URL
+      : envVars.NODE_ENV === "deployment"
+      ? envVars.REMOTE_CLIENT_URL
+      : "",
 };
 
 export { config };

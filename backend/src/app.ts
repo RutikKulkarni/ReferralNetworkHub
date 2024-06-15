@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import httpStatus from "http-status";
 import router from "./routes";
+import { config } from "./config/config";
 
 const app: Application = express();
 
@@ -11,7 +12,7 @@ app.use(express.json());
 // Middleware to enable cross-origin requests
 app.use(
   cors({
-    origin: "https://referral-network-hub.vercel.app/",
+    origin: config.CLIENT_URL,
   })
 );
 

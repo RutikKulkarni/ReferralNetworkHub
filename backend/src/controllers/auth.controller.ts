@@ -15,7 +15,7 @@ const register = catchAsync(async (req: Request, res: Response) => {
   const user = await authService.registerUser(userData);
   return res
     .status(httpStatus.CREATED)
-    .send({ message: "User registered successfully", user });
+    .send({ message: "User registration successful", user });
 });
 
 /**
@@ -31,7 +31,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
   const token = await tokenService.generateAuthToken(user.user);
   return res
     .status(httpStatus.OK)
-    .send({ message: "User logged in successfully", user, token });
+    .send({ message: "Login successful", user, token });
 });
 
 export { register, login };

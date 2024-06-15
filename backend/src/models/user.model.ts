@@ -33,7 +33,10 @@ const userSchema = new mongoose.Schema<UserDocument>(
       unique: true,
       validate: function (email: string) {
         if (!validator.isEmail(email)) {
-          throw new ApiError("Invalid email format!", httpStatus.BAD_REQUEST);
+          throw new ApiError(
+            "Invalid email format. Please provide a valid email address.",
+            httpStatus.BAD_REQUEST
+          );
         }
       },
     },

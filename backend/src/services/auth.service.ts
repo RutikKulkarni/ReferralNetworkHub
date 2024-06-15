@@ -22,7 +22,10 @@ const registerUser = async (
 ): Promise<RegistrationResult> => {
   try {
     if (await findUserByEmail(userData.email)) {
-      throw new ApiError("Email already taken ", httpStatus.BAD_REQUEST);
+      throw new ApiError(
+        "The email address is already in use",
+        httpStatus.BAD_REQUEST
+      );
     }
 
     let user = new UserModel(userData);
@@ -34,7 +37,7 @@ const registerUser = async (
     return { user, userAccountDetails };
   } catch (err: any) {
     throw new ApiError(
-      "Failed to register user, " + err.message,
+      "Failed to register, " + err.message,
       httpStatus.INTERNAL_SERVER_ERROR
     );
   }
@@ -74,7 +77,7 @@ const loginUser = async (
     let user = await findUserByEmail(email);
     if (!user) {
       throw new ApiError(
-        "User not exist, register first!",
+        "User does not exist. Please register first.",
         httpStatus.BAD_REQUEST
       );
     }
@@ -90,7 +93,7 @@ const loginUser = async (
     return { user, userAccountDetails };
   } catch (err: any) {
     throw new ApiError(
-      "Failed to login user, " + err.message,
+      "Failed to log in, " + err.message,
       httpStatus.INTERNAL_SERVER_ERROR
     );
   }

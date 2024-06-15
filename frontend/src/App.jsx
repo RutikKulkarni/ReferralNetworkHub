@@ -11,7 +11,7 @@ import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 
 export const Config = {
-  endpoint: "http://localhost:8082/api/",
+  endpoint: "https://referralnetworkhub.onrender.com/api/",
 };
 
 function App() {

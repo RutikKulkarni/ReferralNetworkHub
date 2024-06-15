@@ -20,9 +20,7 @@ app.use("/api", router);
 
 // Default route handler for the root URL "/"
 app.use("/", (req, res) =>
-  res
-    .status(httpStatus.OK)
-    .send("<h1>Server is running.</h1>")
+  res.status(httpStatus.OK).send("<h1>Server is running.</h1>")
 );
 
 export default app;

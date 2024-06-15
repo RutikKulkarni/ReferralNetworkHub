@@ -3,7 +3,6 @@ import mongoose, { Document, Model } from "mongoose";
 /**
  * Mongoose schema for the Personal Details document.
  * @param {Object} schemaDefinition - Definition of the personal details schema.
- * @param {String} schemaDefinition.userId - User ID.
  * @param {String} schemaDefinition.fullName - Full name.
  * @param {String} schemaDefinition.email - Email address.
  * @param {String} schemaDefinition.gender - Gender.
@@ -13,7 +12,6 @@ import mongoose, { Document, Model } from "mongoose";
  */
 const personalDetailsSchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true },
     fullName: { type: String, required: true },
     email: { type: String, required: true },
     gender: { type: String, required: true },
@@ -99,9 +97,9 @@ const socialLinksSchema = new mongoose.Schema(
  * @interface
  */
 interface AccountDetailsDocument extends Document {
+  _id: string;
   userDetails: {
     personalDetails: {
-      userId: string;
       fullName: string;
       email: string;
       gender: string;
@@ -141,9 +139,9 @@ interface AccountDetailsDocument extends Document {
 /**
  * Mongoose schema for the User Account Details document.
  * @param {Object} schemaDefinition - Definition of the user account details schema.
+ * @param {String} schemaDefinition._id - User ID.
  * @param {Object} schemaDefinition.userDetails - User details schema.
  * @param {Object} schemaDefinition.userDetails.personalDetails - Personal details schema.
- * @param {String} schemaDefinition.userDetails.personalDetails.userId - User ID.
  * @param {String} schemaDefinition.userDetails.personalDetails.fullName - Full name.
  * @param {String} schemaDefinition.userDetails.personalDetails.email - Email address.
  * @param {String} schemaDefinition.userDetails.personalDetails.gender - Gender.
@@ -176,6 +174,7 @@ interface AccountDetailsDocument extends Document {
  */
 const accountDetailsSchema = new mongoose.Schema<AccountDetailsDocument>(
   {
+    _id: { type: String, required: true }, // Added userId field
     userDetails: {
       type: new mongoose.Schema(
         {
@@ -189,7 +188,7 @@ const accountDetailsSchema = new mongoose.Schema<AccountDetailsDocument>(
       default: null,
     },
   },
-  { timestamps: true, _id: false }
+  { timestamps: true }
 );
 
 /**
@@ -203,3 +202,4 @@ const accountDetailsModel: Model<AccountDetailsDocument> =
   );
 
 export { accountDetailsModel };
+export { AccountDetailsDocument };

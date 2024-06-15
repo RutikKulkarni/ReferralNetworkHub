@@ -1,16 +1,25 @@
 import httpStatus from "http-status";
-import { UserModel } from "../models";
+import { UserModel, AccountDetailsModel } from "../models";
 import { ApiError } from "../utils/ApiError";
 import { UserDocument } from "../models/user.model";
+import { AccountDetailsDocument } from "../models/userAccountDetails.model";
+
+// Define a custom interface for the combined return value
+interface RegistrationResult {
+  user: UserDocument;
+  userAccountDetails: AccountDetailsDocument | null;
+}
 
 /**
  * Registers a new user.
  *
  * @param {UserDocument} userData - The user data to register.
- * @returns {Promise<UserDocument>} A promise that resolves with the registered user document.
+ * @returns {Promise<RegistrationResult>} A promise that resolves with the registered user document.
  * @throws {ApiError} Throws an API error if registration fails.
  */
-const registerUser = async (userData: UserDocument): Promise<UserDocument> => {
+const registerUser = async (
+  userData: UserDocument
+): Promise<RegistrationResult> => {
   try {
     if (await findUserByEmail(userData.email)) {
       throw new ApiError("Email already taken ", httpStatus.BAD_REQUEST);
@@ -19,7 +28,10 @@ const registerUser = async (userData: UserDocument): Promise<UserDocument> => {
     let user = new UserModel(userData);
     user.password = await user.hashPassword(user.password);
     saveDOc(user);
-    return user;
+    let userAccountDetails = await AccountDetailsModel.create({
+      _id: user._id,
+    });
+    return { user, userAccountDetails };
   } catch (err: any) {
     throw new ApiError(
       "Failed to register user, " + err.message,
@@ -51,13 +63,13 @@ const findUserByEmail = async (email: string): Promise<UserDocument | null> =>
  *
  * @param {string} email - email provided by user to login.
  * @param {string} password - password provided by user to login.
- * @returns {Promise<UserDocument>} A promise that resolves with the loggedIn user document.
+ * @returns {Promise<RegistrationResult>} A promise that resolves with the loggedIn user document.
  * @throws {ApiError} Throws an API error if login fails.
  */
 const loginUser = async (
   email: string,
   password: string
-): Promise<UserDocument> => {
+): Promise<RegistrationResult> => {
   try {
     let user = await findUserByEmail(email);
     if (!user) {
@@ -71,7 +83,11 @@ const loginUser = async (
       throw new ApiError("Incorrect password", httpStatus.UNAUTHORIZED);
     }
 
-    return user;
+    let userAccountDetails = await AccountDetailsModel.findById({
+      _id: user._id.toString(),
+    });
+
+    return { user, userAccountDetails };
   } catch (err: any) {
     throw new ApiError(
       "Failed to login user, " + err.message,

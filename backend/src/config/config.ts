@@ -18,7 +18,6 @@ const envVarsSchema: import("joi").ObjectSchema = Joi.object()
     PORT: Joi.number().default(3000).description("Port number"),
     MONGO_URI: Joi.string().required().description("Mongo DB URI"),
     SECRET_KEY: Joi.string().required().description("Secret key"),
-    CLIENT_URL: Joi.string().required().description("Client"),
   })
   .unknown();
 

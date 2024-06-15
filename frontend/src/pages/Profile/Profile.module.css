@@ -1,0 +1,96 @@
+.profileContainer {
+  display: flex;
+  padding: 20px;
+  border: 1px solid var(--color-gray);
+  border-radius: 8px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  margin: 10px 20px 10px 20px;
+}
+
+.leftSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.profileImage {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.socialLinks a {
+  text-decoration: none;
+}
+
+.socialLinks img {
+  width: 30px;
+  height: 30px;
+}
+
+.downloadButton {
+  padding: 10px 20px;
+  border: 1px solid var(--color-gray);
+  border-radius: 4px;
+  background-color: var(--button-bg-color);
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.rightSection {
+  flex: 2;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.designation {
+  font-size: 16px;
+  color: var(--color-gray);
+}
+
+.editButton {
+  padding: 10px 20px;
+  border: 1px solid var(--color-gray);
+  border-radius: 4px;
+  background-color: var(--button-bg-color);
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.contactInfo,
+.section {
+  margin-bottom: 20px;
+}
+
+.contactInfo p,
+.section p {
+  margin-bottom: 10px;
+}
+
+.section h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

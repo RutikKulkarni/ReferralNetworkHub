@@ -7,7 +7,6 @@ import Contact from "./pages/Contact/Contact";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import MyAccount from "./pages/MyAccount/MyAccount";
-import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 
 // If you are developing then set this to 'development', if you are pushing your code make sure it is set to 'deployment'
@@ -43,8 +42,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           {/* Route for the MyAccount page */}
           <Route path="/MyAccount" element={<MyAccount />} />
-          {/* Route for the EditAccountInfo.module.css page */}
-          <Route path="/EditAccountInfo" element={<EditAccountInfo />} />
         </Routes>
       </ThemeProvider>
     </Router>

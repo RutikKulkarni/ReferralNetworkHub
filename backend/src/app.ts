@@ -22,7 +22,7 @@ app.use("/api", router);
 app.use("/", (req, res) =>
   res
     .status(httpStatus.OK)
-    .send("<h1>Server is running........................</h1>")
+    .send("<h1>Server is running.</h1>")
 );
 
 export default app;

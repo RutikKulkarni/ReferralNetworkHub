@@ -11,7 +11,7 @@ import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 
 export const Config = {
-  endpoint: "http://localhost:1001/api/",
+  endpoint: "http://localhost:8082/api/",
 };
 
 function App() {

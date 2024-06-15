@@ -5,7 +5,7 @@ import Joi, { ObjectSchema } from "joi";
  */
 const register: ObjectSchema = Joi.object().keys({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().required().email(),
   password: Joi.string().required(),
 });
 
@@ -13,7 +13,7 @@ const register: ObjectSchema = Joi.object().keys({
  * Validation schema for login user
  */
 const login: ObjectSchema = Joi.object().keys({
-  email: Joi.string().required(),
+  email: Joi.string().required().email(),
   password: Joi.string().required(),
 });
 

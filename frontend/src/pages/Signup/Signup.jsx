@@ -37,28 +37,30 @@ const Signup = () => {
 
   const signupUser = async () => {
     try {
-      if (validateUserData(userData) === true) {
+      const validationMessage = validateUserData(userData);
+      if (validationMessage === true) {
         setIsLoading(true);
-        let response = await axios.post(
+        const response = await axios.post(
           `${Config.endpoint}auth/register`,
           userData
         );
 
         if (response.status === 201) {
           generateSnackbar(response.data.message, "success", 2000);
-          setIsLoading(false);
           setUserData({ name: "", email: "", password: "" });
           navigate("/login");
         }
+        setIsLoading(false);
       } else {
-        generateSnackbar(validateUserData(userData), "warning", 2000);
+        generateSnackbar(validationMessage, "warning", 2000);
       }
     } catch (err) {
-      if (err.response?.status === 500) {
-        generateSnackbar(err.response?.data.message, "error", 2000);
-      } else {
-        generateSnackbar(err.response?.statusText, "error", 2000);
-      }
+      const status = err.response?.status;
+      const message =
+        status === 500 || status === 400
+          ? err.response?.data.message
+          : err.response?.statusText;
+      generateSnackbar(message, "error", 2000);
       setIsLoading(false);
     }
   };

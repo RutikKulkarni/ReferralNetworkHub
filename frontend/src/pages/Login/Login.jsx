@@ -33,44 +33,42 @@ const Login = () => {
 
   const loginUser = async () => {
     try {
-      if (validateUserData(userData) === true) {
+      const validationMessage = validateUserData(userData);
+      if (validationMessage === true) {
         setIsLoading(true);
-        let response = await axios.post(
+        const response = await axios.post(
           `${Config.endpoint}auth/login`,
           userData
         );
 
         if (response.status === 200) {
-          setIsLoading(false);
           generateSnackbar(response.data.message, "success", 2000);
-        }
+          rememberMe
+            ? persistUser(
+                response.data.user._id,
+                response.data.token.token,
+                "rememberMe"
+              )
+            : persistUser(
+                response.data.user._id,
+                response.data.token.token,
+                "none"
+              );
 
-        if (rememberMe) {
-          persistUser(
-            response.data.user._id,
-            response.data.token.token,
-            "rememberMe"
-          );
-        } else {
-          persistUser(
-            response.data.user._id,
-            response.data.token.token,
-            "none"
-          );
+          setUserData({ email: "", password: "" });
+          navigate("/");
         }
-
-        setUserData({ email: "", password: "" });
-        navigate("/");
+        setIsLoading(false);
       } else {
-        generateSnackbar(validateUserData(userData), "warning", 2000);
+        generateSnackbar(validationMessage, "warning", 2000);
       }
     } catch (err) {
-      if (err.response?.status === 500) {
-        generateSnackbar(err.response.data.message, "error", 2000);
-      } else {
-        generateSnackbar(err.response.statusText, "error", 2000);
-      }
-
+      const status = err.response?.status;
+      const message =
+        status === 500 || status === 400
+          ? err.response?.data.message
+          : err.response?.statusText;
+      generateSnackbar(message, "error", 2000);
       setIsLoading(false);
     }
   };

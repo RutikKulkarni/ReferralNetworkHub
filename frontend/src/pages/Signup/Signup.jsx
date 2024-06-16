@@ -12,6 +12,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { useNavigate } from "react-router-dom";
 import { validateUserData } from "../../utility/validateUserInput";
 import { generateSnackbar } from "../../utility/snackbarGenerator";
+import { catchError } from "../../utility/catchError";
 
 /**
  * Signup component representing the Signup page.
@@ -44,7 +45,7 @@ const Signup = () => {
         );
 
         if (response.status === 201) {
-          generateSnackbar(response.data.message, "success", 2000);
+          generateSnackbar(response?.data?.message, "success", 2000);
           setUserData({ name: "", email: "", password: "" });
           navigate("/login");
         }
@@ -53,12 +54,7 @@ const Signup = () => {
         generateSnackbar(validationMessage, "warning", 2000);
       }
     } catch (err) {
-      const status = err.response?.status;
-      const message =
-        status === 500 || status === 400
-          ? err.response?.data.message
-          : err.response?.statusText;
-      generateSnackbar(message, "error", 2000);
+      catchError(err);
       setIsLoading(false);
     }
   };

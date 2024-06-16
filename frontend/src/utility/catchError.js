@@ -1,0 +1,12 @@
+import { generateSnackbar } from "./snackbarGenerator";
+
+const catchError = (err) => {
+  const status = err.response?.status;
+  const message =
+    status === 500 || status === 400
+      ? err.response?.data.message
+      : err.response?.statusText;
+  generateSnackbar(message, "error", 2000);
+};
+
+export { catchError };

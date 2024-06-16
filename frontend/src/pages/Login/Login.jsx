@@ -11,6 +11,7 @@ import { LuAtSign } from "react-icons/lu";
 import { GoLock } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
 import { FaLinkedinIn } from "react-icons/fa6";
+import { catchError } from "../../utility/catchError";
 
 /**
  * Login component representing the Login page.
@@ -40,7 +41,7 @@ const Login = () => {
         );
 
         if (response.status === 200) {
-          generateSnackbar(response.data.message, "success", 2000);
+          generateSnackbar(response?.data?.message, "success", 2000);
           rememberMe
             ? persistUser(
                 response.data.user._id,
@@ -61,12 +62,7 @@ const Login = () => {
         generateSnackbar(validationMessage, "warning", 2000);
       }
     } catch (err) {
-      const status = err.response?.status;
-      const message =
-        status === 500 || status === 400
-          ? err.response?.data.message
-          : err.response?.statusText;
-      generateSnackbar(message, "error", 2000);
+      catchError(err);
       setIsLoading(false);
     }
   };

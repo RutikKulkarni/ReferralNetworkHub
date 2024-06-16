@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import { Config } from "../../App";
 import { LinearProgress } from "@mui/material";
@@ -82,7 +80,6 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <Navbar />
       <div className={styles.loginFormContainer}>
         <h1 className={styles.formTitle}>Login</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -153,7 +150,6 @@ const Login = () => {
           </div>
         </form>
       </div>
-      <Footer />
     </div>
   );
 };

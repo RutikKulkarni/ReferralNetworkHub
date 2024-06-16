@@ -30,6 +30,25 @@ const Login = () => {
     }));
   };
 
+  const fetchUserDetails = async (userId, token) => {
+    try {
+      let response = await axios.get(
+        `${Config.endpoint}user/details/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        generateSnackbar(response.data.message, "success", 2000);
+        return response.data;
+      }
+    } catch (err) {
+      catchError(err);
+    }
+  };
+
   const loginUser = async () => {
     try {
       const validationMessage = validateUserData(userData);
@@ -41,6 +60,10 @@ const Login = () => {
         );
 
         if (response.status === 200) {
+          const userData = await fetchUserDetails(
+            response?.data?.user?._id,
+            response?.data?.token?.token
+          );
           generateSnackbar(response?.data?.message, "success", 2000);
           rememberMe
             ? persistUser(
@@ -55,7 +78,12 @@ const Login = () => {
               );
 
           setUserData({ email: "", password: "" });
-          navigate("/");
+
+          if (!userData?.userInfo?.userDetails) {
+            navigate("/editAccountInfo");
+          } else {
+            navigate("/");
+          }
         }
         setIsLoading(false);
       } else {

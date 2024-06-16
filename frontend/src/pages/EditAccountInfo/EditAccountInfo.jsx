@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import styles from "./EditAccountInfo.module.css";
 import Form from "../../components/Form/Form";
 
@@ -11,9 +9,7 @@ import Form from "../../components/Form/Form";
 const EditAccountInfo = () => {
   return (
     <div>
-      <Navbar />
-        <Form />
-      <Footer />
+      <Form />
     </div>
   );
 };

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Signup.module.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import { LuAtSign } from "react-icons/lu";
 import { GoLock } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
@@ -72,7 +70,6 @@ const Signup = () => {
 
   return (
     <div className={styles.container}>
-      <Navbar />
       <div className={styles.signupFormContainer}>
         <h1 className={styles.formTitle}>Sign Up</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -153,7 +150,6 @@ const Signup = () => {
           </div>
         </form>
       </div>
-      <Footer />
     </div>
   );
 };

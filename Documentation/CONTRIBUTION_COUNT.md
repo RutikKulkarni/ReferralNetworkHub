@@ -2,7 +2,7 @@
 
 Thank you to all the contributors who have helped make ReferralNetworkHub better! 
 
-[![The total number of contributors to this project is](https://img.shields.io/github/contributors/RutikKulkarni/ReferralNetworkHub)](https://github.com/RutikKulkarni/ReferralNetworkHub/graphs/contributors)
+[![The total number of contributors to this project is](https://img.shields.io/github/contributors/RutikKulkarni/ReferralNetworkHub)](https://github.com/KARTIK5799/ReferralNetworkHub/graphs/contributors)
 
 ## Contributors
 
@@ -17,3 +17,9 @@ Thank you to all the contributors who have helped make ReferralNetworkHub better
 - LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/rutikkulkarni)
 - GitHub: [GitHub profile](https://github.com/RutikKulkarni)
 - Portfolio Link: [Portfolio](https://www.crio.do/learn/portfolio/rutikkulkarni2001/)
+
+### Name: Kartik Sapkal
+- Email: kartiksapkal5799@gmail.com
+- LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/kartiksapkal/)
+- GitHub: [GitHub profile](https://github.com/KARTIK5799)
+- Portfolio Link: [Portfolio](https://kartiksapkaldev.vercel.app/)

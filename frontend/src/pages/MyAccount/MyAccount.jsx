@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 import styles from "./MyAccount.module.css";
 import Profile from "../../components/Profile/Profile";
 
@@ -11,9 +9,7 @@ import Profile from "../../components/Profile/Profile";
 const MyAccount = () => {
   return (
     <div>
-      <Navbar />
       <Profile />
-      <Footer />
     </div>
   );
 };

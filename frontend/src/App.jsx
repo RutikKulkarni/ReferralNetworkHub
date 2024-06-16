@@ -1,4 +1,6 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./Layout";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Services from "./pages/Services/Services";
@@ -26,26 +28,19 @@ function App() {
   return (
     <Router>
       <ThemeProvider>
-        <Routes>
-          {/* Route for the Home page */}
-          <Route path="/" element={<Home />} />
-          {/* Route for the About page */}
-          <Route path="/about" element={<About />} />
-          {/* Route for the Services page */}
-          <Route path="/services" element={<Services />} />
-          {/* Route for the Help page */}
-          <Route path="/help" element={<Help />} />
-          {/* Route for the Contact page */}
-          <Route path="/contact" element={<Contact />} />
-          {/* Route for the Signup page */}
-          <Route path="/signup" element={<Signup />} />
-          {/* Route for the Login page */}
-          <Route path="/login" element={<Login />} />
-          {/* Route for the MyAccount page */}
-          <Route path="/MyAccount" element={<MyAccount />} />
-          {/* Route for the EditAccountInfo page */}
-          <Route path="/EditAccountInfo" element={<EditAccountInfo />} />
-        </Routes>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/MyAccount" element={<MyAccount />} />
+            <Route path="/EditAccountInfo" element={<EditAccountInfo />} />
+          </Routes>
+        </Layout>
       </ThemeProvider>
     </Router>
   );

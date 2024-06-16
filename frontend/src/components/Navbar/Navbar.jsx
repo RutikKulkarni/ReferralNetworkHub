@@ -25,6 +25,9 @@ const Navbar = () => {
 
   useEffect(() => {
     setActivePath(location.pathname);
+    
+    // Update userId state when localStorage changes
+    setUserId(localStorage.getItem("userId"));
   }, [location]);
 
   /**

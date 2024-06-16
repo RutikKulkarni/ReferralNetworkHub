@@ -12,9 +12,9 @@ import mongoose, { Document, Model } from "mongoose";
  */
 const personalDetailsSchema = new mongoose.Schema(
   {
-    fullName: { type: String, required: true },
-    email: { type: String, required: true },
-    gender: { type: String, required: true },
+    fullName: { type: String },
+    email: { type: String },
+    gender: { type: String },
     resume: { type: String },
     location: { type: String },
     phoneNumber: { type: String },
@@ -38,16 +38,16 @@ const personalDetailsSchema = new mongoose.Schema(
  */
 const pastExperienceSchema = new mongoose.Schema(
   {
-    currentJobTitle: { type: String, required: true },
-    companyName: { type: String, required: true },
-    industry: { type: String, required: true },
-    yearsOfExperience: { type: Number, required: true },
-    highestDegreeAttained: { type: String, required: true },
-    universityInstitutionName: { type: String, required: true },
-    fieldOfStudy: { type: String, required: true },
-    graduationYear: { type: Number, required: true },
-    keySkills: { type: [String], required: true },
-    certificationsLicenses: { type: [String], required: true },
+    currentJobTitle: { type: String },
+    companyName: { type: String },
+    industry: { type: String },
+    yearsOfExperience: { type: Number },
+    highestDegreeAttained: { type: String },
+    universityInstitutionName: { type: String },
+    fieldOfStudy: { type: String },
+    graduationYear: { type: Number },
+    keySkills: { type: [String] },
+    certificationsLicenses: { type: [String] },
   },
   { _id: false, timestamps: false }
 );
@@ -65,13 +65,13 @@ const pastExperienceSchema = new mongoose.Schema(
  */
 const pastWorkHistorySchema = new mongoose.Schema(
   {
-    previousJobTitle: { type: String, required: true },
-    companyName: { type: String, required: true },
-    employmentDates: { type: String, required: true },
-    responsiblitiesAchievements: { type: [String], required: true },
-    personalBioSummary: { type: String, required: true },
-    availablityReferrals: { type: String, required: true },
-    jobPreferences: { type: String, required: true },
+    previousJobTitle: { type: String },
+    companyName: { type: String },
+    employmentDates: { type: String },
+    responsiblitiesAchievements: { type: [String] },
+    personalBioSummary: { type: String },
+    availablityReferrals: { type: String },
+    jobPreferences: { type: String },
   },
   { _id: false, timestamps: false }
 );
@@ -85,9 +85,9 @@ const pastWorkHistorySchema = new mongoose.Schema(
  */
 const socialLinksSchema = new mongoose.Schema(
   {
-    linkedInUrl: { type: String, required: true },
-    gitHubUrl: { type: String, required: true },
-    websiteUrl: { type: String, required: true },
+    linkedInUrl: { type: String },
+    gitHubUrl: { type: String },
+    websiteUrl: { type: String },
   },
   { _id: false, timestamps: false }
 );
@@ -105,7 +105,7 @@ interface AccountDetailsDocument extends Document {
       gender: string;
       resume?: string;
       location?: string;
-      phoneNumber?: string;
+      phoneNumber?: number;
     };
     pastExperience: {
       currentJobTitle: string;
@@ -178,10 +178,10 @@ const accountDetailsSchema = new mongoose.Schema<AccountDetailsDocument>(
     userDetails: {
       type: new mongoose.Schema(
         {
-          personalDetails: { type: personalDetailsSchema, required: true },
-          pastExperience: { type: pastExperienceSchema, required: true },
-          pastWorkHistory: { type: pastWorkHistorySchema, required: true },
-          socialLinks: { type: socialLinksSchema, required: true },
+          personalDetails: { type: personalDetailsSchema },
+          pastExperience: { type: pastExperienceSchema },
+          pastWorkHistory: { type: pastWorkHistorySchema },
+          socialLinks: { type: socialLinksSchema },
         },
         { _id: false, timestamps: false }
       ),

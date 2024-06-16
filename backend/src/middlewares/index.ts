@@ -1,3 +1,3 @@
-import { validateBody } from "./validate.middleware";
+import { validateBody, validateParams } from "./validate.middleware";
 
-export const validate = { body: validateBody };
+export const validate = { body: validateBody, params: validateParams };

@@ -1,7 +1,9 @@
 import Joi, { ObjectSchema } from "joi";
 
 /**
- * Validation schema for registering user
+ * Validation schema for registering a user.
+ *
+ * @type {ObjectSchema}
  */
 const register: ObjectSchema = Joi.object().keys({
   name: Joi.string().required(),
@@ -10,7 +12,9 @@ const register: ObjectSchema = Joi.object().keys({
 });
 
 /**
- * Validation schema for login user
+ * Validation schema for logging in a user.
+ *
+ * @type {ObjectSchema}
  */
 const login: ObjectSchema = Joi.object().keys({
   email: Joi.string().required().email(),

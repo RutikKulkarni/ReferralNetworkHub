@@ -28,7 +28,7 @@ const register = catchAsync(async (req: Request, res: Response) => {
 const login = catchAsync(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await authService.loginUser(email, password);
-  const token = await tokenService.generateAuthToken(user.user);
+  const token = await tokenService.generateAuthToken(user);
   return res
     .status(httpStatus.OK)
     .send({ message: "Login successful", user, token });

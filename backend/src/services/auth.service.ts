@@ -7,7 +7,7 @@ import { AccountDetailsDocument } from "../models/userAccountDetails.model";
 // Define a custom interface for the combined return value
 interface RegistrationResult {
   user: UserDocument;
-  userAccountDetails: AccountDetailsDocument | null;
+  userAccountDetails: AccountDetailsDocument;
 }
 
 /**
@@ -66,13 +66,13 @@ const findUserByEmail = async (email: string): Promise<UserDocument | null> =>
  *
  * @param {string} email - email provided by user to login.
  * @param {string} password - password provided by user to login.
- * @returns {Promise<RegistrationResult>} A promise that resolves with the loggedIn user document.
+ * @returns {Promise<UserDocument>} A promise that resolves with the loggedIn user document.
  * @throws {ApiError} Throws an API error if login fails.
  */
 const loginUser = async (
   email: string,
   password: string
-): Promise<RegistrationResult> => {
+): Promise<UserDocument> => {
   try {
     let user = await findUserByEmail(email);
     if (!user) {
@@ -86,11 +86,7 @@ const loginUser = async (
       throw new ApiError("Incorrect password", httpStatus.UNAUTHORIZED);
     }
 
-    let userAccountDetails = await AccountDetailsModel.findById({
-      _id: user._id.toString(),
-    });
-
-    return { user, userAccountDetails };
+    return user;
   } catch (err: any) {
     throw new ApiError(
       "Failed to log in, " + err.message,

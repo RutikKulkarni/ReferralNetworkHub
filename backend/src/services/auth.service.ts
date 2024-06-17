@@ -6,7 +6,7 @@ import { AccountDetailsDocument } from "../models/userAccountDetails.model";
 
 // Define a custom interface for the combined return value
 interface RegistrationResult {
-  user: UserDocument;
+  userInfo: UserDocument;
   userAccountDetails: AccountDetailsDocument;
 }
 
@@ -34,7 +34,7 @@ const registerUser = async (
     let userAccountDetails = await AccountDetailsModel.create({
       _id: user._id,
     });
-    return { user, userAccountDetails };
+    return { userInfo: user, userAccountDetails };
   } catch (err: any) {
     throw new ApiError(
       "Failed to register, " + err.message,

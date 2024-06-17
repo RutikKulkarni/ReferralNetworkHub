@@ -6,9 +6,10 @@ import mongoose, { Document, Model } from "mongoose";
  * @param {String} schemaDefinition.fullName - Full name.
  * @param {String} schemaDefinition.email - Email address.
  * @param {String} schemaDefinition.gender - Gender.
- * @param {String} [schemaDefinition.resume] - Resume path (optional).
- * @param {String} [schemaDefinition.location] - Location (optional).
- * @param {String} [schemaDefinition.phoneNumber] - Phone number (optional).
+ * @param {String} [schemaDefinition.resume] - Resume path.
+ * @param {String} [schemaDefinition.location] - Location.
+ * @param {String} [schemaDefinition.phoneNumber] - Phone number.
+ * @param {String} [schemaDefinition.profilePhoto] - Profile Photo.
  */
 const personalDetailsSchema = new mongoose.Schema(
   {
@@ -18,6 +19,7 @@ const personalDetailsSchema = new mongoose.Schema(
     resume: { type: String },
     location: { type: String },
     phoneNumber: { type: String },
+    profilePhoto: { type: String },
   },
   { _id: false, timestamps: false }
 );
@@ -148,6 +150,7 @@ interface AccountDetailsDocument extends Document {
  * @param {String} [schemaDefinition.userDetails.personalDetails.resume] - Resume path (optional).
  * @param {String} [schemaDefinition.userDetails.personalDetails.location] - Location (optional).
  * @param {String} [schemaDefinition.userDetails.personalDetails.phoneNumber] - Phone number (optional).
+ * @param {String} [schemaDefinition.userDetails.personalDetails.profilePhoto] - Profile photo (optional).
  * @param {Object} schemaDefinition.userDetails.pastExperience - Past experience schema.
  * @param {String} schemaDefinition.userDetails.pastExperience.currentJobTitle - Current job title.
  * @param {String} schemaDefinition.userDetails.pastExperience.companyName - Company name.
@@ -178,10 +181,10 @@ const accountDetailsSchema = new mongoose.Schema<AccountDetailsDocument>(
     userDetails: {
       type: new mongoose.Schema(
         {
-          personalDetails: { type: personalDetailsSchema },
-          pastExperience: { type: pastExperienceSchema },
-          pastWorkHistory: { type: pastWorkHistorySchema },
-          socialLinks: { type: socialLinksSchema },
+          personalDetails: { type: personalDetailsSchema, default: null },
+          pastExperience: { type: pastExperienceSchema, default: null },
+          pastWorkHistory: { type: pastWorkHistorySchema, default: null },
+          socialLinks: { type: socialLinksSchema, default: null },
         },
         { _id: false, timestamps: false }
       ),

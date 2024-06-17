@@ -6,12 +6,10 @@ import { GoLock } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { FiUser } from "react-icons/fi";
-import axios from "axios";
-import { Config } from "../../App";
 import LinearProgress from "@mui/material/LinearProgress";
 import { useNavigate } from "react-router-dom";
-import { validateUserData } from "../../utility/validateUserInput";
-import { generateSnackbar } from "../../utility/snackbarGenerator";
+import { handleChange } from "../../utility/handleChange";
+import { registerUser } from "./SignupHelperFunctions";
 
 /**
  * Signup component representing the Signup page.
@@ -26,46 +24,14 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setUserData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const signupUser = async () => {
-    try {
-      const validationMessage = validateUserData(userData);
-      if (validationMessage === true) {
-        setIsLoading(true);
-        const response = await axios.post(
-          `${Config.endpoint}auth/register`,
-          userData
-        );
-
-        if (response.status === 201) {
-          generateSnackbar(response.data.message, "success", 2000);
-          setUserData({ name: "", email: "", password: "" });
-          navigate("/login");
-        }
-        setIsLoading(false);
-      } else {
-        generateSnackbar(validationMessage, "warning", 2000);
-      }
-    } catch (err) {
-      const status = err.response?.status;
-      const message =
-        status === 500 || status === 400
-          ? err.response?.data.message
-          : err.response?.statusText;
-      generateSnackbar(message, "error", 2000);
-      setIsLoading(false);
-    }
-  };
-
+  /**
+   * Handles the form submission for registering a new user.
+   *
+   * @param {Object} e - The event object from the form submission.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    signupUser();
+    registerUser(userData, setIsLoading, setUserData, navigate);
   };
 
   return (
@@ -84,7 +50,7 @@ const Signup = () => {
               placeholder="Enter your Name"
               name="name"
               value={userData.name}
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, setUserData)}
               required
             />
           </div>
@@ -100,7 +66,7 @@ const Signup = () => {
               placeholder="Enter your Email"
               name="email"
               value={userData.email}
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, setUserData)}
               required
             />
           </div>
@@ -116,17 +82,10 @@ const Signup = () => {
               placeholder="Enter your Password"
               name="password"
               value={userData.password}
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, setUserData)}
               required
             />
           </div>
-
-          {/* <div className={styles.flexRow}>
-            <div>
-              <input type="checkbox" id="rememberMe" />
-              <label htmlFor="rememberMe">Remember me</label>
-            </div>
-          </div> */}
           {isLoading && (
             <div style={{ marginTop: "10px" }}>
               <LinearProgress color="success" />

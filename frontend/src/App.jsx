@@ -37,8 +37,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/MyAccount" element={<MyAccount />} />
-            <Route path="/EditAccountInfo" element={<EditAccountInfo />} />
+            <Route path="/myAccount" element={<MyAccount />} />
+            <Route path="/editAccountInfo" element={<EditAccountInfo />} />
           </Routes>
         </Layout>
       </ThemeProvider>

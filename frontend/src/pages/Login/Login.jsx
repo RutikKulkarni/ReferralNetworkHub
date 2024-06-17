@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import axios from "axios";
-import { Config } from "../../App";
 import { LinearProgress } from "@mui/material";
-import { validateUserData } from "../../utility/validateUserInput";
-import { persistUser } from "../../utility/userPersistence";
-import { generateSnackbar } from "../../utility/snackbarGenerator";
 import { LuAtSign } from "react-icons/lu";
 import { GoLock } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
 import { FaLinkedinIn } from "react-icons/fa6";
+import { handleChange } from "../../utility/handleChange";
+import { loginUser } from "./LoginHelperFunctions";
 
 /**
  * Login component representing the Login page.
@@ -22,61 +19,20 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setUserData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const loginUser = async () => {
-    try {
-      const validationMessage = validateUserData(userData);
-      if (validationMessage === true) {
-        setIsLoading(true);
-        const response = await axios.post(
-          `${Config.endpoint}auth/login`,
-          userData
-        );
-
-        if (response.status === 200) {
-          generateSnackbar(response.data.message, "success", 2000);
-          rememberMe
-            ? persistUser(
-                response.data.user._id,
-                response.data.token.token,
-                "rememberMe"
-              )
-            : persistUser(
-                response.data.user._id,
-                response.data.token.token,
-                "none"
-              );
-
-          setUserData({ email: "", password: "" });
-          navigate("/");
-        }
-        setIsLoading(false);
-      } else {
-        generateSnackbar(validationMessage, "warning", 2000);
-      }
-    } catch (err) {
-      const status = err.response?.status;
-      const message =
-        status === 500 || status === 400
-          ? err.response?.data.message
-          : err.response?.statusText;
-      generateSnackbar(message, "error", 2000);
-      setIsLoading(false);
-    }
-  };
-
+  /**
+   * Handles the form submission for logging in the user.
+   *
+   * @param {Object} e - The event object from the form submission.
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    loginUser();
+    loginUser(userData, setIsLoading, rememberMe, setUserData, navigate);
   };
 
-  const hanldeRememberMe = () => setRememberMe(!rememberMe);
+  /**
+   * Toggles rememberMe
+   */
+  const handleRememberMe = () => setRememberMe(!rememberMe);
 
   return (
     <div className={styles.container}>
@@ -94,7 +50,7 @@ const Login = () => {
               placeholder="Enter your Email"
               name="email"
               value={userData.email}
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, setUserData)}
               required
             />
           </div>
@@ -110,7 +66,7 @@ const Login = () => {
               placeholder="Enter your Password"
               name="password"
               value={userData.password}
-              onChange={handleChange}
+              onChange={(event) => handleChange(event, setUserData)}
               required
             />
           </div>
@@ -121,7 +77,7 @@ const Login = () => {
                 type="checkbox"
                 id="rememberMe"
                 value={rememberMe}
-                onChange={hanldeRememberMe}
+                onChange={handleRememberMe}
               />
               <label htmlFor="rememberMe">Remember me</label>
             </div>

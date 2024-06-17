@@ -122,6 +122,7 @@
     transition: 0.7s ease-in-out;
     background-color: var(--secondary-color);
     padding: 10px;
+    margin-top: -8px;
   }
 
   .navMenu.active {

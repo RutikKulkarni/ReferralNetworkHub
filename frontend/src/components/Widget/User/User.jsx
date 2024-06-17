@@ -9,7 +9,7 @@ import { HiOutlineLightBulb } from "react-icons/hi";
 import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
 import ThemeSwitcher from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
 
-const Widget = () => {
+const Widget = React.forwardRef((props, ref) => {
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const Widget = () => {
   };
 
   return (
-    <div className={styles.widgetContainer}>
+    <div className={styles.widgetContainer} ref={ref}>
       <div className={styles.profileSection}>
         <div className={styles.profileImage}>
           <UserSvg className={styles.userSvg} />
@@ -36,7 +36,6 @@ const Widget = () => {
       </div>
       <div className={styles.divider}></div>
       <div className={styles.menuItem} onClick={handleMyAccount}>
-        <i className="fa fa-user"></i>
         <BiUser className={styles.icon} />
         <span>My Account</span>
       </div>
@@ -56,6 +55,6 @@ const Widget = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Widget;

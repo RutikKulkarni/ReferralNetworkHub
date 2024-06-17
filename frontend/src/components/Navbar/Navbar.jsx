@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import navDarklogo from "../../assets/svg/dark-logo.svg";
 import navWhitelogo from "../../assets/svg/white-logo.svg";
@@ -22,13 +22,26 @@ const Navbar = () => {
   const [activePath, setActivePath] = useState(location.pathname);
   const [userId, setUserId] = useState(localStorage.getItem("userId") || null);
   const [isWidgetVisible, setIsWidgetVisible] = useState(false);
+  const widgetRef = useRef(null);
 
   useEffect(() => {
     setActivePath(location.pathname);
-    
     // Update userId state when localStorage changes
     setUserId(localStorage.getItem("userId"));
   }, [location]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (widgetRef.current && !widgetRef.current.contains(event.target)) {
+        setIsWidgetVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   /**
    * Toggles the active class for mobile menu.
@@ -108,7 +121,7 @@ const Navbar = () => {
             </>
           )}
           {/* <ThemeSwitcher/> */}
-          {isWidgetVisible && <Widget />}
+          {isWidgetVisible && <Widget ref={widgetRef} />}
         </div>
         <div
           className={`${styles.hamburger} ${isActive ? styles.active : ""}`}

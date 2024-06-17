@@ -2,7 +2,7 @@
 
 Thank you to all the contributors who have helped make ReferralNetworkHub better! 
 
-[![The total number of contributors to this project is](https://img.shields.io/github/contributors/RutikKulkarni/ReferralNetworkHub)](https://github.com/KARTIK5799/ReferralNetworkHub/graphs/contributors)
+[![The total number of contributors to this project is](https://img.shields.io/github/contributors/RutikKulkarni/ReferralNetworkHub)](https://github.com/RutikKulkarni/ReferralNetworkHub/graphs/contributors)
 
 ## Contributors
 

@@ -20,7 +20,9 @@ const getUserDetails = catchAsync(async (req: Request, res: Response) => {
   }
 
   const user = await userService.getDetailsById(userId);
-  return res.status(httpStatus.OK).send(user);
+  return res
+    .status(httpStatus.OK)
+    .send({ message: "User's details fetched successfully", userInfo: user });
 });
 
 /**

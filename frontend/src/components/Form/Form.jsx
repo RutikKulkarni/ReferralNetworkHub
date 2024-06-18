@@ -3,6 +3,7 @@ import styles from "./Form.module.css";
 import { ReactComponent as UserSvg } from "../../assets/svg/user.svg";
 import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
 import ProfessionalInfo from "./ProfessionalInfo/ProfessionalInfo";
+import WorkHistory from "./WorkHistory/WorkHistory";
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("Experienced");
@@ -80,7 +81,11 @@ const Form = () => {
               />
             </div>
           </div>
-          <ProfessionalInfo />
+          {/* <ProfessionalInfo /> */}
+          <ProfessionalInfo
+            handleOptionClick={handleOptionClick}
+            selectedOption={selectedOption}
+          />
           <div className={styles.educationInfo}>
             <h3>Education</h3>
             <div className={styles.inputRow}>
@@ -123,33 +128,7 @@ const Form = () => {
               />
             </div>
           </div>
-          <div className={styles.workHistory}>
-            <h3>Work History</h3>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Previous Job Title"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Company Name"
-                className={styles.inputField}
-              />
-            </div>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Employment Dates (e.g., Jan 2020 to Dec 2023)"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Responsibilities and Achievements (Optional)"
-                className={styles.inputField}
-              />
-            </div>
-          </div>
+          <WorkHistory isDisabled={selectedOption === "Fresher"} />
           <div className={styles.additionalInfo}>
             <h3>Additional Information</h3>
             <textarea

@@ -1,124 +1,207 @@
-import React, { useState } from 'react';
+import React from "react";
+import styles from "./Form.module.css";
+import { ReactComponent as UserSvg } from "../../assets/svg/user.svg";
 import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
-import styles from './Form.module.css';
 
 const Form = () => {
-  const [gender, setGender] = useState('');
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
-
   return (
-    <div className={styles.formContainer}>
-      <div className={styles.imageSection}>
-        <div className={styles.uploadImage}>
-          <input type="file" />
+    <div className={styles.pageContainer}>
+      <div className={styles.formContainer}>
+        <div className={styles.imageSection}>
+          {/* <img src="path_to_default_avatar_image" alt="Profile" className={styles.profileImage} /> */}
+          <div className={styles.uploadImage}>
+            <UserSvg className={styles.userSvg} />
+          </div>
+          {/* <button className={styles.uploadButton}>Upload Image</button> */}
+          <div className={styles.socialLinks}>
+            <input
+              type="url"
+              placeholder="LinkedIn Profile URL"
+              className={styles.inputField}
+            />
+            <input
+              type="url"
+              placeholder="GitHub Profile URL (Optional)"
+              className={styles.inputField}
+            />
+            <input
+              type="url"
+              placeholder="Website URL (Optional)"
+              className={styles.inputField}
+            />
+          </div>
+          <div className={styles.genderSection}>
+            <label>
+              <input type="radio" name="gender" value="male" /> Male
+            </label>
+            <label>
+              <input type="radio" name="gender" value="female" /> Female
+            </label>
+            <label>
+              <input type="radio" name="gender" value="other" /> Other
+            </label>
+          </div>
         </div>
-        <input className={styles.inputField} type="text" placeholder="LinkedIn Profile URL" />
-        <input className={styles.inputField} type="text" placeholder="GitHub Profile URL (Optional)" />
-        <input className={styles.inputField} type="text" placeholder="Website URL (Optional)" />
-        <div className={styles.genderSelection}>
-          <label>
-            <input
-              type="radio"
-              value="Male"
-              checked={gender === 'Male'}
-              onChange={handleGenderChange}
-            />
-            Male
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="Female"
-              checked={gender === 'Female'}
-              onChange={handleGenderChange}
-            />
-            Female
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="Other"
-              checked={gender === 'Other'}
-              onChange={handleGenderChange}
-            />
-            Other
-          </label>
+
+        <div className={styles.formSection}>
+          {/* <input type="file" className={styles.fileInput} /> */}
+          <ResumeUpload />
+          <div className={styles.personalInfo}>
+            <h3>Personal Information</h3>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Full Name"
+                className={styles.inputField}
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className={styles.inputField}
+              />
+            </div>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Location (City, Country)"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="Phone Number"
+                className={styles.inputField}
+              />
+            </div>
+          </div>
+          <div className={styles.professionalInfo}>
+            <h3>Professional Information</h3>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Current Job Title"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="Company Name"
+                className={styles.inputField}
+              />
+            </div>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Industry"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="Years of Experience"
+                className={styles.inputField}
+              />
+            </div>
+          </div>
+          <div className={styles.educationInfo}>
+            <h3>Education</h3>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Highest Degree Attained"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="University/Institution Name"
+                className={styles.inputField}
+              />
+            </div>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Field of Study"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="Graduation Year"
+                className={styles.inputField}
+              />
+            </div>
+          </div>
+          <div className={styles.skillsInfo}>
+            <h3>Skills and Expertise</h3>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Key Skills"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="Certifications or Licenses"
+                className={styles.inputField}
+              />
+            </div>
+          </div>
+          <div className={styles.workHistory}>
+            <h3>Work History</h3>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Previous Job Title"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="Company Name"
+                className={styles.inputField}
+              />
+            </div>
+            <div className={styles.inputRow}>
+              <input
+                type="text"
+                placeholder="Employment Dates (e.g., Jan 2020 to Dec 2023)"
+                className={styles.inputField}
+              />
+              <input
+                type="text"
+                placeholder="Responsibilities and Achievements (Optional)"
+                className={styles.inputField}
+              />
+            </div>
+          </div>
+          <div className={styles.additionalInfo}>
+            <h3>Additional Information</h3>
+            <textarea
+              placeholder="Personal Bio or Summary (in 200 Words Only)"
+              className={styles.textArea}
+            ></textarea>
+          </div>
+          <div className={styles.preferences}>
+            <h3>Preferences</h3>
+            <div className={styles.inputRow}>
+              <select className={styles.selectField}>
+                <option disabled selected>
+                  Availability for Referrals
+                </option>
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Job Preferences"
+                className={styles.inputField}
+              />
+            </div>
+          </div>
+          <div className={styles.footerInputes}>
+            <div className={styles.termsAndConditions}>
+              <label>
+                <input type="checkbox" /> Accept Terms & Conditions
+              </label>
+            </div>
+            <button className={styles.saveButton}>Save</button>
+          </div>
         </div>
-      </div>
-      <div className={styles.formSection}>
-        {/* <div className={styles.resumeUpload}>
-          <label htmlFor="resumeUpload">Choose Resume or drag & drop it here</label>
-          <input type="file" id="resumeUpload" className={styles.uploadInput} />
-        </div> */}
-        <ResumeUpload/>
-        <form>
-          <div className={styles.inputGroup}>
-            <input className={styles.inputField} type="text" placeholder="Full Name" />
-            <input className={styles.inputField} type="email" placeholder="Email" />
-          </div>
-          <div className={styles.inputGroup}>
-            <input className={styles.inputField} type="text" placeholder="Location (City, Country)" />
-            <input className={styles.inputField} type="text" placeholder="Phone Number" />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>
-              <input type="radio" name="experience" value="Experienced" /> Experienced
-            </label>
-            <label>
-              <input type="radio" name="experience" value="Fresher" /> Fresher
-            </label>
-          </div>
-          <div className={styles.inputGroup}>
-            <input className={styles.inputField} type="text" placeholder="Current Job Title" />
-            <input className={styles.inputField} type="text" placeholder="Company Name" />
-          </div>
-          <div className={styles.inputGroup}>
-            <input className={styles.inputField} type="text" placeholder="Industry" />
-            <input className={styles.inputField} type="text" placeholder="Years of Experience" />
-          </div>
-          <div className={styles.inputGroup}>
-            <input className={styles.inputField} type="text" placeholder="Highest Degree Attained" />
-            <input className={styles.inputField} type="text" placeholder="University/Institution Name" />
-          </div>
-          <div className={styles.inputGroup}>
-            <input className={styles.inputField} type="text" placeholder="Field of Study" />
-            <input className={styles.inputField} type="text" placeholder="Graduation Year" />
-          </div>
-          <div className={styles.inputGroup}>
-            <input className={styles.inputField} type="text" placeholder="Key Skills" />
-            <input className={styles.inputField} type="text" placeholder="Certifications or Licenses" />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>
-              Work History
-              <div className={styles.workHistory}>
-                <input className={styles.inputField} type="text" placeholder="Previous Job Title" />
-                <input className={styles.inputField} type="text" placeholder="Company Name" />
-                <input className={styles.inputField} type="text" placeholder="Employment Dates (eg., Jan 2020 To Dec 2023)" />
-                <input className={styles.inputField} type="text" placeholder="Responsibilities and Achievements (Optional)" />
-              </div>
-            </label>
-          </div>
-          <div className={styles.inputGroup}>
-            <textarea className={styles.inputField} placeholder="Personal Bio or Summary (in 200 Words Only)"></textarea>
-          </div>
-          <div className={styles.inputGroup}>
-            <select className={styles.inputField}>
-              <option>Availability for Referrals</option>
-              <option value="available">Available</option>
-              <option value="notAvailable">Not Available</option>
-            </select>
-            <input className={styles.inputField} type="text" placeholder="Job Preferences" />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>
-              <input type="checkbox" /> Accept Terms & Conditions
-            </label>
-          </div>
-          <button className={styles.submitButton} type="submit">Save</button>
-        </form>
       </div>
     </div>
   );

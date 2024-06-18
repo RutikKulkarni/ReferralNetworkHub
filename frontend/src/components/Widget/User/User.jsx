@@ -43,7 +43,7 @@ const Widget = React.forwardRef((props, ref) => {
       <div className={styles.menuItem}>
         <HiOutlineLightBulb className={styles.themeIcon} />
         <span>Dark Theme</span>
-        <ThemeSwitcher />
+        {/* <ThemeSwitcher /> */}
       </div>
       <div className={styles.menuItem}>
         <LuLifeBuoy className={styles.helpIcon} />

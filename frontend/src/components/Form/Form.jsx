@@ -81,7 +81,6 @@ const Form = () => {
               />
             </div>
           </div>
-          {/* <ProfessionalInfo /> */}
           <ProfessionalInfo
             handleOptionClick={handleOptionClick}
             selectedOption={selectedOption}

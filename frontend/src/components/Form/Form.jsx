@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Form.module.css";
 import { ReactComponent as UserSvg } from "../../assets/svg/user.svg";
 import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
+import ProfessionalInfo from "./ProfessionalInfo/ProfessionalInfo";
 
 const Form = () => {
+  const [selectedOption, setSelectedOption] = useState("Experienced");
+
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+  };
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.formContainer}>
@@ -73,33 +80,7 @@ const Form = () => {
               />
             </div>
           </div>
-          <div className={styles.professionalInfo}>
-            <h3>Professional Information</h3>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Current Job Title"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Company Name"
-                className={styles.inputField}
-              />
-            </div>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Industry"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Years of Experience"
-                className={styles.inputField}
-              />
-            </div>
-          </div>
+          <ProfessionalInfo />
           <div className={styles.educationInfo}>
             <h3>Education</h3>
             <div className={styles.inputRow}>

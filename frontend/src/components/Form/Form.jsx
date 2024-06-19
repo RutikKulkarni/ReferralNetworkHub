@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./Form.module.css";
 import { ReactComponent as UserSvg } from "../../assets/svg/user.svg";
 import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
+import ImageSection from "./ImageSection/ImageSection";
 import ProfessionalInfo from "./ProfessionalInfo/ProfessionalInfo";
 import WorkHistory from "./WorkHistory/WorkHistory";
 
@@ -15,42 +16,7 @@ const Form = () => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.formContainer}>
-        <div className={styles.imageSection}>
-          {/* <img src="path_to_default_avatar_image" alt="Profile" className={styles.profileImage} /> */}
-          <div className={styles.uploadImage}>
-            <UserSvg className={styles.userSvg} />
-          </div>
-          <button className={styles.uploadButton}>Upload Image</button>
-          <div className={styles.socialLinks}>
-            <input
-              type="url"
-              placeholder="LinkedIn Profile URL"
-              className={styles.inputField}
-            />
-            <input
-              type="url"
-              placeholder="GitHub Profile URL (Optional)"
-              className={styles.inputField}
-            />
-            <input
-              type="url"
-              placeholder="Website URL (Optional)"
-              className={styles.inputField}
-            />
-          </div>
-          <div className={styles.genderSection}>
-            <label>
-              <input type="radio" name="gender" value="male" /> Male
-            </label>
-            <label>
-              <input type="radio" name="gender" value="female" /> Female
-            </label>
-            <label>
-              <input type="radio" name="gender" value="other" /> Other
-            </label>
-          </div>
-        </div>
-
+        <ImageSection />
         <div className={styles.formSection}>
           {/* <input type="file" className={styles.fileInput} /> */}
           <ResumeUpload />

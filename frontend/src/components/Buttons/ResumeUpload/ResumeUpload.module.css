@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: 20px;
-  border: 1px solid var(--color-gray);
+  border: 0.01px solid var(--color-gray);
   border-radius: 8px;
   background-color: var(--secondary-color);
   color: var(--text-color);
@@ -13,11 +13,7 @@
   margin-right: 20px;
   font-size: 28px;
   margin-left: 10px;
-}
-
-.iconContainer img {
-  width: 40px;
-  height: 40px;
+  color: var(--text-color);
 }
 
 .textContainer {
@@ -35,9 +31,25 @@
   color: var(--color-gray);
 }
 
+.fileInfo {
+  display: flex;
+  align-items: center;
+}
+
+.fileName {
+  margin-right: 20px;
+}
+
 .buttonContainer {
   display: flex;
   align-items: center;
+}
+
+.buttonDelete {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 .fileInput {
@@ -46,9 +58,37 @@
 
 .browseButton {
   padding: 10px 20px;
-  border: 1px solid var(--color-gray);
+  border: 0.1px solid var(--color-gray);
   border-radius: 4px;
   background-color: var(--button-bg-color);
   cursor: pointer;
   color: var(--text-color);
+}
+
+.deleteButton:hover {
+  background-color: var(--button-bg-color-hover);
+}
+
+.deleteButton svg {
+  margin-right: 5px;
+}
+
+/* Mobile screens */
+@media (max-width: 800px) {
+  .iconContainer {
+    font-size: 24px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .browseButton {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
 }

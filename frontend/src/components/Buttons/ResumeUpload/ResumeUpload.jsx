@@ -73,6 +73,7 @@ const ResumeUpload = () => {
             </div>
             <div className={styles.subtitle}>
               DOC, DOCX and PDF with a maximum file size of 2 MB
+              {error && <p className={styles.error}>{error}</p>}
             </div>
           </div>
           <div className={styles.buttonContainer}>

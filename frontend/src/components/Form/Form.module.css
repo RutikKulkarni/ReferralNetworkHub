@@ -90,6 +90,11 @@
   letter-spacing: 0.5px;
 }
 
+.inputField.disabledInput {
+  cursor: not-allowed;
+  background-color: #f0f0f0;
+}
+
 ::placeholder {
   color: #999;
   opacity: 1;

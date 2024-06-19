@@ -45,14 +45,18 @@ const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
         <input
           type="text"
           placeholder="Current Job Title"
-          className={styles.inputField}
+          className={`${styles.inputField} ${
+            selectedOption === "Fresher" ? styles.disabledInput : ""
+          }`}
           disabled={selectedOption === "Fresher"}
           required={selectedOption === "Experienced"}
         />
         <input
           type="text"
           placeholder="Company Name"
-          className={styles.inputField}
+          className={`${styles.inputField} ${
+            selectedOption === "Fresher" ? styles.disabledInput : ""
+          }`}
           disabled={selectedOption === "Fresher"}
           required={selectedOption === "Experienced"}
         />
@@ -61,14 +65,18 @@ const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
         <input
           type="text"
           placeholder="Industry"
-          className={styles.inputField}
+          className={`${styles.inputField} ${
+            selectedOption === "Fresher" ? styles.disabledInput : ""
+          }`}
           disabled={selectedOption === "Fresher"}
           required={selectedOption === "Experienced"}
         />
         <input
           type="text"
           placeholder="Years of Experience"
-          className={styles.inputField}
+          className={`${styles.inputField} ${
+            selectedOption === "Fresher" ? styles.disabledInput : ""
+          }`}
           disabled={selectedOption === "Fresher"}
           required={selectedOption === "Experienced"}
         />

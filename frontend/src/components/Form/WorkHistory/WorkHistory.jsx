@@ -65,7 +65,9 @@ const WorkHistory = ({ isDisabled }) => {
               <input
                 type="text"
                 placeholder="Previous Job Title"
-                className={styles.inputField}
+                className={`${styles.inputField} ${
+                  isDisabled ? styles.disabledInput : ""
+                }`}
                 value={field.jobTitle}
                 disabled={isDisabled}
                 onChange={(e) => {
@@ -77,7 +79,9 @@ const WorkHistory = ({ isDisabled }) => {
               <input
                 type="text"
                 placeholder="Company Name"
-                className={styles.inputField}
+                className={`${styles.inputField} ${
+                  isDisabled ? styles.disabledInput : ""
+                }`}
                 value={field.companyName}
                 disabled={isDisabled}
                 onChange={(e) => {
@@ -91,7 +95,9 @@ const WorkHistory = ({ isDisabled }) => {
               <input
                 type="text"
                 placeholder="Employment Dates (e.g., Jan 2020 to Dec 2023)"
-                className={styles.inputField}
+                className={`${styles.inputField} ${
+                  isDisabled ? styles.disabledInput : ""
+                }`}
                 value={field.employmentDates}
                 disabled={isDisabled}
                 onChange={(e) => {
@@ -103,7 +109,9 @@ const WorkHistory = ({ isDisabled }) => {
               <input
                 type="text"
                 placeholder="Responsibilities and Achievements (Optional)"
-                className={styles.inputField}
+                className={`${styles.inputField} ${
+                  isDisabled ? styles.disabledInput : ""
+                }`}
                 value={field.responsibilities}
                 disabled={isDisabled}
                 onChange={(e) => {

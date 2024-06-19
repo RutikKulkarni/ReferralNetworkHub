@@ -34,6 +34,13 @@
 
 .uploadButton {
   margin-bottom: 20px;
+  background-color: var(--button-bg-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Poppins;
 }
 
 .imageSection {
@@ -121,6 +128,10 @@
   justify-content: space-between;
   align-items: center;
   width: 70%;
+}
+
+.genderSection label {
+  cursor: pointer;
 }
 
 .formSection {
@@ -282,6 +293,15 @@
 
   .uploadButton {
     margin-bottom: 10px;
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Poppins;
+    text-align: center;
+    box-sizing: border-box;
   }
 
   .socialLinks {

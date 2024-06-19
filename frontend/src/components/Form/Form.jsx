@@ -20,7 +20,7 @@ const Form = () => {
           <div className={styles.uploadImage}>
             <UserSvg className={styles.userSvg} />
           </div>
-          {/* <button className={styles.uploadButton}>Upload Image</button> */}
+          <button className={styles.uploadButton}>Upload Image</button>
           <div className={styles.socialLinks}>
             <input
               type="url"
@@ -142,8 +142,12 @@ const Form = () => {
                 <option disabled selected>
                   Availability for Referrals
                 </option>
-                <option>Yes</option>
-                <option>No</option>
+                <option>I am able to provide referrals to others</option>
+                <option>I am looking for referrals</option>
+                <option>
+                  I can both provide referrals in my current company and am
+                  looking referrals
+                </option>
               </select>
               <input
                 type="text"

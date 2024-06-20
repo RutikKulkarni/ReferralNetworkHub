@@ -40,16 +40,16 @@ const Widget = React.forwardRef((props, ref) => {
         <span>My Account</span>
       </div>
       <div className={styles.divider}></div>
-      <div className={styles.menuItem}>
+      <div className={styles.menuItems}>
         <HiOutlineLightBulb className={styles.themeIcon} />
         <span>Dark Theme</span>
-        {/* <ThemeSwitcher /> */}
+        <ThemeSwitcher />
       </div>
-      <div className={styles.menuItem}>
+      <div className={styles.menuItems}>
         <LuLifeBuoy className={styles.helpIcon} />
         <span>Help</span>
       </div>
-      <div className={styles.menuItem} onClick={handleLogout}>
+      <div className={styles.menuItems} onClick={handleLogout}>
         <FiLogOut className={styles.logoutIcon} />
         <span>Log out</span>
       </div>

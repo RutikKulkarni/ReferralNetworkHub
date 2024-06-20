@@ -61,9 +61,17 @@
   cursor: pointer;
 }
 
-.menuItem i {
-  margin-right: 10px;
+.menuItems {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  cursor: pointer;
+  margin-left: -10px;
 }
+
+/* .menuItem i {
+  margin-right: 10px;
+} */
 
 .icon {
   color: var(--icon-color);

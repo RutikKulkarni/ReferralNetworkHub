@@ -1,0 +1,44 @@
+.chipInputContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 5px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 470px;
+    border-radius: 12px;
+  }
+  
+  .chip {
+    display: flex;
+    align-items: center;
+    background-color: #e0e0e0;
+    border-radius: 16px;
+    padding: 5px 10px;
+    margin: 5px;
+    font-size: 14px;
+  }
+  
+  .chipDeleteButton {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 5px;
+    color: #666;
+  }
+  
+  .chipDeleteButton:hover {
+    color: #000;
+  }
+  
+  .chipInput {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    min-width: 150px;
+    box-sizing: border-box;
+  }
+  

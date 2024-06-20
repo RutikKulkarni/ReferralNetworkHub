@@ -5,6 +5,7 @@ import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
 import ImageSection from "./ImageSection/ImageSection";
 import ProfessionalInfo from "./ProfessionalInfo/ProfessionalInfo";
 import WorkHistory from "./WorkHistory/WorkHistory";
+import ChipTextField from "./ChipTextField/ChipTextField";
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("Experienced");
@@ -81,16 +82,8 @@ const Form = () => {
           <div className={styles.skillsInfo}>
             <h3>Skills and Expertise</h3>
             <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Key Skills"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Certifications or Licenses"
-                className={styles.inputField}
-              />
+              <ChipTextField placeholder={'Key Skills'} />
+              <ChipTextField placeholder={'Certifications or Licenses'} />
             </div>
           </div>
           <WorkHistory isDisabled={selectedOption === "Fresher"} />

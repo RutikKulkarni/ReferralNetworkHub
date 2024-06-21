@@ -10,6 +10,7 @@ import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import MyAccount from "./pages/MyAccount/MyAccount";
 import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
+import Explore from "./pages/Explore/Explore"
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 import { getConfig } from "./utility/envHelper/envHelper";
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/myAccount" element={<MyAccount />} />
             <Route path="/editAccountInfo" element={<EditAccountInfo />} />
+            <Route path="/explore" element={<Explore />} />
           </Routes>
         </Layout>
       </ThemeProvider>

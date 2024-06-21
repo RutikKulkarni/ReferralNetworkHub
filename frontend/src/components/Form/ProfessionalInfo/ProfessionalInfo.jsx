@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FiInfo } from "react-icons/fi";
 import { Tooltip } from "react-tooltip";
 import styles from "../Form.module.css";
@@ -7,7 +7,7 @@ import styles1 from "./ProfessionalInfo.module.css";
 const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
   return (
     <div className={styles.professionalInfo}>
-      <div className={styles.header}>
+      <div className={styles1.header}>
         <div className={styles.headerInfo}>
           <h3>Professional Information</h3>
           <FiInfo className={styles1.icon} data-tip data-for="info-tooltip" />

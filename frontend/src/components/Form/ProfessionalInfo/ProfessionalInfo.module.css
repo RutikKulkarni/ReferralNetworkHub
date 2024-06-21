@@ -17,6 +17,12 @@
   z-index: 1;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .options {
   display: flex;
   align-items: center;

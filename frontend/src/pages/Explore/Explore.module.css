@@ -1,0 +1,24 @@
+.exploreWrapper {
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  /* min-height: 100vh; */
+  /* margin-top: 30px; */
+}
+
+.explore {
+  padding: 20px;
+}
+
+.heading {
+  text-align: left;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}

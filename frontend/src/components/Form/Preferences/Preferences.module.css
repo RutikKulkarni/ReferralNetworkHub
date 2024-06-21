@@ -1,0 +1,19 @@
+.icon {
+  margin: 0 0 10px 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tooltip {
+  position: absolute;
+  top: -5px;
+  left: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 10px;
+  white-space: nowrap;
+  z-index: 1;
+}
+

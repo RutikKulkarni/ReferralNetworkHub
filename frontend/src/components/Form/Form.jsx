@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Form.module.css";
-import { ReactComponent as UserSvg } from "../../assets/svg/user.svg";
+import Preferences from "./Preferences/Preferences";
 import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
 import ImageSection from "./ImageSection/ImageSection";
 import ProfessionalInfo from "./ProfessionalInfo/ProfessionalInfo";
@@ -97,33 +97,13 @@ const Form = () => {
             </div>
           </div>
           <WorkHistory isDisabled={selectedOption === "Fresher"} />
+          <Preferences />
           <div className={styles.additionalInfo}>
             <h3>Additional Information</h3>
             <textarea
               placeholder="Personal Bio or Summary (in 200 Words Only)"
               className={styles.textArea}
             ></textarea>
-          </div>
-          <div className={styles.preferences}>
-            <h3>Preferences</h3>
-            <div className={styles.inputRow}>
-              <select className={styles.selectField}>
-                <option disabled selected>
-                  Availability for Referrals
-                </option>
-                <option>I am able to provide referrals to others</option>
-                <option>I am looking for referrals</option>
-                <option>
-                  I can both provide referrals in my current company and am
-                  looking referrals
-                </option>
-              </select>
-              <input
-                type="text"
-                placeholder="Job Preferences"
-                className={styles.inputField}
-              />
-            </div>
           </div>
           <div className={styles.footerInputes}>
             <div className={styles.termsAndConditions}>

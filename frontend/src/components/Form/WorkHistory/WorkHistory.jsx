@@ -33,8 +33,8 @@ const WorkHistory = ({ isDisabled }) => {
 
   return (
     <div className={styles.workHistory}>
-      <div className={styles1.header}>
-        <div className={styles1.headerInfo}>
+      <div className={styles.header}>
+        <div className={styles.headerInfo}>
           <h3>Work History</h3>
           <FiInfo className={styles1.icon} data-tip data-for="info-tooltip" />
         </div>

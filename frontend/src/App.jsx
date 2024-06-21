@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./Layout";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Services from "./pages/Services/Services";
@@ -10,9 +9,10 @@ import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import MyAccount from "./pages/MyAccount/MyAccount";
 import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
-import Explore from "./pages/Explore/Explore"
+import Explore from "./pages/Explore/Explore";
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 import { getConfig } from "./utility/envHelper/envHelper";
+import { BgLayout } from "./components/BgComponent/BgComponent";
 
 export const Config = getConfig();
 
@@ -20,20 +20,21 @@ function App() {
   return (
     <Router>
       <ThemeProvider>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/myAccount" element={<MyAccount />} />
-            <Route path="/editAccountInfo" element={<EditAccountInfo />} />
-            <Route path="/explore" element={<Explore />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/" element={BgLayout(Home)()} />
+          <Route path="/about" element={BgLayout(About)()} />
+          <Route path="/services" element={BgLayout(Services)()} />
+          <Route path="/help" element={BgLayout(Help)()} />
+          <Route path="/contact" element={BgLayout(Contact)()} />
+          <Route path="/signup" element={BgLayout(Signup)()} />
+          <Route path="/login" element={BgLayout(Login)()} />
+          <Route path="/myAccount" element={BgLayout(MyAccount)()} />
+          <Route
+            path="/editAccountInfo"
+            element={BgLayout(EditAccountInfo)()}
+          />
+          <Route path="/explore" element={BgLayout(Explore)()} />
+        </Routes>
       </ThemeProvider>
     </Router>
   );

@@ -1,7 +1,7 @@
 .bg {
-  height: 100vh;
+  min-height: 100vh;
   width: 100svw;
-  background: #fff;
+  background: var(--secondary-color);
   top: 0;
   left: 0;
 

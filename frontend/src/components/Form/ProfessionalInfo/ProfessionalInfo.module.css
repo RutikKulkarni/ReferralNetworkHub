@@ -39,7 +39,7 @@
 
 .active {
   font-weight: 600;
-  border-bottom: 0.3px solid var(--primary-color);
+  border-bottom: 0.3px solid var(--text-color);
 }
 
 /* Tablet styles */

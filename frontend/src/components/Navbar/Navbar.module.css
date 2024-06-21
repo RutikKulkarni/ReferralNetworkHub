@@ -59,7 +59,7 @@
 
 .signupBtn {
   background-color: var(--primary-color);
-  color: var(--secondary-color);
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;

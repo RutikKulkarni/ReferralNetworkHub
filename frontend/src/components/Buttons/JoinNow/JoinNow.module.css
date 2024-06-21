@@ -5,7 +5,7 @@
   font-weight: 500;
   border: none;
   background-color: var(--primary-color);
-  color: var(--secondary-color);
+  color: #ffffff;
   border-radius: 10px;
   cursor: pointer;
   /* box-shadow: 0px 10px 15px var(--primary-color); */

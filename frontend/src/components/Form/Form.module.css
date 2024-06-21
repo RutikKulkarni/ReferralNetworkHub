@@ -77,18 +77,30 @@
   height: 50px;
   padding: 20px;
   margin-bottom: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--input-border-color);
+  background-color: transparent;
+  color: var(--text-color);
   border-radius: 12px;
   font-family: Poppins;
   font-size: 16px;
   font-weight: 400;
   opacity: 1;
   letter-spacing: 0.5px;
+  transition: border-color 0.3s ease;
+}
+
+.inputField:hover,
+.inputField:focus {
+  border-color: #2d79f3;
+}
+
+.inputField:focus-within {
+  border: 1px solid #2d79f3;
 }
 
 .inputField.disabledInput {
   cursor: not-allowed;
-  background-color: #f0f0f0;
+  background-color: var(--input-border-color);
 }
 
 ::placeholder {
@@ -132,7 +144,6 @@
 
 .formSection h3 {
   margin-bottom: 10px;
-  color: #2d2d2d;
   letter-spacing: 0.5px;
 }
 
@@ -156,7 +167,9 @@
   width: 100%;
   padding: 20px;
   margin-bottom: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--input-border-color);
+  background-color: transparent;
+  color: var(--text-color);
   border-radius: 12px;
   font-family: Poppins;
   font-size: 16px;
@@ -170,7 +183,7 @@
   height: 50px;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #2d79f3;
   border-radius: 12px;
   font-family: Poppins;
   font-size: 16px;

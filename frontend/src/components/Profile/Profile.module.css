@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--background-color);
   padding-top: 40px;
   padding-bottom: 40px;
 }
@@ -11,7 +10,6 @@
   display: flex;
   justify-content: center;
   padding: 20px;
-  background: var(--hero-bg-color);
   border-radius: 8px;
   width: 80%;
   flex-wrap: wrap;
@@ -62,14 +60,16 @@
   padding: 10px 15px;
   border-radius: 7px;
   font-size: 16px;
-  background-color: var(--navbar-bg-color) ;
+  background-color: transparent;
   text-decoration: none;
-  border: 0.1px solid var(--color-gray);
+  border: 0.1px solid var(--text-color);
   cursor: pointer;
   color: var(--text-color);
+  letter-spacing: 0.3px;
 }
 
 .icon {
+  color: var(--icon-color);
   margin-right: 8px;
   font-size: 22px;
 }
@@ -126,7 +126,7 @@
 .section h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #2d2d2d;
+  color: var(--text-color);
   margin-top: 20px;
 }
 

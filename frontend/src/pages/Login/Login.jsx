@@ -98,7 +98,7 @@ const Login = () => {
           <p className={`${styles.p} ${styles.line}`}>Or With</p>
           <div className={styles.flexRow}>
             <button className={styles.btn} disabled>
-              <FcGoogle className={styles.icon} />
+              <FcGoogle className={styles.GoogleIcon} />
             </button>
             <button className={styles.btn} disabled>
               <FaLinkedinIn className={styles.linkedInIcon} />

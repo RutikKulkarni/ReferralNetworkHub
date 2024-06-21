@@ -43,7 +43,7 @@ const Signup = () => {
             <label>Name</label>
           </div>
           <div className={styles.inputForm}>
-            <FiUser className={styles.user} />
+            <FiUser className={styles.icon} />
             <input
               type="text"
               className={styles.input}
@@ -101,7 +101,7 @@ const Signup = () => {
           <p className={`${styles.p} ${styles.line}`}>Or With</p>
           <div className={styles.flexRow}>
             <button className={styles.btn} disabled>
-              <FcGoogle className={styles.icon} />
+              <FcGoogle className={styles.GoogleIcon} />
             </button>
             <button className={styles.btn} disabled>
               <FaLinkedinIn className={styles.linkedInIcon} />

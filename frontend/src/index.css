@@ -9,26 +9,30 @@
   --button-bg-color: #f2f2f2;
 
   --icon-color: rgb(60, 60, 60);
-  --hero-bg-color: transparent;
   --navbar-bg-color: #ffffff;
   --footer-bg-color: #f2f2f2;
 
   --color-gray: gray;
+  --button-text-color: #000000;
+  --card-bg-color: #f9f9f9;
+  --input-border-color: #ecedec;
 }
 
 /* dark-theme */
 [data-theme="dark"] {
-  --primary-color: #ffffff;
-  --secondary-color: #3b3b3b;
+  --primary-color: #0a1d56;
+  --secondary-color: #121212;
   --text-color: #ffffff;
-  --button-bg-color: #0a1d56;
+  --button-bg-color: #333333;
 
-  --icon-color: rgb(240, 240, 240);
-  --hero-bg-color: #3b3b3b;
-  --navbar-bg-color: #272727;
-  --footer-bg-color: #272727;
+  --icon-color: rgb(200, 200, 200);
+  --navbar-bg-color: #1e1e1e;
+  --footer-bg-color: #1e1e1e;
 
-  --color-gray: rgb(178, 178, 178);
+  --color-gray: lightgray;
+  --button-text-color: #ffffff;
+  --card-bg-color: #242424;
+  --input-border-color: #444444;
 }
 
 /* Global Reset */
@@ -43,4 +47,5 @@
 body {
   font-family: "Poppins", sans-serif;
   color: var(--text-color);
+  background-color: var(--secondary-color);
 }

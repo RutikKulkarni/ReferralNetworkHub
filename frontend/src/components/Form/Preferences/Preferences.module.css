@@ -1,3 +1,14 @@
+/* .selectField {
+  background: transparent;
+  border: 1px solid var(--input-border-color);
+  color: var(--text-color);
+}
+
+.selectField option {
+  background: transparent;
+  color: var(--text-color);
+} */
+
 .icon {
   margin: 0 0 10px 8px;
   cursor: pointer;
@@ -8,7 +19,7 @@
   position: absolute;
   top: -5px;
   left: 20px;
-  background-color: #333;
+  background-color: var(--color-gray);
   color: #fff;
   padding: 5px;
   border-radius: 3px;
@@ -16,4 +27,3 @@
   white-space: nowrap;
   z-index: 1;
 }
-

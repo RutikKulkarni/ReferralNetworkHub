@@ -37,7 +37,7 @@
 }
 
 .formTitle {
-  letter-spacing: 2px; 
+  letter-spacing: 2px;
 }
 
 .inputForm {
@@ -95,6 +95,7 @@
   color: #2d79f3;
   font-weight: 500;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .link {
@@ -165,7 +166,7 @@
 }
 
 .linkedInIcon {
-  color: #00659C;
+  color: #00659c;
   width: 24px;
   height: 24px;
 }

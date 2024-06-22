@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getTheme, setTheme } from "../../utility/themeUtils";
+import { getTheme, setTheme, getDeviceTheme } from "../../utility/themeUtils";
 
 export const ThemeContext = React.createContext();
 
@@ -12,12 +12,29 @@ const ThemeProvider = ({ children }) => {
     setTheme(newTheme);
   };
 
+  const setThemeExplicitly = (newTheme) => {
+    setThemeState(newTheme);
+    setTheme(newTheme);
+  };
+
   useEffect(() => {
-    setTheme(theme);
-  }, [theme]);
+    const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleThemeChange = (e) => {
+      const newTheme = e.matches ? "dark" : "light";
+      setThemeState(newTheme);
+      setTheme(newTheme);
+    };
+
+    darkThemeMq.addEventListener("change", handleThemeChange);
+
+    return () => {
+      darkThemeMq.removeEventListener("change", handleThemeChange);
+    };
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setThemeExplicitly }}>
       {children}
     </ThemeContext.Provider>
   );

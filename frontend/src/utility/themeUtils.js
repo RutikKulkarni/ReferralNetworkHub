@@ -10,12 +10,17 @@ const setTheme = (theme) => {
 };
 
 /**
- * Retrieves the current theme from local storage.
+ * Retrieves the current theme from local storage or device preference.
  *
- * @returns {string} - The currently set theme. Defaults to 'light' if no theme is set.
+ * @returns {string} - The currently set theme. Defaults to the device preference if no theme is set.
  */
 const getTheme = () => {
-  return localStorage.getItem("theme") || "light";
+  const storedTheme = localStorage.getItem("theme");
+  if (storedTheme) {
+    return storedTheme;
+  } else {
+    return getDeviceTheme();
+  }
 };
 
 /**

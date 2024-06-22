@@ -7,7 +7,7 @@ import { LuLifeBuoy } from "react-icons/lu";
 import { FiLogOut } from "react-icons/fi";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
-import ThemeSwitcher from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
+import {ToggleThemeSwitcher, ThemeSwitcher} from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 const Widget = React.forwardRef((props, ref) => {
   const { theme } = useContext(ThemeContext);
@@ -43,7 +43,7 @@ const Widget = React.forwardRef((props, ref) => {
       <div className={styles.menuItems}>
         <HiOutlineLightBulb className={styles.themeIcon} />
         <span>Dark Theme</span>
-        <ThemeSwitcher />
+        <ToggleThemeSwitcher />
       </div>
       <div className={styles.menuItems}>
         <LuLifeBuoy className={styles.helpIcon} />

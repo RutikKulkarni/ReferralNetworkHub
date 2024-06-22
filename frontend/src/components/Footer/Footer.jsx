@@ -2,6 +2,7 @@ import React from "react";
 import { SiGithub } from "react-icons/si";
 import styles from "./Footer.module.css";
 import { useNavigate } from "react-router-dom";
+import {ToggleThemeSwitcher, ThemeSwitcher} from "../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 /**
  * Footer component for the Referral Network app.
@@ -39,14 +40,11 @@ const Footer = () => {
           </a>
         </div>
         <hr />
-        <div className={styles.alignment2}>
+        <div className={styles.alignment}>
           <p>&copy; 2024 Referral Network, All rights reserved.</p>
-          <ul className={styles.footerLinks}>
-            <li onClick={() => handleNavigate("home")}>Home</li>
-            <li onClick={() => handleNavigate("about")}>About</li>
-            <li onClick={() => handleNavigate("help")}>Help</li>
-            <li onClick={() => handleNavigate("contact")}>Contact</li>
-          </ul>
+          <div>
+          <ThemeSwitcher className={styles.gitLogo}/>
+          </div>
         </div>
       </div>
     </footer>

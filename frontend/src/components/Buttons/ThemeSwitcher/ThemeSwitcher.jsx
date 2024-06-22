@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import { MdOutlineLightMode } from "react-icons/md";
-import { SlScreenDesktop } from "react-icons/sl";
 import { BiMoon } from "react-icons/bi";
 import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
-import { getDeviceTheme } from "../../../utility/themeUtils";
 import styles from "./ThemeSwitcher.module.css";
 
 const ToggleThemeSwitcher = () => {
@@ -39,22 +37,9 @@ const ThemeSwitcher = () => {
         aria-label="Switch to light theme"
         aria-checked={theme === "light"}
         onClick={() => handleThemeChange("light")}
-        title="Light"
+        title="Light Theme"
       >
         <MdOutlineLightMode className="icon" />
-      </button>
-      <button
-        type="button"
-        role="radio"
-        data-theme-switcher="true"
-        data-active={theme === "system"}
-        className={styles.themeSwitcherSwitch}
-        aria-label="Switch to system theme"
-        aria-checked={theme === "system"}
-        onClick={() => handleThemeChange(getDeviceTheme())}
-        title="System"
-      >
-        <SlScreenDesktop className="icon" />
       </button>
       <button
         type="button"
@@ -65,7 +50,7 @@ const ThemeSwitcher = () => {
         aria-label="Switch to dark theme"
         aria-checked={theme === "dark"}
         onClick={() => handleThemeChange("dark")}
-        title="Dark"
+        title="Dark Theme"
       >
         <BiMoon className="icon" />
       </button>

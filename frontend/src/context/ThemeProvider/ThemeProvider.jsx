@@ -6,18 +6,9 @@ export const ThemeContext = React.createContext();
 const ThemeProvider = ({ children }) => {
   const [theme, setThemeState] = useState(getTheme());
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setThemeState(newTheme);
-    setTheme(newTheme);
-  };
-
-  const setThemeExplicitly = (newTheme) => {
-    setThemeState(newTheme);
-    setTheme(newTheme);
-  };
-
   useEffect(() => {
+    setTheme(theme);
+
     const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleThemeChange = (e) => {
@@ -31,7 +22,18 @@ const ThemeProvider = ({ children }) => {
     return () => {
       darkThemeMq.removeEventListener("change", handleThemeChange);
     };
-  }, []);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setThemeState(newTheme);
+    setTheme(newTheme);
+  };
+
+  const setThemeExplicitly = (newTheme) => {
+    setThemeState(newTheme);
+    setTheme(newTheme);
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setThemeExplicitly }}>

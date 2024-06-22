@@ -53,8 +53,8 @@ input:checked + .slider:before {
 }
 
 .themeSwitcherSwitch {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,8 +63,17 @@ input:checked + .slider:before {
   background: none;
   cursor: pointer;
   color: var(--icon-color);
+  transition: background-color 0.5s ease; 
 }
 
 .themeSwitcherSwitch[data-active="true"] {
   background-color: rgba(128, 128, 128, 0.35);
+}
+
+/* Mobile screens */
+@media (max-width: 800px) {
+  .themeSwitcherSwitch {
+    width: 32px;
+    height: 28px;
+  }
 }

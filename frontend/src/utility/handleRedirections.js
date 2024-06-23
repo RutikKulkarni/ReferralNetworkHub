@@ -11,6 +11,7 @@ const handleNavigate = (path, navigate) => {
     contact: "/contact",
     login: "/login",
     signup: "/signup",
+    explore: "/explore",
   };
 
   navigate(redirects[path]);

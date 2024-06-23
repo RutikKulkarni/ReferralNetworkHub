@@ -1,79 +1,119 @@
 import mongoose, { Document, Model } from "mongoose";
 
 /**
- * Mongoose schema for the Personal Details document.
- * @param {Object} schemaDefinition - Definition of the personal details schema.
+ * Mongoose schema for the Personal Information document.
+ * @param {Object} schemaDefinition - Definition of the personal information schema.
  * @param {String} schemaDefinition.fullName - Full name.
  * @param {String} schemaDefinition.email - Email address.
  * @param {String} schemaDefinition.gender - Gender.
- * @param {String} [schemaDefinition.resume] - Resume path.
- * @param {String} [schemaDefinition.location] - Location.
- * @param {String} [schemaDefinition.phoneNumber] - Phone number.
- * @param {String} [schemaDefinition.profilePhoto] - Profile Photo.
+ * @param {String} [schemaDefinition.resume] - Resume path (optional).
+ * @param {String} [schemaDefinition.location] - Location (optional).
+ * @param {Number} [schemaDefinition.phoneNumber] - Phone number (optional).
+ * @param {String} [schemaDefinition.profilePhoto] - Profile photo (optional).
  */
-const personalDetailsSchema = new mongoose.Schema(
+const personalInfoSchema = new mongoose.Schema(
   {
-    fullName: { type: String },
-    email: { type: String },
-    gender: { type: String },
-    resume: { type: String },
-    location: { type: String },
-    phoneNumber: { type: String },
-    profilePhoto: { type: String },
+    fullName: { type: String, default: "" },
+    email: { type: String, default: "" },
+    gender: { type: String, default: "" },
+    resume: { type: String, default: "" },
+    location: { type: String, default: "" },
+    phoneNumber: { type: Number, default: null },
+    profilePhoto: { type: String, default: "" },
   },
   { _id: false, timestamps: false }
 );
 
 /**
- * Mongoose schema for the Past Experience document.
- * @param {Object} schemaDefinition - Definition of the past experience schema.
+ * Mongoose schema for the Professional Information document.
+ * @param {Object} schemaDefinition - Definition of the professional information schema.
  * @param {String} schemaDefinition.currentJobTitle - Current job title.
  * @param {String} schemaDefinition.companyName - Company name.
  * @param {String} schemaDefinition.industry - Industry.
  * @param {Number} schemaDefinition.yearsOfExperience - Years of experience.
- * @param {String} schemaDefinition.highestDegreeAttained - Highest degree attained.
- * @param {String} schemaDefinition.universityInstitutionName - University or institution name.
- * @param {String} schemaDefinition.fieldOfStudy - Field of study.
- * @param {Number} schemaDefinition.graduationYear - Graduation year.
- * @param {String[]} schemaDefinition.keySkills - List of key skills.
- * @param {String[]} schemaDefinition.certificationsLicenses - List of certifications/licenses.
  */
-const pastExperienceSchema = new mongoose.Schema(
+const professionalInfoSchema = new mongoose.Schema(
   {
-    currentJobTitle: { type: String },
-    companyName: { type: String },
-    industry: { type: String },
-    yearsOfExperience: { type: Number },
-    highestDegreeAttained: { type: String },
-    universityInstitutionName: { type: String },
-    fieldOfStudy: { type: String },
-    graduationYear: { type: Number },
-    keySkills: { type: [String] },
-    certificationsLicenses: { type: [String] },
+    currentJobTitle: { type: String, default: "" },
+    companyName: { type: String, default: "" },
+    industry: { type: String, default: "" },
+    yearsOfExperience: { type: Number, default: null },
   },
   { _id: false, timestamps: false }
 );
 
 /**
- * Mongoose schema for the Past Work History document.
- * @param {Object} schemaDefinition - Definition of the past work history schema.
+ * Mongoose schema for the Education Information document.
+ * @param {Object} schemaDefinition - Definition of the education information schema.
+ * @param {String} schemaDefinition.highestDegreeAttained - Highest degree attained.
+ * @param {String} schemaDefinition.uniInsName - University or institution name.
+ * @param {String} schemaDefinition.fieldOfStudy - Field of study.
+ * @param {Number} schemaDefinition.graduationYear - Graduation year.
+ */
+const educationInfoSchema = new mongoose.Schema(
+  {
+    highestDegreeAttained: { type: String, default: "" },
+    uniInsName: { type: String, default: "" },
+    fieldOfStudy: { type: String, default: "" },
+    graduationYear: { type: Number, default: null },
+  },
+  { _id: false, timestamps: false }
+);
+
+/**
+ * Mongoose schema for the Skills and Expertise document.
+ * @param {Object} schemaDefinition - Definition of the skills and expertise schema.
+ * @param {String[]} schemaDefinition.keySkills - List of key skills.
+ * @param {String[]} schemaDefinition.certificationsLicenses - List of certifications/licenses.
+ */
+const skillsExpertiseSchema = new mongoose.Schema(
+  {
+    keySkills: { type: [String], default: [] },
+    certificationsLicenses: { type: [String], default: [] },
+  },
+  { _id: false, timestamps: false }
+);
+
+/**
+ * Mongoose schema for the Work History document.
+ * @param {Object} schemaDefinition - Definition of the work history schema.
  * @param {String} schemaDefinition.previousJobTitle - Previous job title.
  * @param {String} schemaDefinition.companyName - Company name.
  * @param {String} schemaDefinition.employmentDates - Employment dates.
- * @param {String[]} schemaDefinition.responsiblitiesAchievements - List of responsibilities/achievements.
- * @param {String} schemaDefinition.personalBioSummary - Personal bio/summary.
- * @param {String} schemaDefinition.availablityReferrals - Availability and referrals.
+ * @param {String[]} schemaDefinition.responsibilitiesAchievements - List of responsibilities/achievements.
+ */
+const workHistorySchema = new mongoose.Schema(
+  {
+    previousJobTitle: { type: String, default: "" },
+    companyName: { type: String, default: "" },
+    employmentDates: { type: String, default: "" },
+    responsibilitiesAchievements: { type: [String], default: [] },
+  },
+  { _id: false, timestamps: false }
+);
+
+/**
+ * Mongoose schema for the Preferences document.
+ * @param {Object} schemaDefinition - Definition of the preferences schema.
+ * @param {String} schemaDefinition.availabilityForReferrals - Availability for referrals.
  * @param {String} schemaDefinition.jobPreferences - Job preferences.
  */
-const pastWorkHistorySchema = new mongoose.Schema(
+const preferencesSchema = new mongoose.Schema(
   {
-    previousJobTitle: { type: String },
-    companyName: { type: String },
-    employmentDates: { type: String },
-    responsiblitiesAchievements: { type: [String] },
-    personalBioSummary: { type: String },
-    availablityReferrals: { type: String },
-    jobPreferences: { type: String },
+    availabilityForReferrals: { type: String, default: "" },
+    jobPreferences: { type: String, default: "" },
+  },
+  { _id: false, timestamps: false }
+);
+
+/**
+ * Mongoose schema for the Additional Information document.
+ * @param {Object} schemaDefinition - Definition of the additional information schema.
+ * @param {String} schemaDefinition.personalBio - Personal bio.
+ */
+const additionalInfoSchema = new mongoose.Schema(
+  {
+    personalBio: { type: String, default: "" },
   },
   { _id: false, timestamps: false }
 );
@@ -101,34 +141,43 @@ const socialLinksSchema = new mongoose.Schema(
 interface AccountDetailsDocument extends Document {
   _id: string;
   userDetails: {
-    personalDetails: {
+    personalInfo: {
       fullName: string;
       email: string;
       gender: string;
       resume?: string;
       location?: string;
       phoneNumber?: number;
+      profilePhoto?: string;
     };
-    pastExperience: {
+    professionalInfo: {
       currentJobTitle: string;
       companyName: string;
       industry: string;
       yearsOfExperience: number;
+    };
+    education: {
       highestDegreeAttained: string;
-      universityInstitutionName: string;
+      uniInsName: string;
       fieldOfStudy: string;
       graduationYear: number;
+    };
+    skillsExpertise: {
       keySkills: string[];
       certificationsLicenses: string[];
     };
-    pastWorkHistory: {
+    workHistory: {
       previousJobTitle: string;
       companyName: string;
       employmentDates: string;
-      responsiblitiesAchievements: string[];
-      personalBioSummary: string;
-      availablityReferrals: string;
+      responsibilitiesAchievements: string[];
+    };
+    preferences: {
+      availabilityForReferrals: string;
       jobPreferences: string;
+    };
+    additionalInfo: {
+      personalBio: string;
     };
     socialLinks: {
       linkedInUrl: string;
@@ -143,33 +192,36 @@ interface AccountDetailsDocument extends Document {
  * @param {Object} schemaDefinition - Definition of the user account details schema.
  * @param {String} schemaDefinition._id - User ID.
  * @param {Object} schemaDefinition.userDetails - User details schema.
- * @param {Object} schemaDefinition.userDetails.personalDetails - Personal details schema.
- * @param {String} schemaDefinition.userDetails.personalDetails.fullName - Full name.
- * @param {String} schemaDefinition.userDetails.personalDetails.email - Email address.
- * @param {String} schemaDefinition.userDetails.personalDetails.gender - Gender.
- * @param {String} [schemaDefinition.userDetails.personalDetails.resume] - Resume path (optional).
- * @param {String} [schemaDefinition.userDetails.personalDetails.location] - Location (optional).
- * @param {String} [schemaDefinition.userDetails.personalDetails.phoneNumber] - Phone number (optional).
- * @param {String} [schemaDefinition.userDetails.personalDetails.profilePhoto] - Profile photo (optional).
- * @param {Object} schemaDefinition.userDetails.pastExperience - Past experience schema.
- * @param {String} schemaDefinition.userDetails.pastExperience.currentJobTitle - Current job title.
- * @param {String} schemaDefinition.userDetails.pastExperience.companyName - Company name.
- * @param {String} schemaDefinition.userDetails.pastExperience.industry - Industry.
- * @param {Number} schemaDefinition.userDetails.pastExperience.yearsOfExperience - Years of experience.
- * @param {String} schemaDefinition.userDetails.pastExperience.highestDegreeAttained - Highest degree attained.
- * @param {String} schemaDefinition.userDetails.pastExperience.universityInstitutionName - University or institution name.
- * @param {String} schemaDefinition.userDetails.pastExperience.fieldOfStudy - Field of study.
- * @param {Number} schemaDefinition.userDetails.pastExperience.graduationYear - Graduation year.
- * @param {String[]} schemaDefinition.userDetails.pastExperience.keySkills - List of key skills.
- * @param {String[]} schemaDefinition.userDetails.pastExperience.certificationsLicenses - List of certifications/licenses.
- * @param {Object} schemaDefinition.userDetails.pastWorkHistory - Past work history schema.
- * @param {String} schemaDefinition.userDetails.pastWorkHistory.previousJobTitle - Previous job title.
- * @param {String} schemaDefinition.userDetails.pastWorkHistory.companyName - Company name.
- * @param {String} schemaDefinition.userDetails.pastWorkHistory.employmentDates - Employment dates.
- * @param {String[]} schemaDefinition.userDetails.pastWorkHistory.responsiblitiesAchievements - List of responsibilities/achievements.
- * @param {String} schemaDefinition.userDetails.pastWorkHistory.personalBioSummary - Personal bio/summary.
- * @param {String} schemaDefinition.userDetails.pastWorkHistory.availablityReferrals - Availability and referrals.
- * @param {String} schemaDefinition.userDetails.pastWorkHistory.jobPreferences - Job preferences.
+ * @param {Object} schemaDefinition.userDetails.personalInfo - Personal information schema.
+ * @param {String} schemaDefinition.userDetails.personalInfo.fullName - Full name.
+ * @param {String} schemaDefinition.userDetails.personalInfo.email - Email address.
+ * @param {String} schemaDefinition.userDetails.personalInfo.gender - Gender.
+ * @param {String} [schemaDefinition.userDetails.personalInfo.resume] - Resume path (optional).
+ * @param {String} [schemaDefinition.userDetails.personalInfo.location] - Location (optional).
+ * @param {Number} [schemaDefinition.userDetails.personalInfo.phoneNumber] - Phone number (optional).
+ * @param {String} [schemaDefinition.userDetails.personalInfo.profilePhoto] - Profile photo (optional).
+ * @param {Object} schemaDefinition.userDetails.professionalInfo - Professional information schema.
+ * @param {String} schemaDefinition.userDetails.professionalInfo.currentJobTitle - Current job title.
+ * @param {String} schemaDefinition.userDetails.professionalInfo.companyName - Company name.
+ * @param {String} schemaDefinition.userDetails.professionalInfo.industry - Industry.
+ * @param {Number} schemaDefinition.userDetails.professionalInfo.yearsOfExperience - Years of experience.
+ * @param {Object} schemaDefinition.userDetails.education - Education information schema.
+ * @param {String} schemaDefinition.userDetails.education.highestDegreeAttained - Highest degree attained.
+ * @param {String} schemaDefinition.userDetails.education.uniInsName - University or institution name.
+ * @param {String} schemaDefinition.userDetails.education.fieldOfStudy - Field of study.
+ * @param {Number} schemaDefinition.userDetails.education.graduationYear - Graduation year.
+ * @param {String[]} schemaDefinition.userDetails.skillsExpertise.keySkills - List of key skills.
+ * @param {String[]} schemaDefinition.userDetails.skillsExpertise.certificationsLicenses - List of certifications/licenses.
+ * @param {Object} schemaDefinition.userDetails.workHistory - Work history schema.
+ * @param {String} schemaDefinition.userDetails.workHistory.previousJobTitle - Previous job title.
+ * @param {String} schemaDefinition.userDetails.workHistory.companyName - Company name.
+ * @param {String} schemaDefinition.userDetails.workHistory.employmentDates - Employment dates.
+ * @param {String[]} schemaDefinition.userDetails.workHistory.responsibilitiesAchievements - List of responsibilities/achievements.
+ * @param {Object} schemaDefinition.userDetails.preferences - Preferences schema.
+ * @param {String} schemaDefinition.userDetails.preferences.availabilityForReferrals - Availability for referrals.
+ * @param {String} schemaDefinition.userDetails.preferences.jobPreferences - Job preferences.
+ * @param {Object} schemaDefinition.userDetails.additionalInfo - Additional information schema.
+ * @param {String} schemaDefinition.userDetails.additionalInfo.personalBio - Personal bio.
  * @param {Object} schemaDefinition.userDetails.socialLinks - Social links schema.
  * @param {String} schemaDefinition.userDetails.socialLinks.linkedInUrl - LinkedIn URL.
  * @param {String} schemaDefinition.userDetails.socialLinks.gitHubUrl - GitHub URL.
@@ -177,13 +229,17 @@ interface AccountDetailsDocument extends Document {
  */
 const accountDetailsSchema = new mongoose.Schema<AccountDetailsDocument>(
   {
-    _id: { type: String, required: true }, // Added userId field
+    _id: { type: String, required: true },
     userDetails: {
       type: new mongoose.Schema(
         {
-          personalDetails: { type: personalDetailsSchema, default: null },
-          pastExperience: { type: pastExperienceSchema, default: null },
-          pastWorkHistory: { type: pastWorkHistorySchema, default: null },
+          personalInfo: { type: personalInfoSchema, default: null },
+          professionalInfo: { type: professionalInfoSchema, default: null },
+          education: { type: educationInfoSchema, default: null },
+          skillsExpertise: { type: skillsExpertiseSchema, default: null },
+          workHistory: { type: workHistorySchema, default: null },
+          preferences: { type: preferencesSchema, default: null },
+          additionalInfo: { type: additionalInfoSchema, default: null },
           socialLinks: { type: socialLinksSchema, default: null },
         },
         { _id: false, timestamps: false }

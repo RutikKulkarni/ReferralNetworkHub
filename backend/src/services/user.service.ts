@@ -7,11 +7,11 @@ import { AccountDetailsDocument } from "../models/userAccountDetails.model";
  * Get user details by user ID.
  *
  * @param {string} userId - The ID of the user to fetch details for.
- * @returns {Promise<AccountDetailsModel>} The user details.
+ * @returns {Promise<AccountDetailsDocument>} The user details.
  * @throws {ApiError} If the user is not found, throws a BAD_REQUEST error.
  */
-const getDetailsById = async (userId: string) => {
-  let user = await AccountDetailsModel.findById({ _id: userId });
+const getDetailsById = async (userId: string): Promise<AccountDetailsDocument | null> => {
+  const user = await AccountDetailsModel.findById(userId);
 
   if (!user) {
     throw new ApiError("User not found", httpStatus.BAD_REQUEST);
@@ -24,10 +24,14 @@ const getDetailsById = async (userId: string) => {
  * Interface representing user account details for posting.
  */
 interface UserAccountDetails {
-  personalDetails: AccountDetailsDocument["userDetails"]["personalDetails"]; // Personal details of the user.
-  pastExperience: AccountDetailsDocument["userDetails"]["pastExperience"]; // Past experience details of the user.
-  pastWorkHistory: AccountDetailsDocument["userDetails"]["pastWorkHistory"]; // Past work history details of the user.
-  socialLinks: AccountDetailsDocument["userDetails"]["socialLinks"]; // Social links details of the user.
+  personalInfo: AccountDetailsDocument["userDetails"]["personalInfo"]; // Personal details of the user.
+  professionalInfo: AccountDetailsDocument["userDetails"]["professionalInfo"]; // Professional information of the user.
+  education: AccountDetailsDocument["userDetails"]["education"]; // Education information of the user.
+  skillsExpertise: AccountDetailsDocument["userDetails"]["skillsExpertise"]; // Skills and expertise of the user.
+  workHistory: AccountDetailsDocument["userDetails"]["workHistory"]; // Work history of the user.
+  preferences: AccountDetailsDocument["userDetails"]["preferences"]; // Job preferences of the user.
+  additionalInfo: AccountDetailsDocument["userDetails"]["additionalInfo"]; // Additional information about the user.
+  socialLinks: AccountDetailsDocument["userDetails"]["socialLinks"]; // Social links of the user.
 }
 
 /**
@@ -35,17 +39,21 @@ interface UserAccountDetails {
  *
  * @param {string} userId - The ID of the user to update details for.
  * @param {UserAccountDetails} details - The user account details to update.
- * @returns {Promise<AccountDetailsModel>} The updated user details.
+ * @returns {Promise<AccountDetailsDocument | null>} The updated user details.
  */
-const postDetails = async (userId: string, details: UserAccountDetails) => {
+const postDetails = async (userId: string, details: UserAccountDetails): Promise<AccountDetailsDocument | null> => {
   const updateSchema: UserAccountDetails = {
-    personalDetails: details.personalDetails,
-    pastExperience: details.pastExperience,
-    pastWorkHistory: details.pastWorkHistory,
+    personalInfo: details.personalInfo,
+    professionalInfo: details.professionalInfo,
+    education: details.education,
+    skillsExpertise: details.skillsExpertise,
+    workHistory: details.workHistory,
+    preferences: details.preferences,
+    additionalInfo: details.additionalInfo,
     socialLinks: details.socialLinks,
   };
 
-  let user = await AccountDetailsModel.findOneAndUpdate(
+  const user = await AccountDetailsModel.findOneAndUpdate(
     { _id: userId },
     { userDetails: updateSchema },
     { new: true }

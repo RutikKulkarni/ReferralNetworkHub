@@ -1,4 +1,4 @@
-import Joi, { ObjectSchema } from "joi";
+import Joi, { ArraySchema, ObjectSchema } from "joi";
 import objectId from "./custom.validations";
 
 /**
@@ -11,54 +11,89 @@ const getUserDetails: ObjectSchema = Joi.object().keys({
 });
 
 /**
- * Schema for validating personal details.
+ * Schema for validating Personal Information.
  *
  * @type {ObjectSchema}
  */
-const personalDetails: ObjectSchema = Joi.object().keys({
+const personalInfo: ObjectSchema = Joi.object().keys({
   fullName: Joi.string(),
   email: Joi.string().email(),
   gender: Joi.string(),
   resume: Joi.string(),
   location: Joi.string(),
-  phoneNumber: Joi.number(),
+  phoneNumber: Joi.string().length(10),
+  profilePhoto: Joi.string(),
 });
 
 /**
- * Schema for validating past experience details.
+ * Schema for validating Professional Information.
  *
  * @type {ObjectSchema}
  */
-const pastExperience: ObjectSchema = Joi.object().keys({
+const professionalInfo: ObjectSchema = Joi.object().keys({
   currentJobTitle: Joi.string(),
   companyName: Joi.string(),
   industry: Joi.string(),
-  yearsOfExperience: Joi.number(),
-  highestDegreeAttained: Joi.string(),
-  universityInstitutionName: Joi.string(),
-  fieldOfStudy: Joi.string(),
-  graduationYear: Joi.number(),
-  keySkills: Joi.array(),
-  certificationsLicenses: Joi.array(),
+  yearsOfExperience: Joi.string(),
 });
 
 /**
- * Schema for validating past work history details.
+ * Schema for validating Education Information.
  *
  * @type {ObjectSchema}
  */
-const pastWorkHistory: ObjectSchema = Joi.object().keys({
-  previousJobTitle: Joi.string(),
-  companyName: Joi.string(),
-  employmentDates: Joi.string(),
-  responsiblitiesAchievements: Joi.array(),
-  personalBioSummary: Joi.string(),
-  availablityReferrals: Joi.string(),
-  jobPreferences: Joi.string(),
+const education: ObjectSchema = Joi.object().keys({
+  highestDegreeAttained: Joi.string(),
+  uniInsName: Joi.string(),
+  fieldOfStudy: Joi.string(),
+  graduationYear: Joi.string().length(4),
 });
 
 /**
- * Schema for validating social links.
+ * Schema for validating Skills and Expertise.
+ *
+ * @type {ObjectSchema}
+ */
+const skillsExpertise: ObjectSchema = Joi.object().keys({
+  keySkills: Joi.array().items(Joi.string()),
+  certificationsLicenses: Joi.array().items(Joi.string()),
+});
+
+/**
+ * Schema for validating work history details.
+ *
+ * @type {ArraySchema}
+ */
+const workHistory: ArraySchema = Joi.array().items(
+  Joi.object().keys({
+    previousJobTitle: Joi.string(),
+    companyName: Joi.string(),
+    employmentDates: Joi.string(),
+    responsibilitiesAchievements: Joi.string()
+  })
+);
+
+/**
+ * Schema for validating Preferences.
+ *
+ * @type {ObjectSchema}
+ */
+const preferences: ObjectSchema = Joi.object().keys({
+  availabilityForReferrals: Joi.string(),
+  jobPreferences: Joi.array().items(Joi.string()),
+});
+
+/**
+ * Schema for validating Additional Information.
+ *
+ * @type {ObjectSchema}
+ */
+const additionalInfo: ObjectSchema = Joi.object().keys({
+  personalBio: Joi.string().max(200),
+});
+
+/**
+ * Schema for validating Social Links.
  *
  * @type {ObjectSchema}
  */
@@ -73,11 +108,15 @@ const socialLinks: ObjectSchema = Joi.object().keys({
  *
  * @type {ObjectSchema}
  */
-const postUserDetails: ObjectSchema = Joi.object().keys({
-  personalDetails,
-  pastExperience,
-  pastWorkHistory,
+const updateUserDetails: ObjectSchema = Joi.object().keys({
+  personalInfo,
+  professionalInfo,
+  education,
+  skillsExpertise,
+  workHistory,
+  preferences,
+  additionalInfo,
   socialLinks,
 });
 
-export { getUserDetails, postUserDetails };
+export { getUserDetails, updateUserDetails };

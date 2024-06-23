@@ -5,116 +5,148 @@ import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
 import ImageSection from "./ImageSection/ImageSection";
 import ProfessionalInfo from "./ProfessionalInfo/ProfessionalInfo";
 import WorkHistory from "./WorkHistory/WorkHistory";
-// import ChipTextField from "./ChipTextField/ChipTextField";
+import PersonalInfo from "./PersonalInfo/PersonalInfo";
+import EducationInfo from "./EducationInfo/EducationInfo";
+import SkillsExpertise from "./SkillsExpertise/SkillsExpertise";
+import AdditionalInfo from "./AdditionalInfo/AdditionalInfo";
+import { resetStates, updateUserAccountInfo } from "./formHelperFunc";
+import { useNavigate } from "react-router-dom";
+import { generateSnackbar } from "../../utility/snackbarGenerator";
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("Experienced");
+  const navigate = useNavigate();
+  const [personalInfo, setPersonalInfo] = useState({
+    fullName: "",
+    email: "",
+    gender: "",
+    resume: " ",
+    location: "",
+    phoneNumber: "",
+    profilePhoto: " ",
+  });
+  const [professionalInfo, setProfessionalInfo] = useState({
+    currentJobTitle: "",
+    companyName: "",
+    industry: "",
+    yearsOfExperience: "",
+  });
+  const [education, setEducation] = useState({
+    highestDegreeAttained: "",
+    uniInsName: "",
+    fieldOfStudy: "",
+    graduationYear: "",
+  });
+  const [skillsExpertise, setSkillsExpertise] = useState({
+    keySkills: [],
+    certificationsLicenses: [],
+  });
+  const [workHistory, setWorkHistory] = useState([
+    {
+      previousJobTitle: "",
+      companyName: "",
+      employmentDates: "",
+      responsibilitiesAchievements: "",
+    },
+  ]);
+  const [preferences, setPreferences] = useState({
+    availabilityForReferrals: "",
+    jobPreferences: [],
+  });
+  const [additionalInfo, setAdditionalInfo] = useState({
+    personalBio: "",
+  });
+  const [socialLinks, setSocialLinks] = useState({
+    linkedInUrl: "",
+    gitHubUrl: "",
+    websiteUrl: "",
+  });
+  const [termsAndConditions, setTermsAndConditions] = useState(false)
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(!termsAndConditions){
+      generateSnackbar("You must have checked Terms & Conditions Box!", 'warning', 2000)
+      return;
+    }
+
+    let data = {
+      personalInfo,
+      professionalInfo,
+      education,
+      skillsExpertise,
+      workHistory,
+      preferences,
+      additionalInfo,
+      socialLinks,
+    };
+    updateUserAccountInfo(data, navigate);
+
+    resetStates(
+      setPersonalInfo,
+      setProfessionalInfo,
+      setEducation,
+      setSkillsExpertise,
+      setWorkHistory,
+      setPreferences,
+      setAdditionalInfo,
+      setSocialLinks
+    );
+  };
+
   return (
     <div className={styles.pageContainer}>
-      <div className={styles.formContainer}>
-        <ImageSection />
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
+        <ImageSection
+          setProfileInfo={setPersonalInfo}
+          socialLinks={socialLinks}
+          setSocialLinks={setSocialLinks}
+        />
         <div className={styles.formSection}>
-          {/* <input type="file" className={styles.fileInput} /> */}
-          <ResumeUpload />
-          <div className={styles.personalInfo}>
-            <h3>Personal Information</h3>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Full Name"
-                className={styles.inputField}
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                className={styles.inputField}
-              />
-            </div>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Location (City, Country)"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Phone Number"
-                className={styles.inputField}
-              />
-            </div>
-          </div>
+          <ResumeUpload setResume={setPersonalInfo} />
+          <PersonalInfo
+            personalInfo={personalInfo}
+            setPersonalInfo={setPersonalInfo}
+          />
           <ProfessionalInfo
             handleOptionClick={handleOptionClick}
             selectedOption={selectedOption}
+            professionalInfo={professionalInfo}
+            setProfessionalInfo={setProfessionalInfo}
           />
-          <div className={styles.educationInfo}>
-            <h3>Education</h3>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Highest Degree Attained"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="University/Institution Name"
-                className={styles.inputField}
-              />
-            </div>
-            <div className={styles.inputRow}>
-              <input
-                type="text"
-                placeholder="Field of Study"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Graduation Year"
-                className={styles.inputField}
-              />
-            </div>
-          </div>
-          <div className={styles.skillsInfo}>
-            <h3>Skills and Expertise</h3>
-            <div className={styles.inputRow}>
-              {/* <ChipTextField placeholder={'Key Skills'} className={styles.inputField}/>
-              <ChipTextField placeholder={'Certifications or Licenses'}  className={styles.inputField}/> */}
-              <input
-                type="text"
-                placeholder="Key Skills"
-                className={styles.inputField}
-              />
-              <input
-                type="text"
-                placeholder="Certifications or Licenses"
-                className={styles.inputField}
-              />
-            </div>
-          </div>
-          <WorkHistory isDisabled={selectedOption === "Fresher"} />
-          <Preferences />
-          <div className={styles.additionalInfo}>
-            <h3>Additional Information</h3>
-            <textarea
-              placeholder="Personal Bio or Summary (in 200 Words Only)"
-              className={styles.textArea}
-            ></textarea>
-          </div>
+          <EducationInfo education={education} setEducation={setEducation} />
+          <SkillsExpertise
+            skillsExpertise={skillsExpertise}
+            setSkillsExpertise={setSkillsExpertise}
+          />
+          <WorkHistory
+            isDisabled={selectedOption === "Fresher"}
+            workHistoryFields={workHistory}
+            setWorkHistoryFields={setWorkHistory}
+          />
+          <Preferences
+            preferences={preferences}
+            setPreferences={setPreferences}
+          />
+          <AdditionalInfo
+            additionalInfo={additionalInfo}
+            setAdditionalInfo={setAdditionalInfo}
+          />
           <div className={styles.footerInputes}>
             <div className={styles.termsAndConditions}>
               <label>
-                <input type="checkbox" /> Accept Terms & Conditions
+                <input type="checkbox" value="termsAndConditions" checked={termsAndConditions} onChange={() => setTermsAndConditions(!termsAndConditions)} /> Accept Terms & Conditions
               </label>
             </div>
             <button className={styles.saveButton}>Save</button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

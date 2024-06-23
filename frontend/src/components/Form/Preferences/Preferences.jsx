@@ -3,8 +3,10 @@ import { FiInfo } from "react-icons/fi";
 import { Tooltip } from "react-tooltip";
 import styles from "../Form.module.css";
 import styles1 from "./Preferences.module.css";
+import { handleChange } from "../formHelperFunc";
+import ChipTextField from "../ChipTextField/ChipTextField";
 
-const Preferences = () => {
+const Preferences = ({preferences, setPreferences}) => {
   return (
     <div className={styles.preferences}>
       <div className={styles.header}>
@@ -30,7 +32,7 @@ const Preferences = () => {
         </span>
       </Tooltip>
       <div className={styles.inputRow}>
-        <select className={styles.selectField} defaultValue="">
+        <select className={styles.selectField} name="availabilityForReferrals" defaultValue="" onChange={(e) => handleChange(e, setPreferences)}>
           <option value="" disabled>
             Availability for Referrals
           </option>
@@ -41,11 +43,7 @@ const Preferences = () => {
             for referrals
           </option>
         </select>
-        <input
-          type="text"
-          placeholder="Job Preferences"
-          className={styles.inputField}
-        />
+        <ChipTextField placeholder={'Job Preferences'} inputName={'jobPreferences'} chips={preferences.jobPreferences} setChips={setPreferences} />
       </div>
     </div>
   );

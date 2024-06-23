@@ -1,27 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { FiInfo, FiTrash2 } from "react-icons/fi";
 import { Tooltip } from "react-tooltip";
 import styles from "../Form.module.css";
 import styles1 from "./WorkHistory.module.css";
 
-const WorkHistory = ({ isDisabled }) => {
-  const [workHistoryFields, setWorkHistoryFields] = useState([
-    {
-      jobTitle: "",
-      companyName: "",
-      employmentDates: "",
-      responsibilities: "",
-    },
-  ]);
+const WorkHistory = ({ isDisabled, workHistoryFields, setWorkHistoryFields }) => {
 
   const addWorkHistoryFields = () => {
     setWorkHistoryFields([
       ...workHistoryFields,
       {
-        jobTitle: "",
+        previousJobTitle: "",
         companyName: "",
         employmentDates: "",
-        responsibilities: "",
+        responsibilitiesAchievements: "",
       },
     ]);
   };
@@ -57,7 +49,7 @@ const WorkHistory = ({ isDisabled }) => {
           Professional Information.
         </span>
       </Tooltip>
-      {workHistoryFields.map((field, index) => (
+      {workHistoryFields?.map((field, index) => (
         <div key={index} className={styles1.workHistoryEntry}>
           <div className={styles1.entryHeader}>
             {index > 0 && <p>Work {index + 1}</p>}
@@ -68,11 +60,11 @@ const WorkHistory = ({ isDisabled }) => {
                 className={`${styles.inputField} ${
                   isDisabled ? styles.disabledInput : ""
                 }`}
-                value={field.jobTitle}
+                value={field.previousJobTitle}
                 disabled={isDisabled}
                 onChange={(e) => {
                   const updatedFields = [...workHistoryFields];
-                  updatedFields[index].jobTitle = e.target.value;
+                  updatedFields[index].previousJobTitle = e.target.value;
                   setWorkHistoryFields(updatedFields);
                 }}
               />
@@ -112,11 +104,11 @@ const WorkHistory = ({ isDisabled }) => {
                 className={`${styles.inputField} ${
                   isDisabled ? styles.disabledInput : ""
                 }`}
-                value={field.responsibilities}
+                value={field.responsibilitiesAchievements}
                 disabled={isDisabled}
                 onChange={(e) => {
                   const updatedFields = [...workHistoryFields];
-                  updatedFields[index].responsibilities = e.target.value;
+                  updatedFields[index].responsibilitiesAchievements = e.target.value;
                   setWorkHistoryFields(updatedFields);
                 }}
               />

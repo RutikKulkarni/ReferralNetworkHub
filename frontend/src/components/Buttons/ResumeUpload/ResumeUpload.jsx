@@ -4,7 +4,7 @@ import { PiFilePdfLight } from "react-icons/pi";
 import { BsFiletypeDoc, BsFiletypeDocx } from "react-icons/bs";
 import styles from "./ResumeUpload.module.css";
 
-const ResumeUpload = () => {
+const ResumeUpload = ({setResume}) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileTypeIcon, setFileTypeIcon] = useState(null);
   const [error, setError] = useState("");

@@ -38,11 +38,11 @@ router.get(
  * @param {Function} handler - Request handler function for updating user details.
  * @returns {void}
  */
-router.put(
+router.patch(
   "/details/:userId",
   auth,
   validate.params(userValidation.getUserDetails),
-  validate.body(userValidation.postUserDetails),
+  validate.body(userValidation.updateUserDetails),
   (req, res, next) => userController.postUserDetails(req, res, next)
 );
 

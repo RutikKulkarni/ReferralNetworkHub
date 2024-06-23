@@ -1,32 +1,33 @@
+/* General styles for the card */
 .card {
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
+  background-color: white;
   border-radius: 8px;
-  padding: 20px;
-  margin: 10px;
-  width: 500px;
-  height: 100px;
+  padding: 15px;
+  width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+  justify-content: space-between; /* Align children to the start and end */
 }
 
-.profilePic {
+.imageWrapper {
   width: 50px;
   height: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
+  border-radius: 50%; /* Make the image round */
+  overflow: hidden; /* Ensure image stays within bounds */
+  margin-right: 15px;
 }
 
-.details {
-  display: flex;
-  align-items: center;
+.imageWrapper img {
   width: 100%;
-  justify-content: space-between;
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the entire circle */
 }
 
 .info {
-  display: flex;
-  flex-direction: column;
+  width: calc(100% - 100px); /* Adjust width as needed */
 }
 
 .info h2 {
@@ -39,8 +40,10 @@
   font-size: 14px;
 }
 
-.company {
-  margin-left: auto;
+.companyDetails  {
   font-weight: bold;
-  color: gray;
+  color: #78858F;
+}
+.companyDetails p {
+  font-size: 12px;
 }

@@ -12,4 +12,14 @@ const persistUser = (userId, token, loginType) => {
   localStorage.setItem("loginType", loginType);
 };
 
-export { persistUser };
+const clearUserData = () => {
+  localStorage.removeItem("userId");
+  localStorage.removeItem("token");
+  localStorage.removeItem("loginType");
+};
+
+const isLoggedIn = () => {
+  return localStorage.getItem("token") !== null;
+};
+
+export { persistUser, clearUserData, isLoggedIn };

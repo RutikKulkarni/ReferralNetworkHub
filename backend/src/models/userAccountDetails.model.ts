@@ -13,13 +13,13 @@ import mongoose, { Document, Model } from "mongoose";
  */
 const personalInfoSchema = new mongoose.Schema(
   {
-    fullName: { type: String },
-    email: { type: String },
-    gender: { type: String },
-    resume: { type: String },
-    location: { type: String },
-    phoneNumber: { type: Number },
-    profilePhoto: { type: String },
+    fullName: { type: String, default: "" },
+    email: { type: String, default: "" },
+    gender: { type: String, default: "" },
+    resume: { type: String, default: "" },
+    location: { type: String, default: "" },
+    phoneNumber: { type: Number, default: null },
+    profilePhoto: { type: String, default: "" },
   },
   { _id: false, timestamps: false }
 );
@@ -34,10 +34,10 @@ const personalInfoSchema = new mongoose.Schema(
  */
 const professionalInfoSchema = new mongoose.Schema(
   {
-    currentJobTitle: { type: String },
-    companyName: { type: String },
-    industry: { type: String },
-    yearsOfExperience: { type: Number },
+    currentJobTitle: { type: String, default: "" },
+    companyName: { type: String, default: "" },
+    industry: { type: String, default: "" },
+    yearsOfExperience: { type: Number, default: null },
   },
   { _id: false, timestamps: false }
 );

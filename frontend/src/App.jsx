@@ -7,6 +7,7 @@ import Help from "./pages/Help/Help";
 import Contact from "./pages/Contact/Contact";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
+import ForgotPassword from "./pages/Forgot/Forgot"
 import MyAccount from "./pages/MyAccount/MyAccount";
 import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
 import Explore from "./pages/Explore/Explore";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/contact" element={BgLayout(Contact)()} />
           <Route path="/signup" element={BgLayout(Signup)()} />
           <Route path="/login" element={BgLayout(Login)()} />
+          <Route path="/forgotpassword" element={BgLayout(ForgotPassword)()} />
           <Route path="/myAccount" element={BgLayout(MyAccount)()} />
           <Route
             path="/editAccountInfo"

@@ -81,7 +81,10 @@ const Login = () => {
               />
               <label htmlFor="rememberMe">Remember me</label>
             </div>
-            <span className={styles.span}>Forgot password?</span>
+            {/* <span className={styles.span}>Forgot password?</span> */}
+            <Link to="/forgotpassword" className={styles.span}>
+            Forgot password?
+            </Link>
           </div>
           {isLoading && (
             <div style={{ marginTop: "10px" }}>

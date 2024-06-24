@@ -14,33 +14,35 @@ import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
 import Explore from "./pages/Explore/Explore";
 import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
 import { getConfig } from "./utility/envHelper/envHelper";
-import { BgLayout } from "./components/BgComponent/BgComponent";
+import Layout from "./Layout";
 
 export const Config = getConfig();
 
 function App() {
   return (
     <Router>
-      <ThemeProvider>
-        <Routes>
-          <Route path="/" element={BgLayout(Home)()} />
-          <Route path="/about" element={BgLayout(About)()} />
-          <Route path="/services" element={BgLayout(Services)()} />
-          <Route path="/help" element={BgLayout(Help)()} />
-          <Route path="/contact" element={BgLayout(Contact)()} />
-          <Route path="/signup" element={BgLayout(Signup)()} />
-          <Route path="/login" element={BgLayout(Login)()} />
-          <Route path="/forgotpassword" element={BgLayout(ForgotPassword)()} />
-          <Route path="/myAccount" element={BgLayout(MyAccount)()} />
-          <Route
-            path="/editAccountInfo"
-            element={BgLayout(EditAccountInfo)()}
-          />
-          <Route path="/explore" element={BgLayout(Explore)()} />
-          <Route path="*" element={BgLayout(NotFound)()} />
-        </Routes>
-      </ThemeProvider>
-    </Router>
+    <ThemeProvider>
+      <Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/myAccount" element={<MyAccount />} />
+        <Route
+          path="/editAccountInfo"
+          element={<EditAccountInfo />}
+        />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      </Layout>
+    </ThemeProvider>
+  </Router>
   );
 }
 

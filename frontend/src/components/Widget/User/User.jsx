@@ -8,27 +8,36 @@ import { FiLogOut } from "react-icons/fi";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
 import { clearUserData } from "../../../utility/userPersistence";
-import {ToggleThemeSwitcher, ThemeSwitcher} from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
+import { ToggleThemeSwitcher } from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
 
+/**
+ * User widget component displaying user information and actions.
+ *
+ * @param {object} props - Component props.
+ * @param {React.Ref} ref - Reference to the DOM node of the widget.
+ * @returns {JSX.Element} User widget JSX element.
+ */
 const Widget = React.forwardRef((props, ref) => {
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
-  // const handleLogout = () => {
-  //   clearUserData();
-  //   navigate("/login");
-  // };
-
+  /**
+   * Handles user logout action, clearing user data from local storage.
+   */
   const handleLogout = () => {
     const loginType = localStorage.getItem("loginType");
     const retainEmailPassword = loginType === "rememberMe";
     clearUserData(retainEmailPassword);
     navigate("/login");
+    props.closeWidget();
   };
-  
 
+  /**
+   * Navigates to the user's account page.
+   */
   const handleMyAccount = () => {
     navigate("/MyAccount");
+    props.closeWidget();
   };
 
   return (

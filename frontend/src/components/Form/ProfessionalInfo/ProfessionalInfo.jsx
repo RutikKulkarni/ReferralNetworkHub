@@ -5,7 +5,12 @@ import styles from "../Form.module.css";
 import styles1 from "./ProfessionalInfo.module.css";
 import { handleChange } from "../formHelperFunc";
 
-const ProfessionalInfo = ({ handleOptionClick, selectedOption, professionalInfo, setProfessionalInfo }) => {
+const ProfessionalInfo = ({
+  handleOptionClick,
+  selectedOption,
+  professionalInfo,
+  setProfessionalInfo,
+}) => {
   return (
     <div className={styles.professionalInfo}>
       <div className={styles1.header}>

@@ -1,6 +1,6 @@
 # Contribution Guidelines
 
-Thank you for considering contributing to ReferralNetworkHub! By participating in this project, you agree to abide by the [code of conduct](https://www.contributor-covenant.org/version/1/4/code-of-conduct/).
+Thank you for considering contributing to ReferralNetworkHub! By participating in this project, you agree to abide by the [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## How to Contribute
 

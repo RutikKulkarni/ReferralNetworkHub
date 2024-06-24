@@ -21,33 +21,4 @@ const BgComponent = () => {
   );
 };
 
-const BgLayout = (Component, useLayout = true) => {
-  return (props) => {
-    if (useLayout) {
-      return (
-        <div
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            position: "relative",
-          }}
-        >
-          <div style={{ position: "absolute", zIndex: -99 }}>
-            <BgComponent />
-          </div>
-          <Navbar />
-          <main>
-            <Component {...props} />
-          </main>
-          <Footer />
-        </div>
-      );
-    }
-    return <Component {...props} />;
-  };
-};
-
-export { BgLayout };
 export default BgComponent;

@@ -61,7 +61,7 @@ const Form = () => {
     gitHubUrl: "",
     websiteUrl: "",
   });
-  const [termsAndConditions, setTermsAndConditions] = useState(false)
+  const [termsAndConditions, setTermsAndConditions] = useState(false);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -70,8 +70,12 @@ const Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(!termsAndConditions){
-      generateSnackbar("You must have checked Terms & Conditions Box!", 'warning', 2000)
+    if (!termsAndConditions) {
+      generateSnackbar(
+        "You must have checked Terms & Conditions Box!",
+        "warning",
+        2000
+      );
       return;
     }
 
@@ -140,7 +144,13 @@ const Form = () => {
           <div className={styles.footerInputes}>
             <div className={styles.termsAndConditions}>
               <label>
-                <input type="checkbox" value="termsAndConditions" checked={termsAndConditions} onChange={() => setTermsAndConditions(!termsAndConditions)} /> Accept Terms & Conditions
+                <input
+                  type="checkbox"
+                  value="termsAndConditions"
+                  checked={termsAndConditions}
+                  onChange={() => setTermsAndConditions(!termsAndConditions)}
+                />{" "}
+                Accept Terms & Conditions
               </label>
             </div>
             <button className={styles.saveButton}>Save</button>

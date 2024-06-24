@@ -14,5 +14,6 @@ root.render(
     }}
   >
     <App />
+
   </SnackbarProvider>
 );

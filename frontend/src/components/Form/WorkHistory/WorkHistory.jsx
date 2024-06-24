@@ -4,8 +4,11 @@ import { Tooltip } from "react-tooltip";
 import styles from "../Form.module.css";
 import styles1 from "./WorkHistory.module.css";
 
-const WorkHistory = ({ isDisabled, workHistoryFields, setWorkHistoryFields }) => {
-
+const WorkHistory = ({
+  isDisabled,
+  workHistoryFields,
+  setWorkHistoryFields,
+}) => {
   const addWorkHistoryFields = () => {
     setWorkHistoryFields([
       ...workHistoryFields,
@@ -108,7 +111,8 @@ const WorkHistory = ({ isDisabled, workHistoryFields, setWorkHistoryFields }) =>
                 disabled={isDisabled}
                 onChange={(e) => {
                   const updatedFields = [...workHistoryFields];
-                  updatedFields[index].responsibilitiesAchievements = e.target.value;
+                  updatedFields[index].responsibilitiesAchievements =
+                    e.target.value;
                   setWorkHistoryFields(updatedFields);
                 }}
               />

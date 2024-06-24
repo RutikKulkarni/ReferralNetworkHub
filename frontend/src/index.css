@@ -49,3 +49,17 @@ body {
   color: var(--text-color);
   background-color: var(--secondary-color);
 }
+
+/* Layout Styles */
+.layoutWrapper{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* BgComponent Styles */
+.bgCompWrapper{
+  position: absolute;
+  z-index: -99999;
+}

@@ -3,8 +3,9 @@ import { FiInfo } from "react-icons/fi";
 import { Tooltip } from "react-tooltip";
 import styles from "../Form.module.css";
 import styles1 from "./ProfessionalInfo.module.css";
+import { handleChange } from "../formHelperFunc";
 
-const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
+const ProfessionalInfo = ({ handleOptionClick, selectedOption, professionalInfo, setProfessionalInfo }) => {
   return (
     <div className={styles.professionalInfo}>
       <div className={styles1.header}>
@@ -45,6 +46,9 @@ const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
         <input
           type="text"
           placeholder="Current Job Title"
+          name="currentJobTitle"
+          value={professionalInfo.currentJobTitle}
+          onChange={(e) => handleChange(e, setProfessionalInfo)}
           className={`${styles.inputField} ${
             selectedOption === "Fresher" ? styles.disabledInput : ""
           }`}
@@ -54,6 +58,9 @@ const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
         <input
           type="text"
           placeholder="Company Name"
+          name="companyName"
+          value={professionalInfo.companyName}
+          onChange={(e) => handleChange(e, setProfessionalInfo)}
           className={`${styles.inputField} ${
             selectedOption === "Fresher" ? styles.disabledInput : ""
           }`}
@@ -65,6 +72,9 @@ const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
         <input
           type="text"
           placeholder="Industry"
+          name="industry"
+          value={professionalInfo.industry}
+          onChange={(e) => handleChange(e, setProfessionalInfo)}
           className={`${styles.inputField} ${
             selectedOption === "Fresher" ? styles.disabledInput : ""
           }`}
@@ -72,8 +82,11 @@ const ProfessionalInfo = ({ handleOptionClick, selectedOption }) => {
           required={selectedOption === "Experienced"}
         />
         <input
-          type="text"
+          type="number"
           placeholder="Years of Experience"
+          name="yearsOfExperience"
+          value={professionalInfo.yearsOfExperience}
+          onChange={(e) => handleChange(e, setProfessionalInfo)}
           className={`${styles.inputField} ${
             selectedOption === "Fresher" ? styles.disabledInput : ""
           }`}

@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NotFound from "./pages/Page404/Page404"
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Services from "./pages/Services/Services";
@@ -36,6 +37,7 @@ function App() {
             element={BgLayout(EditAccountInfo)()}
           />
           <Route path="/explore" element={BgLayout(Explore)()} />
+          <Route path="*" element={BgLayout(NotFound)()} />
         </Routes>
       </ThemeProvider>
     </Router>

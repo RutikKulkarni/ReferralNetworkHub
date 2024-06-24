@@ -7,6 +7,7 @@ import { LuLifeBuoy } from "react-icons/lu";
 import { FiLogOut } from "react-icons/fi";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
+import { clearUserData } from "../../../utility/userPersistence";
 import {ToggleThemeSwitcher, ThemeSwitcher} from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
 
 const Widget = React.forwardRef((props, ref) => {
@@ -14,9 +15,8 @@ const Widget = React.forwardRef((props, ref) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("userId");
-    localStorage.removeItem("token");
-    navigate("/");
+    clearUserData();
+    navigate("/login");
   };
 
   const handleMyAccount = () => {

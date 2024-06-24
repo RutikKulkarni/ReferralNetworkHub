@@ -1,34 +1,43 @@
-import React, { useState } from 'react';
-import styles from './ChipTextField.module.css';
+import React, { useState } from "react";
+import styles from "./ChipTextField.module.css";
 
-const ChipTextField = ({placeholder}) => {
-  const [inputValue, setInputValue] = useState('');
-  const [chips, setChips] = useState([]);
+const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
+  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === ' ') {
+    if (e.key === " ") {
       e.preventDefault();
-      if (inputValue.trim() !== '') {
-        setChips([...chips, inputValue.trim()]);
-        setInputValue('');
+      if (inputValue.trim() !== "") {
+        setChips((prev) => ({
+          ...prev,
+          [inputName] : [...chips, inputValue.trim()],
+        }));
+        setInputValue("");
       }
     }
   };
 
   const handleDelete = (chipToDelete) => {
-    setChips(chips.filter((chip) => chip !== chipToDelete));
+    let filteredChips = chips?.filter((chip) => chip !== chipToDelete)
+    setChips((prev)=> ({
+      ...prev,
+      [inputName] : filteredChips
+    }))
   };
 
   return (
     <div className={styles.chipInputContainer}>
-      {chips.map((chip, index) => (
+      {chips?.map((chip, index) => (
         <div key={index} className={styles.chip}>
           {chip}
-          <button onClick={() => handleDelete(chip)} className={styles.chipDeleteButton}>
+          <button
+            onClick={() => handleDelete(chip)}
+            className={styles.chipDeleteButton}
+          >
             &times;
           </button>
         </div>
@@ -39,6 +48,7 @@ const ChipTextField = ({placeholder}) => {
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className={styles.chipInput}
+        name={inputName}
       />
     </div>
   );

@@ -62,12 +62,25 @@ const Navbar = () => {
         <img src={theme === "dark" ? navWhitelogo : navDarklogo} alt="Logo" />
       </div>
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
-        <li
-          className={activePath === "/" ? styles.active : ""}
-          onClick={() => handleNavigate("home", navigate)}
-        >
-          Home
-        </li>
+        {!userId ? (
+          <>
+            <li
+              className={activePath === "/" ? styles.active : ""}
+              onClick={() => handleNavigate("home", navigate)}
+            >
+              Home
+            </li>
+          </>
+        ) : (
+          <>
+            <li
+              className={activePath === "/explore" ? styles.active : ""}
+              onClick={() => handleNavigate("home", navigate)}
+            >
+              Explore
+            </li>
+          </>
+        )}
         <li
           className={activePath === "/about" ? styles.active : ""}
           onClick={() => handleNavigate("about", navigate)}

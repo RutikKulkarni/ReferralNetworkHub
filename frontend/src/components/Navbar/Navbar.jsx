@@ -8,6 +8,7 @@ import { BiUser } from "react-icons/bi";
 import { LiaInfoCircleSolid } from "react-icons/lia";
 import Widget from "../../components/Widget/User/User";
 import { ThemeContext } from "../../context/ThemeProvider/ThemeProvider";
+import { isLoggedIn } from "../../utility/userPersistence";
 
 /**
  * Navbar component for navigation within the application.
@@ -25,7 +26,6 @@ const Navbar = () => {
 
   useEffect(() => {
     setActivePath(location.pathname);
-    // Update userId state when localStorage changes
     setUserId(localStorage.getItem("userId"));
   }, [location]);
 
@@ -75,7 +75,7 @@ const Navbar = () => {
           <>
             <li
               className={activePath === "/explore" ? styles.active : ""}
-              onClick={() => handleNavigate("home", navigate)}
+              onClick={() => handleNavigate("explore", navigate)}
             >
               Explore
             </li>
@@ -132,7 +132,7 @@ const Navbar = () => {
               <LiaInfoCircleSolid className={styles.iconInfo} />
             </>
           )}
-          {isWidgetVisible && (
+          {isLoggedIn() && isWidgetVisible && (
             <Widget
               ref={widgetRef}
               closeWidget={() => setIsWidgetVisible(false)}

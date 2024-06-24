@@ -14,7 +14,7 @@ const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
       if (inputValue.trim() !== "") {
         setChips((prev) => ({
           ...prev,
-          [inputName] : [...chips, inputValue.trim()],
+          [inputName]: [...chips, inputValue.trim()],
         }));
         setInputValue("");
       }
@@ -22,11 +22,11 @@ const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
   };
 
   const handleDelete = (chipToDelete) => {
-    let filteredChips = chips?.filter((chip) => chip !== chipToDelete)
-    setChips((prev)=> ({
+    let filteredChips = chips?.filter((chip) => chip !== chipToDelete);
+    setChips((prev) => ({
       ...prev,
-      [inputName] : filteredChips
-    }))
+      [inputName]: filteredChips,
+    }));
   };
 
   return (

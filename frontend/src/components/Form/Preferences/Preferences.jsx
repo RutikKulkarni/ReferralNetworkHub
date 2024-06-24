@@ -6,7 +6,7 @@ import styles1 from "./Preferences.module.css";
 import { handleChange } from "../formHelperFunc";
 import ChipTextField from "../ChipTextField/ChipTextField";
 
-const Preferences = ({preferences, setPreferences}) => {
+const Preferences = ({ preferences, setPreferences }) => {
   return (
     <div className={styles.preferences}>
       <div className={styles.header}>
@@ -23,8 +23,8 @@ const Preferences = ({preferences, setPreferences}) => {
         effect="solid"
       >
         <span className={styles.tooltipContent}>
-          Selecting "I am able to provide referrals to others" <br></br>
-          & "Both" your profile will be publicly visible <br></br>
+          Selecting "I am able to provide referrals to others" <br></br>& "Both"
+          your profile will be publicly visible <br></br>
           on the Explore page for referral requests.<br></br>
           Selecting "I am looking for referrals," your information
           <br></br>
@@ -32,7 +32,12 @@ const Preferences = ({preferences, setPreferences}) => {
         </span>
       </Tooltip>
       <div className={styles.inputRow}>
-        <select className={styles.selectField} name="availabilityForReferrals" defaultValue="" onChange={(e) => handleChange(e, setPreferences)}>
+        <select
+          className={styles.selectField}
+          name="availabilityForReferrals"
+          defaultValue=""
+          onChange={(e) => handleChange(e, setPreferences)}
+        >
           <option value="" disabled>
             Availability for Referrals
           </option>
@@ -43,7 +48,12 @@ const Preferences = ({preferences, setPreferences}) => {
             for referrals
           </option>
         </select>
-        <ChipTextField placeholder={'Job Preferences'} inputName={'jobPreferences'} chips={preferences.jobPreferences} setChips={setPreferences} />
+        <ChipTextField
+          placeholder={"Job Preferences"}
+          inputName={"jobPreferences"}
+          chips={preferences.jobPreferences}
+          setChips={setPreferences}
+        />
       </div>
     </div>
   );

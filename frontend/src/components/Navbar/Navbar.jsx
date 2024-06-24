@@ -8,7 +8,6 @@ import { BiUser } from "react-icons/bi";
 import { LiaInfoCircleSolid } from "react-icons/lia";
 import Widget from "../../components/Widget/User/User";
 import { ThemeContext } from "../../context/ThemeProvider/ThemeProvider";
-// import ThemeSwitcher from "../Buttons/ThemeSwitcher/ThemeSwitcher"
 
 /**
  * Navbar component for navigation within the application.
@@ -120,8 +119,12 @@ const Navbar = () => {
               <LiaInfoCircleSolid className={styles.iconInfo} />
             </>
           )}
-          {/* <ThemeSwitcher/> */}
-          {isWidgetVisible && <Widget ref={widgetRef} />}
+          {isWidgetVisible && (
+            <Widget
+              ref={widgetRef}
+              closeWidget={() => setIsWidgetVisible(false)}
+            />
+          )}
         </div>
         <div
           className={`${styles.hamburger} ${isActive ? styles.active : ""}`}

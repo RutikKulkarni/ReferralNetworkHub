@@ -1,24 +1,86 @@
 .exploreWrapper {
   display: flex;
-  /* align-items: center; */
-  justify-content: center;
-  /* min-height: 100vh; */
-  /* margin-top: 30px; */
+  flex-direction: column;
+  align-items: center;
+  background-color: transparent;
+  max-width: 100%;
+  padding: 0 15px; /* Add padding to ensure spacing on both sides */
+  box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
 }
 
-.explore {
-  padding: 20px;
-}
-
-.heading {
-  text-align: left;
-  margin: 0;
-  margin-bottom: 20px;
-}
-
-.cardContainer {
+.mainText {
   display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1200px; /* Limit max width to prevent text from stretching */
+}
+
+.mainText h1 {
+  margin: 0;
+  margin-right: 10px;
+}
+
+.arrowIcon {
+  font-size: 2rem;
+  vertical-align: middle;
+}
+
+.gridContainer {
+  display: grid;
+  gap: 15px;
+  width: 100%;
+  max-width: 1200px; /* Limit max width to prevent grid from stretching */
+  grid-template-columns: repeat(3, 1fr); /* Default to 3 columns */
+}
+
+.gridItem {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+}
+
+/* Media queries for responsive layout */
+@media (max-width: 768px) {
+  .gridContainer {
+    grid-template-columns: 1fr; /* Show 1 card on mobile */
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, 1fr); /* Show 2 cards on tablets */
+  }
+  
+  .leftoverOne .gridItem {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1025px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr); /* Show 3 cards on laptops and larger screens */
+  }
+  
+  .leftoverGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .leftoverOne .gridItem {
+    grid-column: span 4;
+  }
+
+  .leftoverTwo .gridItem {
+    grid-column: span 2;
+  }
+}
+
+/* Additional CSS for leftover cards */
+.leftoverGrid {
+  display: grid;
+  gap: 15px;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 15px; /* Ensure there is a gap between the main grid and leftover grid */
 }

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./MyAccount.module.css";
-import Profile from "../../components/Profile/Profile";
+import {Profile} from '../../components'
 
 /**
  * Home component representing the Home page.

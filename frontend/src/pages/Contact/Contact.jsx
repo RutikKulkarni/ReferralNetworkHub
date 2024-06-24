@@ -1,7 +1,5 @@
 import React from "react";
 import styles from "./Contact.module.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
 
 /**
  * Contact component representing the Contact page.

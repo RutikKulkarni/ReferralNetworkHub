@@ -236,7 +236,7 @@
     font-size: 20px;
     font-weight: 600;
     margin-top: 20px;
-    color: #2d2d2d;
+    color: var(--text-color); 
   }
 
   .section p {

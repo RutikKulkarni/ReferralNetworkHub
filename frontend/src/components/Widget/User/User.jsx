@@ -14,10 +14,18 @@ const Widget = React.forwardRef((props, ref) => {
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
+  // const handleLogout = () => {
+  //   clearUserData();
+  //   navigate("/login");
+  // };
+
   const handleLogout = () => {
-    clearUserData();
+    const loginType = localStorage.getItem("loginType");
+    const retainEmailPassword = loginType === "rememberMe";
+    clearUserData(retainEmailPassword);
     navigate("/login");
   };
+  
 
   const handleMyAccount = () => {
     navigate("/MyAccount");

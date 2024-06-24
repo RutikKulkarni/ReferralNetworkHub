@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import { LinearProgress } from "@mui/material";
@@ -20,7 +20,26 @@ const Login = () => {
   const navigate = useNavigate();
 
   /**
+   * useEffect hook to initialize the login form with remembered credentials.
+   * Retrieves stored email and password from local storage and sets them in the
+   * component's state if available.
+   */
+  useEffect(() => {
+    // Retrieve stored email and password from local storage
+    const storedEmail = localStorage.getItem("email");
+    const storedPassword = localStorage.getItem("password");
+
+    // If email and password are found in local storage, set them in state and mark rememberMe as true
+    if (storedEmail && storedPassword) {
+      setUserData({ email: storedEmail, password: storedPassword });
+      setRememberMe(true);
+    }
+  }, []);
+
+  /**
    * Handles the form submission for logging in the user.
+   * If 'Remember me' is checked, stores the user's email in localStorage.
+   * Calls the 'loginUser' function to authenticate the user with provided credentials.
    *
    * @param {Object} e - The event object from the form submission.
    */
@@ -76,14 +95,13 @@ const Login = () => {
               <input
                 type="checkbox"
                 id="rememberMe"
-                value={rememberMe}
+                checked={rememberMe}
                 onChange={handleRememberMe}
               />
               <label htmlFor="rememberMe">Remember me</label>
             </div>
-            {/* <span className={styles.span}>Forgot password?</span> */}
             <Link to="/forgotpassword" className={styles.span}>
-            Forgot password?
+              Forgot password?
             </Link>
           </div>
           {isLoading && (

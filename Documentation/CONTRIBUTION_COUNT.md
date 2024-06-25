@@ -3,6 +3,8 @@
 Thank you to all the contributors who have helped make ReferralNetworkHub better! 
 
 [![The total number of contributors to this project is](https://img.shields.io/github/contributors/RutikKulkarni/ReferralNetworkHub)](https://github.com/RutikKulkarni/ReferralNetworkHub/graphs/contributors)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[<img align="right" width="50" src="https://www.svgrepo.com/show/331368/discord-v2.svg">](https://discord.gg/UjqwhdD9CG)
 
 ## Contributors
 

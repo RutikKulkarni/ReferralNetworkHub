@@ -1,6 +1,4 @@
-import React from 'react';
-import {Card} from '../../components'
-import styles from './Explore.module.css';
+import {Card, styles} from './'
 
 const Explore = () => {
   const cardsData = [

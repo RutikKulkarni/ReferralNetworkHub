@@ -15,8 +15,8 @@ import {
   NotFound,
 } from "./pages";
 import Layout from "./Layout";
-import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
-import { getConfig } from "./utility/envHelper/envHelper";
+import { ThemeProvider } from './context'
+import { getConfig } from './utility'
 
 export const Config = getConfig();
 

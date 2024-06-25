@@ -16,6 +16,15 @@
   --button-text-color: #000000;
   --card-bg-color: #f9f9f9;
   --input-border-color: #ecedec;
+
+  /* BgComponent Colors */
+  --bg-component-skyBlue: #dbf8ff;
+  --bg-component-yellow: #f1e362;
+  --bg-component-purple: #ad84ff;
+  --bg-component-red: #ff3132;
+  --bg-component-green: #86fb74;
+  --bg-component-darkskyBlue: #badeff;
+  --bg-component-Blue: #5856e8;
 }
 
 /* dark-theme */
@@ -33,6 +42,15 @@
   --button-text-color: #ffffff;
   --card-bg-color: #242424;
   --input-border-color: #444444;
+
+  /* Dark Theme BgComponent Colors */
+  --bg-component-skyBlue: #004b6b;
+  --bg-component-yellow: #b59f00;
+  --bg-component-purple: #6b42aa;
+  --bg-component-red: #b51e1e;
+  --bg-component-green: #4b9f3a;
+  --bg-component-darkskyBlue: #3a79a5;
+  --bg-component-Blue: #3a3aa5;
 }
 
 /* Global Reset */
@@ -51,7 +69,7 @@ body {
 }
 
 /* Layout Styles */
-.layoutWrapper{
+.layoutWrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -59,7 +77,7 @@ body {
 }
 
 /* BgComponent Styles */
-.bgCompWrapper{
+.bgCompWrapper {
   position: absolute;
   z-index: -99999;
 }

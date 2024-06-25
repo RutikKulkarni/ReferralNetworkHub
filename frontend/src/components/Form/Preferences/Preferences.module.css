@@ -1,14 +1,3 @@
-/* .selectField {
-  background: transparent;
-  border: 1px solid var(--input-border-color);
-  color: var(--text-color);
-}
-
-.selectField option {
-  background: transparent;
-  color: var(--text-color);
-} */
-
 .icon {
   margin: 0 0 10px 8px;
   cursor: pointer;
@@ -26,4 +15,38 @@
   font-size: 10px;
   white-space: nowrap;
   z-index: 1;
+}
+
+.selectField {
+  width: 470px;
+  height: 50px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: transparent;
+  border: 1px solid var(--input-border-color);
+  border-radius: 12px;
+  color: var(--text-color);
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 1;
+  letter-spacing: 0.5px;
+}
+
+.selectField:focus {
+  outline: none;
+  border-color: #2d79f3;
+}
+
+.selectField:hover {
+  border-color: #2d79f3;
+}
+
+.selectField:focus-within {
+  border: 1px solid #2d79f3;
+}
+
+.selectField option {
+  background-color: var(--input-border-color);
+  color: var(--text-color);
 }

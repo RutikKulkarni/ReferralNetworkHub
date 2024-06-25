@@ -2,11 +2,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 5px 20px;
-  border: 1px solid var(--input-border-color);
   border-radius: 4px;
   width: 470px;
   border-radius: 12px;
+  position: relative;
 }
 
 .chip {
@@ -29,15 +28,34 @@
 }
 
 .chipInput {
+  width: 470px;
+  height: 50px;
   flex-grow: 1;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  min-width: 150px;
-  box-sizing: border-box;
+  padding: 20px;
+  margin-bottom: 10px;
+  border: 1px solid var(--input-border-color);
   background-color: transparent;
   color: var(--text-color);
+  border-radius: 12px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 1;
+  letter-spacing: 0.5px;
+  transition: border-color 0.3s ease;
+}
+
+.chipInput:focus {
+  outline: none;
+  border-color: #2d79f3;
+}
+
+.chipInput:hover {
+  border-color: #2d79f3;
+}
+
+.chipInput:focus-within {
+  border: 1px solid #2d79f3;
 }
 
 /* Media query for screens between 801px and 1349px */

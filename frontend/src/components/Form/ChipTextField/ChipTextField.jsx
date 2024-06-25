@@ -1,4 +1,4 @@
-import {chipTextFieldStyles as styles, useState} from '../imports'
+import { chipTextFieldStyles as styles, useState } from "../imports";
 
 const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
   const [inputValue, setInputValue] = useState("");
@@ -30,6 +30,14 @@ const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
 
   return (
     <div className={styles.chipInputContainer}>
+      <input
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        className={styles.chipInput}
+        name={inputName}
+      />
       {chips?.map((chip, index) => (
         <div key={index} className={styles.chip}>
           {chip}
@@ -41,14 +49,6 @@ const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
           </button>
         </div>
       ))}
-      <input
-        value={inputValue}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        className={styles.chipInput}
-        name={inputName}
-      />
     </div>
   );
 };

@@ -50,6 +50,11 @@
   background-color: transparent;
   color: var(--text-color);
   font-size: 16px;
+  letter-spacing: 0.5px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 1;
 }
 
 .input:focus {

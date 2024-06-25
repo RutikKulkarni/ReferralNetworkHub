@@ -82,15 +82,19 @@
   color: var(--text-color);
   border-radius: 12px;
   font-family: Poppins;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   opacity: 1;
   letter-spacing: 0.5px;
   transition: border-color 0.3s ease;
 }
 
-.inputField:hover,
 .inputField:focus {
+  outline: none;
+  border-color: #2d79f3;
+}
+
+.inputField:hover {
   border-color: #2d79f3;
 }
 
@@ -104,7 +108,6 @@
 }
 
 ::placeholder {
-  color: #999;
   opacity: 1;
   font-family: Poppins;
   font-size: 16px;
@@ -172,24 +175,23 @@
   color: var(--text-color);
   border-radius: 12px;
   font-family: Poppins;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   opacity: 1;
   letter-spacing: 0.5px;
 }
 
-.selectField {
-  width: 470px;
-  height: 50px;
-  padding: 10px;
-  margin-bottom: 10px;
+.textArea:focus {
+  outline: none;
+  border-color: #2d79f3;
+}
+
+.textArea:hover {
+  border-color: #2d79f3;
+}
+
+.textArea:focus-within {
   border: 1px solid #2d79f3;
-  border-radius: 12px;
-  font-family: Poppins;
-  font-size: 16px;
-  font-weight: 400;
-  opacity: 1;
-  letter-spacing: 0.5px;
 }
 
 .footerInputes {

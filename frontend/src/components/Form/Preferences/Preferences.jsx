@@ -27,7 +27,7 @@ const Preferences = ({ preferences, setPreferences }) => {
       </Tooltip>
       <div className={styles.inputRow}>
         <select
-          className={styles.selectField}
+          className={styles1.selectField}
           name="availabilityForReferrals"
           defaultValue=""
           onChange={(e) => handleChange(e, setPreferences)}

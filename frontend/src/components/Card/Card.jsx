@@ -1,10 +1,10 @@
-import { cardStyles as styles, Avtar } from './imports'
+import { cardStyles as styles } from "./imports";
 
-const Card = ({ name, title, company }) => {
+const Card = ({ name, title, company, img }) => {
   return (
     <div className={styles.card}>
       <div className={styles.imageWrapper}>
-        <img src={Avtar} alt="profile" />
+        <img src={img} alt="profile" />
       </div>
 
       <div className={styles.info}>

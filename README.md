@@ -43,6 +43,8 @@ To develop ReferralNetworkHub, the following technologies we are using:
 
 To get started with ReferralNetworkHub, please refer to the [documentation](./Documentation/README.md) for setup instructions and usage guidelines.
 
+- **Flowchart:** Explore the flowchart illustrating user interactions [Flow Chart](./Documentation/FLOWCHART.md).
+
 ## Contributing
 
 We welcome contributions from the community! If you're interested in contributing to the development of ReferralNetworkHub, you can do so by:
@@ -62,4 +64,3 @@ This project is licensed under the [MIT License](LICENSE).
 ## Legal Notice
 
 ReferralNetworkHub is an open-source project developed by [GyamaTech](https://gyamatech.com/). All rights to the original content and name are reserved. Unauthorized use of the GyamaTech brand or name for purposes outside the scope of this project is prohibited. For more details, please refer to the [MIT License](LICENSE).
-

@@ -1,5 +1,4 @@
-import React from "react";
-import styles from "./Services.module.css";
+import { servicesStyles as styles } from './imports'
 
 /**
  * Services component representing the Services page.

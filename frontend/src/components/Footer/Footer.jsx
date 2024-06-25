@@ -1,8 +1,4 @@
-import React from "react";
-import { SiGithub } from "react-icons/si";
-import styles from "./Footer.module.css";
-import { useNavigate } from "react-router-dom";
-import {ToggleThemeSwitcher, ThemeSwitcher} from "../Buttons/ThemeSwitcher/ThemeSwitcher";
+import {footerStyles as styles, useNavigate, SiGithub, ThemeSwitcher} from './imports'
 
 /**
  * Footer component for the Referral Network app.

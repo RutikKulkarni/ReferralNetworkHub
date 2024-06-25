@@ -1,14 +1,21 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import navDarklogo from "../../assets/svg/dark-logo.svg";
-import navWhitelogo from "../../assets/svg/white-logo.svg";
-import styles from "./Navbar.module.css";
-import { handleNavigate } from "../../utility/handleRedirections";
-import { BiUser } from "react-icons/bi";
-import { LiaInfoCircleSolid } from "react-icons/lia";
-import Widget from "../../components/Widget/User/User";
-import { ThemeContext } from "../../context/ThemeProvider/ThemeProvider";
-import { isLoggedIn } from "../../utility/userPersistence";
+import {
+  navbarStyles as styles,
+  useState,
+  useEffect,
+  useNavigate,
+  useLocation,
+  useContext,
+  useRef,
+  handleNavigate,
+  ThemeContext,
+  navWhitelogo,
+  navDarklogo,
+  BiUser,
+  LiaInfoCircleSolid,
+  Widget,
+  isLoggedIn
+}
+from './imports'
 
 /**
  * Navbar component for navigation within the application.

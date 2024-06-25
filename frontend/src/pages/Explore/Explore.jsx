@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import Card from '../../components/Card/Card';
-import styles from './Explore.module.css';
-import { IoArrowForward } from "react-icons/io5";
-import { calculateColumns, splitCardsIntoMainAndLeftover, getLeftoverGridClass } from './gridHelper';
+import {
+  exploreStyles as styles,
+  useState,
+  useEffect,
+  Card,
+  IoArrowForward,
+  calculateColumns,
+  getLeftoverGridClass,
+  splitCardsIntoMainAndLeftover
+}
+  from './imports'
 
 const Explore = () => {
   const cardData = [

@@ -1,8 +1,4 @@
-import React from "react";
-import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
-import styles from "../Form.module.css";
-import styles1 from "./ImageSection.module.css";
-import { handleChange } from "../formHelperFunc";
+import {formStyles as styles, imageSectionStyles as styles1, handleChange, UserSvg} from '../imports'
 
 const ImageSection = ({ setProfileInfo, socialLinks, setSocialLinks }) => {
   return (

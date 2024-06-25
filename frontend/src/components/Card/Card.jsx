@@ -1,6 +1,5 @@
-import React from "react";
-import styles from "./Card.module.css";
-import Avtar from '../../assets/png/avatar.png'
+import { cardStyles as styles, Avtar } from './imports'
+
 const Card = ({ name, title, company }) => {
   return (
     <div className={styles.card}>

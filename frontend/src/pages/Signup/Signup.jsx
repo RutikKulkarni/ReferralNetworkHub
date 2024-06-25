@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import styles from "./Signup.module.css";
-import { LuAtSign } from "react-icons/lu";
-import { GoLock } from "react-icons/go";
-import { FcGoogle } from "react-icons/fc";
-import { FaLinkedinIn } from "react-icons/fa6";
-import { FiUser } from "react-icons/fi";
-import LinearProgress from "@mui/material/LinearProgress";
-import { useNavigate } from "react-router-dom";
-import { handleChange } from "../../utility/handleChange";
-import { registerUser } from "./SignupHelperFunctions";
+import {
+  signupStyles as styles,
+  useState,
+  Link,
+  LuAtSign,
+  GoLock,
+  FcGoogle,
+  FaLinkedinIn,
+  FiUser,
+  LinearProgress,
+  useNavigate,
+  handleChange,
+  registerUser
+} from './imports'
 
 /**
  * Signup component representing the Signup page.

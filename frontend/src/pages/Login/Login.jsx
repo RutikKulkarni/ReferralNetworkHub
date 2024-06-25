@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "./Login.module.css";
-import { LinearProgress } from "@mui/material";
-import { LuAtSign } from "react-icons/lu";
-import { GoLock } from "react-icons/go";
-import { FcGoogle } from "react-icons/fc";
-import { FaLinkedinIn } from "react-icons/fa6";
-import { handleChange } from "../../utility/handleChange";
-import { loginUser } from "./LoginHelperFunctions";
+import {
+  loginStyles as styles,
+  useState,
+  useEffect,
+  Link,
+  useNavigate,
+  LinearProgress,
+  LuAtSign,
+  GoLock,
+  FcGoogle,
+  FaLinkedinIn,
+  handleChange,
+  loginUser,
+} from './imports'
 
 /**
  * Login component representing the Login page.

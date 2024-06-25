@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import styles from "./ChipTextField.module.css";
+import {chipTextFieldStyles as styles, useState} from '../imports'
 
 const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
   const [inputValue, setInputValue] = useState("");

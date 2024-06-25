@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import styles from "./EditAccountInfo.module.css";
-import Form from "../../components/Form/Form";
+import { editAccountInfoStyles as styles, Form } from './imports'
 
 /**
  * Home component representing the Home page.

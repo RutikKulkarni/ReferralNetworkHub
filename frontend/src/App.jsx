@@ -5,23 +5,23 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import NotFound from "./pages/Page404/Page404";
-import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
-import Services from "./pages/Services/Services";
-import Help from "./pages/Help/Help";
-import Contact from "./pages/Contact/Contact";
-import Signup from "./pages/Signup/Signup";
-import Login from "./pages/Login/Login";
-import ForgotPassword from "./pages/Forgot/Forgot";
-import MyAccount from "./pages/MyAccount/MyAccount";
-import EditAccountInfo from "./pages/EditAccountInfo/EditAccountInfo";
-import Explore from "./pages/Explore/Explore";
-import ThemeProvider from "./context/ThemeProvider/ThemeProvider";
-import { getConfig } from "./utility/envHelper/envHelper";
+import {
+  About,
+  Contact,
+  EditAccountInfo,
+  Explore,
+  ForgotPassword,
+  Help,
+  Home,
+  Login,
+  MyAccount,
+  NotFound,
+  Services,
+  Signup
+} from './pages/exports'
+import { ThemeProvider } from './context/exports'
+import { getConfig, isLoggedIn } from "./utility/exports";
 import Layout from "./Layout";
-import { isLoggedIn } from "./utility/userPersistence";
-// import { handleNavigate } from "./utility/handleRedirections";
 
 export const Config = getConfig();
 

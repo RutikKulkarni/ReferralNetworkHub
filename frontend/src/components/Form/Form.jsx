@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import styles from "./Form.module.css";
-import Preferences from "./Preferences/Preferences";
-import ResumeUpload from "../Buttons/ResumeUpload/ResumeUpload";
-import ImageSection from "./ImageSection/ImageSection";
-import ProfessionalInfo from "./ProfessionalInfo/ProfessionalInfo";
-import WorkHistory from "./WorkHistory/WorkHistory";
-import PersonalInfo from "./PersonalInfo/PersonalInfo";
-import EducationInfo from "./EducationInfo/EducationInfo";
-import SkillsExpertise from "./SkillsExpertise/SkillsExpertise";
-import AdditionalInfo from "./AdditionalInfo/AdditionalInfo";
-import { resetStates, updateUserAccountInfo } from "./formHelperFunc";
-import { useNavigate } from "react-router-dom";
-import { generateSnackbar } from "../../utility/snackbarGenerator";
+import {
+  formStyles as styles,
+  useState, 
+  useNavigate,
+  generateSnackbar,
+  updateUserAccountInfo,
+  resetStates,
+  ImageSection,
+  ResumeUpload, 
+  PersonalInfo,
+  ProfessionalInfo, 
+  EducationInfo,
+  SkillsExpertise, 
+  WorkHistory, 
+  Preferences, 
+  AdditionalInfo
+} from './imports'
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("Experienced");

@@ -1,9 +1,11 @@
-import axios from "axios";
+import {
+  axios,
+  generateSnackbar,
+  catchError,
+  validateUserData,
+  persistUser,
+} from "./imports";
 import { Config } from "../../App";
-import { generateSnackbar } from "../../utility/snackbarGenerator";
-import { catchError } from "../../utility/catchError";
-import { validateUserData } from "../../utility/validateUserInput";
-import { persistUser } from "../../utility/userPersistence";
 
 /**
  * Fetches user details from the API.
@@ -87,7 +89,7 @@ const loginUser = async (
         if (!fetchedUserData?.userInfo?.userDetails) {
           navigate("/editAccountInfo");
         } else {
-          navigate("/");
+          navigate("/explore");
         }
       }
       setIsLoading(false);

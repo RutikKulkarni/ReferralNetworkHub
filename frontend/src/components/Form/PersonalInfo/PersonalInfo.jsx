@@ -1,5 +1,4 @@
-import styles from "../Form.module.css";
-import { handleChange } from "../formHelperFunc";
+import {formStyles as styles, handleChange} from '../imports'
 
 const PersonalInfo = ({ personalInfo, setPersonalInfo }) => {
   return (

@@ -1,10 +1,4 @@
-import React from "react";
-import { FiInfo } from "react-icons/fi";
-import { Tooltip } from "react-tooltip";
-import styles from "../Form.module.css";
-import styles1 from "./Preferences.module.css";
-import { handleChange } from "../formHelperFunc";
-import ChipTextField from "../ChipTextField/ChipTextField";
+import {formStyles as styles, preferencesStyles as styles1, FiInfo, Tooltip, handleChange, ChipTextField} from '../imports'
 
 const Preferences = ({ preferences, setPreferences }) => {
   return (

@@ -1,12 +1,14 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ReactComponent as UserSvg } from "../../assets/svg/user.svg";
-import { SiGithub } from "react-icons/si";
-import { FaLinkedinIn } from "react-icons/fa6";
-import { TbExternalLink } from "react-icons/tb";
-import { CgSoftwareDownload } from "react-icons/cg";
-import { BiSolidEditAlt } from "react-icons/bi";
-import styles from "./Profile.module.css";
+import {
+  profileStyles as styles,
+  BiSolidEditAlt,
+  CgSoftwareDownload,
+  FaLinkedinIn,
+  SiGithub,
+  TbExternalLink,
+  UserSvg,
+  useNavigate,
+}
+from './imports'
 
 const Profile = () => {
   const navigate = useNavigate();

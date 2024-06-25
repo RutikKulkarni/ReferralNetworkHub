@@ -1,7 +1,4 @@
-import React from "react";
-import HeroImg from "../../assets/svg/hero.svg";
-import styles from "./Hero.module.css";
-import JoinNow from "../Buttons/JoinNow/JoinNow";
+import {heroStyles as styles, HeroImg, JoinNow} from './imports'
 
 const Hero = () => {
   return (

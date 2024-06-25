@@ -16,6 +16,18 @@
   --button-text-color: #000000;
   --card-bg-color: #f9f9f9;
   --input-border-color: #ecedec;
+
+  /* New variables for additional components */
+  --header-bg-color: #ffffff; 
+  --sidebar-bg-color: #f2f2f2;
+
+  /* Hover state colors */
+  --button-hover-bg-color: #e0e0e0;
+  --link-hover-color: #0a1d56;
+
+  /* Form validation colors */
+  --error-color: #ff4d4f;
+  --success-color: #52c41a;
 }
 
 /* dark-theme */
@@ -33,6 +45,18 @@
   --button-text-color: #ffffff;
   --card-bg-color: #242424;
   --input-border-color: #444444;
+
+  /* Dark theme variables for additional components */
+  --header-bg-color: #1e1e1e; 
+  --sidebar-bg-color: #2e2e2e;
+
+   /* Dark theme hover state colors */
+   --button-hover-bg-color: #444444;
+   --link-hover-color: #4a90e2;
+ 
+   /* Dark theme form validation colors */
+   --error-color: #ff4d4f;
+   --success-color: #52c41a;
 }
 
 /* Global Reset */
@@ -62,4 +86,15 @@ body {
 .bgCompWrapper{
   position: absolute;
   z-index: -99999;
+  background-color: var(--secondary-color);
+}
+
+/* Header Styles */
+.header{
+  background-color: var(--header-bg-color);
+}
+
+/* Sidebar Styles */
+.sidebar{
+  background-color: var(--sidebar-bg-color);
 }

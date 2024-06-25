@@ -1,48 +1,79 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
-  Home,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import {
   About,
-  Services,
-  Help,
   Contact,
-  Signup,
-  Login,
-  ForgotPassword,
-  MyAccount,
   EditAccountInfo,
   Explore,
+  ForgotPassword,
+  Help,
+  Home,
+  Login,
+  MyAccount,
   NotFound,
-} from "./pages";
+  Services,
+  Signup
+} from './pages/exports'
+import { ThemeProvider } from './context/exports'
+import { getConfig, isLoggedIn } from "./utility/exports";
 import Layout from "./Layout";
-import { ThemeProvider } from './context'
-import { getConfig } from './utility'
 
 export const Config = getConfig();
 
-function App() {
+const PrivateRoute = ({ element, ...rest }) => {
+  return isLoggedIn() ? element : <Navigate to="/login" />;
+};
+
+const RedirectIfLoggedIn = ({ element, ...rest }) => {
+  return isLoggedIn() ? <Navigate to="/explore" /> : element;
+};
+
+const App = () => {
   return (
     <Router>
       <ThemeProvider>
         <Layout>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={isLoggedIn() ? <Navigate to="/explore" /> : <Home />}
+            />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/help" element={<Help />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/signup"
+              element={<RedirectIfLoggedIn element={<Signup />} />}
+            />
+            <Route
+              path="/login"
+              element={<RedirectIfLoggedIn element={<Login />} />}
+            />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
-            <Route path="/myAccount" element={<MyAccount />} />
-            <Route path="/editAccountInfo" element={<EditAccountInfo />} />
-            <Route path="/explore" element={<Explore />} />
+            <Route
+              path="/myAccount"
+              element={<PrivateRoute element={<MyAccount />} />}
+            />
+            <Route
+              path="/editAccountInfo"
+              element={<PrivateRoute element={<EditAccountInfo />} />}
+            />
+            <Route
+              path="/explore"
+              element={<PrivateRoute element={<Explore />} />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </ThemeProvider>
     </Router>
   );
-}
+};
 
 export default App;

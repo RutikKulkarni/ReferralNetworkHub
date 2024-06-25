@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "../Form.module.css";
-import ChipTextField from "../ChipTextField/ChipTextField";
+import {formStyles as styles, ChipTextField} from '../imports'
 
 const SkillsExpertise = ({ skillsExpertise, setSkillsExpertise }) => {
   return (

@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "./BgComponent.module.css";
-import wavylines from "../../../src/assets/png/wavylines.png";
+import { bgStyles as styles, wavylines } from './imports'
 
 const BgComponent = () => {
   return (

@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "./EditAccountInfo.module.css";
-import {Form} from '../../components'
+import { editAccountInfoStyles as styles, Form } from './imports'
 
 /**
  * Home component representing the Home page.

@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "./MyAccount.module.css";
-import {Profile} from '../../components'
+import { myAccountStyles as styles, Profile } from './imports'
 
 /**
  * Home component representing the Home page.

@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "./JoinNow.module.css";
-import { IoArrowForwardCircleOutline } from "react-icons/io5";
+import { joinNowStyles as styles, IoArrowForwardCircleOutline } from '../imports'
 
 const JoinNow = () => {
   return (

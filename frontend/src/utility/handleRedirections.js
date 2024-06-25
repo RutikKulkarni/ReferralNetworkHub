@@ -1,7 +1,5 @@
-/**
- * Navigates to the specified path.
- * @param {string} path - Path to navigate to
- */
+import { isLoggedIn } from "./userPersistence";
+
 const handleNavigate = (path, navigate) => {
   const redirects = {
     home: "/",
@@ -12,9 +10,21 @@ const handleNavigate = (path, navigate) => {
     login: "/login",
     signup: "/signup",
     explore: "/explore",
+    editAccountInfo: "/editAccountInfo",
+    myAccount: "/myAccount",
+    forgotpassword: "/forgotpassword",
   };
 
-  navigate(redirects[path]);
+  if (
+    !isLoggedIn() &&
+    (path === "myAccount" || path === "editAccountInfo" || path === "explore")
+  ) {
+    navigate("/login");
+  } else if (isLoggedIn() && (path === "login" || path === "signup")) {
+    navigate("/explore");
+  } else {
+    navigate(redirects[path]);
+  }
 };
 
 export { handleNavigate };

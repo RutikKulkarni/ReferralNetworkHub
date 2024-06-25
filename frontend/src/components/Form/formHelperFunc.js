@@ -1,7 +1,5 @@
-import { catchError } from "../../utility/catchError";
-import axios from "axios";
+import { axios, catchError, generateSnackbar } from "./imports";
 import { Config } from "../../App";
-import { generateSnackbar } from "../../utility/snackbarGenerator";
 
 const handleChange = (event, setState) => {
   setState((prev) => ({
@@ -20,7 +18,7 @@ const updateUserAccountInfo = async (
 ) => {
   try {
     let response = await axios.patch(
-      `${Config.endpoint}user/details/${userId}`,
+      `${Config?.endpoint}user/details/${userId}`,
       data,
       {
         headers: { Authorization: `Bearer ${token}` },

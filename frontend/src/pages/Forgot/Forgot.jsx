@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
-import styles from "./Forgot.module.css";
-import { LuAtSign } from "react-icons/lu";
-import { GoLock } from "react-icons/go";
-import { LinearProgress } from "@mui/material";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import {
+  forgotStyles as styles,
+  useState,
+  useEffect,
+  LuAtSign,
+  GoLock,
+  LinearProgress,
+  AiOutlineCheckCircle
+} from './imports'
 
 const ForgotPassword = () => {
   const [emailSent, setEmailSent] = useState(false);

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import styles from "./ChipTextField.module.css";
+import {chipTextFieldStyles as styles, useState} from '../imports'
 
 const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
   const [inputValue, setInputValue] = useState("");
@@ -14,7 +13,7 @@ const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
       if (inputValue.trim() !== "") {
         setChips((prev) => ({
           ...prev,
-          [inputName] : [...chips, inputValue.trim()],
+          [inputName]: [...chips, inputValue.trim()],
         }));
         setInputValue("");
       }
@@ -22,11 +21,11 @@ const ChipTextField = ({ placeholder, inputName, chips, setChips }) => {
   };
 
   const handleDelete = (chipToDelete) => {
-    let filteredChips = chips?.filter((chip) => chip !== chipToDelete)
-    setChips((prev)=> ({
+    let filteredChips = chips?.filter((chip) => chip !== chipToDelete);
+    setChips((prev) => ({
       ...prev,
-      [inputName] : filteredChips
-    }))
+      [inputName]: filteredChips,
+    }));
   };
 
   return (

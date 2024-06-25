@@ -1,13 +1,21 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import navDarklogo from "../../assets/svg/dark-logo.svg";
-import navWhitelogo from "../../assets/svg/white-logo.svg";
-import styles from "./Navbar.module.css";
-import { handleNavigate } from "../../utility/handleRedirections";
-import { BiUser } from "react-icons/bi";
-import { LiaInfoCircleSolid } from "react-icons/lia";
-import Widget from "../../components/Widget/User/User";
-import { ThemeContext } from "../../context/ThemeProvider/ThemeProvider";
+import {
+  navbarStyles as styles,
+  useState,
+  useEffect,
+  useNavigate,
+  useLocation,
+  useContext,
+  useRef,
+  handleNavigate,
+  ThemeContext,
+  navWhitelogo,
+  navDarklogo,
+  BiUser,
+  LiaInfoCircleSolid,
+  Widget,
+  isLoggedIn
+}
+from './imports'
 
 /**
  * Navbar component for navigation within the application.
@@ -25,7 +33,6 @@ const Navbar = () => {
 
   useEffect(() => {
     setActivePath(location.pathname);
-    // Update userId state when localStorage changes
     setUserId(localStorage.getItem("userId"));
   }, [location]);
 
@@ -62,12 +69,25 @@ const Navbar = () => {
         <img src={theme === "dark" ? navWhitelogo : navDarklogo} alt="Logo" />
       </div>
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
-        <li
-          className={activePath === "/" ? styles.active : ""}
-          onClick={() => handleNavigate("home", navigate)}
-        >
-          Home
-        </li>
+        {!userId ? (
+          <>
+            <li
+              className={activePath === "/" ? styles.active : ""}
+              onClick={() => handleNavigate("home", navigate)}
+            >
+              Home
+            </li>
+          </>
+        ) : (
+          <>
+            <li
+              className={activePath === "/explore" ? styles.active : ""}
+              onClick={() => handleNavigate("explore", navigate)}
+            >
+              Explore
+            </li>
+          </>
+        )}
         <li
           className={activePath === "/about" ? styles.active : ""}
           onClick={() => handleNavigate("about", navigate)}
@@ -119,7 +139,7 @@ const Navbar = () => {
               <LiaInfoCircleSolid className={styles.iconInfo} />
             </>
           )}
-          {isWidgetVisible && (
+          {isLoggedIn() && isWidgetVisible && (
             <Widget
               ref={widgetRef}
               closeWidget={() => setIsWidgetVisible(false)}

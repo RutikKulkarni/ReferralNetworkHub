@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "./About.module.css";
-
+import { aboutStyles as styles } from './imports'
 
 /**
  * About component representing the About Us page.

@@ -1,8 +1,9 @@
-import React from "react";
-import styles from "./Page404.module.css";
-import { Link } from "react-router-dom";
-import NotFoundImage from "../../assets/svg/404.svg";
-import { IoArrowForwardCircleOutline } from "react-icons/io5";
+import {
+  notFoundStyles as styles,
+  Link,
+  NotFoundImage,
+  IoArrowForwardCircleOutline
+} from './imports'
 
 const NotFound = () => {
   return (

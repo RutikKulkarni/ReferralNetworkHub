@@ -1,10 +1,6 @@
-import React from "react";
-import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
-import styles from "../Form.module.css";
-import styles1 from './ImageSection.module.css';
-import { handleChange } from "../formHelperFunc";
+import {formStyles as styles, imageSectionStyles as styles1, handleChange, UserSvg} from '../imports'
 
-const ImageSection = ({setProfileInfo, socialLinks, setSocialLinks}) => {
+const ImageSection = ({ setProfileInfo, socialLinks, setSocialLinks }) => {
   return (
     <div className={styles.imageSection}>
       <div className={styles.uploadImage}>
@@ -39,13 +35,34 @@ const ImageSection = ({setProfileInfo, socialLinks, setSocialLinks}) => {
       </div>
       <div className={styles.genderSection}>
         <label>
-          <input type="radio" name="gender" value="male" onChange={(e) => handleChange(e, setProfileInfo)} required /> Male
+          <input
+            type="radio"
+            name="gender"
+            value="male"
+            onChange={(e) => handleChange(e, setProfileInfo)}
+            required
+          />{" "}
+          Male
         </label>
         <label>
-          <input type="radio" name="gender" value="female" onChange={(e) => handleChange(e, setProfileInfo)} required /> Female
+          <input
+            type="radio"
+            name="gender"
+            value="female"
+            onChange={(e) => handleChange(e, setProfileInfo)}
+            required
+          />{" "}
+          Female
         </label>
         <label>
-          <input type="radio" name="gender" value="other" onChange={(e) => handleChange(e, setProfileInfo)} required /> Other
+          <input
+            type="radio"
+            name="gender"
+            value="other"
+            onChange={(e) => handleChange(e, setProfileInfo)}
+            required
+          />{" "}
+          Other
         </label>
       </div>
     </div>

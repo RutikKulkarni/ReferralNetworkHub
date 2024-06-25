@@ -1,8 +1,10 @@
-import React, { useContext } from "react";
-import { MdOutlineLightMode } from "react-icons/md";
-import { BiMoon } from "react-icons/bi";
-import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
-import styles from "./ThemeSwitcher.module.css";
+import {
+  themeSwitcherStyles as styles,
+  useContext,
+  ThemeContext,
+  MdOutlineLightMode,
+  BiMoon
+} from '../imports'
 
 const ToggleThemeSwitcher = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);

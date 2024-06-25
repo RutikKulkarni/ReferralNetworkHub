@@ -1,13 +1,15 @@
-import axios from "axios";
-import { validateUserData } from "../../utility/validateUserInput";
+import {
+  axios,
+  validateUserData,
+  generateSnackbar,
+  catchError,
+} from "./imports";
 import { Config } from "../../App";
-import { generateSnackbar } from "../../utility/snackbarGenerator";
-import { catchError } from "../../utility/catchError";
 
 /**
  * Registers a new user by validating the user data, sending a registration request to the API,
  * and handling the response.
- * 
+ *
  * @param {Object} userData - The user data containing name, email, and password.
  * @param {Function} setIsLoading - Function to set the loading state.
  * @param {Function} setUserData - Function to set the user data state.

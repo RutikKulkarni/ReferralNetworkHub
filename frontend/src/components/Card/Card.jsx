@@ -1,15 +1,18 @@
-import React from 'react';
-import styles from './Card.module.css';
+import { cardStyles as styles, Avtar } from './imports'
 
 const Card = ({ name, title, company }) => {
   return (
     <div className={styles.card}>
-      <img src="profile-pic-url" alt="profile" className={styles.profilePic} />
-      <div className={styles.details}>
-        <div className={styles.info}>
-          <h2>{name}</h2>
-          <p>{title}</p>
-        </div>
+      <div className={styles.imageWrapper}>
+        <img src={Avtar} alt="profile" />
+      </div>
+
+      <div className={styles.info}>
+        <h2>{name}</h2>
+        <p>{title}</p>
+      </div>
+
+      <div className={styles.companyDetails}>
         {company && <p className={styles.company}>{company}</p>}
       </div>
     </div>

@@ -1,14 +1,18 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from "./User.module.css";
-import { ReactComponent as UserSvg } from "../../../assets/svg/user.svg";
-import { BiUser } from "react-icons/bi";
-import { LuLifeBuoy } from "react-icons/lu";
-import { FiLogOut } from "react-icons/fi";
-import { HiOutlineLightBulb } from "react-icons/hi";
-import { ThemeContext } from "../../../context/ThemeProvider/ThemeProvider";
-import { clearUserData } from "../../../utility/userPersistence";
-import { ToggleThemeSwitcher } from "../../Buttons/ThemeSwitcher/ThemeSwitcher";
+import {
+  userStyles as styles,
+  React,
+  BiUser,
+  FiLogOut,
+  HiOutlineLightBulb,
+  LuLifeBuoy,
+  ThemeContext,
+  ToggleThemeSwitcher,
+  UserSvg,
+  clearUserData,
+  useContext,
+  useNavigate
+}
+from '../imports'
 
 /**
  * User widget component displaying user information and actions.

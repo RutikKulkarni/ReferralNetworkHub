@@ -1,5 +1,4 @@
-import React from "react";
-import styles from "./Help.module.css";
+import { helpStyles as styles } from './imports'
 
 /**
  * Help component representing the Help page.

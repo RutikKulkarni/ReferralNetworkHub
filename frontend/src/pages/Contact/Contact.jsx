@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./Contact.module.css";
+import { contactStyles as styles } from './imports'
+
 
 /**
  * Contact component representing the Contact page.

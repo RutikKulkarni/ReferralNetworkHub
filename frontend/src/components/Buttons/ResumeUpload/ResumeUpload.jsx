@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { FiUploadCloud, FiTrash2 } from "react-icons/fi";
-import { PiFilePdfLight } from "react-icons/pi";
-import { BsFiletypeDoc, BsFiletypeDocx } from "react-icons/bs";
-import styles from "./ResumeUpload.module.css";
+import {
+  resumeUploadStyles as styles,
+  useState, PiFilePdfLight,
+  BsFiletypeDoc,
+  BsFiletypeDocx,
+  FiUploadCloud,
+  FiTrash2
+} from '../imports'
 
-const ResumeUpload = ({setResume}) => {
+const ResumeUpload = ({ setResume }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileTypeIcon, setFileTypeIcon] = useState(null);
   const [error, setError] = useState("");

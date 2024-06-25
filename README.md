@@ -55,9 +55,9 @@ For more information or inquiries, you can contact at [rutikkulkarni2001@gmail.c
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+This project is licensed under the [MIT License](LICENSE).
 
 ## Legal Notice
 

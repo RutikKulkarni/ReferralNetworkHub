@@ -40,6 +40,9 @@ export const formatName = (name) => {
     }
   } else if (words.length === 3) {
     // If the name has three words
+    if (name.length <= 20) {
+      return name;
+    }
     const shortName = `${words[0]} ${words[1].charAt(0)} ${words[2]}`;
     if (shortName.length <= 20) {
       return shortName;

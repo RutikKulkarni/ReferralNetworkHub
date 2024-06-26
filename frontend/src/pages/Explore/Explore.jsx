@@ -7,8 +7,9 @@ import {
   calculateColumns,
   getLeftoverGridClass,
   splitCardsIntoMainAndLeftover,
-  cardData
-} from './imports';
+  cardData,
+  formatName,
+} from "./imports";
 
 const Explore = () => {
   const [columns, setColumns] = useState(3);
@@ -18,13 +19,16 @@ const Explore = () => {
       setColumns(calculateColumns(window.innerWidth));
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const { mainGridCards, leftoverCards } = splitCardsIntoMainAndLeftover(cardData, columns);
+  const { mainGridCards, leftoverCards } = splitCardsIntoMainAndLeftover(
+    cardData,
+    columns
+  );
 
   return (
     <>
@@ -36,15 +40,20 @@ const Explore = () => {
         <div className={styles.gridContainer}>
           {mainGridCards.map((card, index) => (
             <div key={index} className={styles.gridItem}>
-              <Card {...card} />
+              <Card {...card} name={formatName(card.name)} />
             </div>
           ))}
         </div>
         {leftoverCards.length > 0 && columns > 1 && (
-          <div className={`${styles.leftoverGrid} ${getLeftoverGridClass(leftoverCards.length, styles)}`}>
+          <div
+            className={`${styles.leftoverGrid} ${getLeftoverGridClass(
+              leftoverCards.length,
+              styles
+            )}`}
+          >
             {leftoverCards.map((card, index) => (
               <div key={index} className={styles.gridItem}>
-                <Card {...card} />
+                <Card {...card} name={formatName(card.name)} />
               </div>
             ))}
           </div>

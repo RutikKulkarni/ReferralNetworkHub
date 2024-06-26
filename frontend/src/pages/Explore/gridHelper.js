@@ -27,3 +27,26 @@ export const getLeftoverGridClass = (count, styles) => {
   }
   return "";
 };
+
+export const formatName = (name) => {
+  const words = name.split(" ");
+
+  if (words.length === 2) {
+    // If the name has two words
+    if (name.length <= 20) {
+      return name;
+    } else {
+      return `${words[0]} ${words[1].charAt(0)}.`;
+    }
+  } else if (words.length === 3) {
+    // If the name has three words
+    const shortName = `${words[0]} ${words[1].charAt(0)} ${words[2]}`;
+    if (shortName.length <= 20) {
+      return shortName;
+    } else {
+      return `${words[0]} ${words[1].charAt(0)}.${words[2].charAt(0)}.`;
+    }
+  }
+
+  return name;
+};

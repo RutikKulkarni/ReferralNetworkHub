@@ -11,6 +11,7 @@ export {
   calculateColumns,
   splitCardsIntoMainAndLeftover,
   getLeftoverGridClass,
+  formatName,
 } from "../gridHelper";
 
-export {default as cardData} from "../cardData"
+export { default as cardData } from "../cardData";

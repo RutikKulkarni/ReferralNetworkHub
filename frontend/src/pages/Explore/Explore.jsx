@@ -6,20 +6,11 @@ import {
   IoArrowForward,
   calculateColumns,
   getLeftoverGridClass,
-  splitCardsIntoMainAndLeftover
-}
-  from './imports'
+  splitCardsIntoMainAndLeftover,
+  cardData
+} from './imports';
 
 const Explore = () => {
-  const cardData = [
-    { name: 'John Doe', title: 'Software Engineer - 1', company: 'Company Logo', img: "https://via.placeholder.com/50" },
-    { name: 'John Doe', title: 'Software Engineer - 1', company: 'Company Logo', img: "https://via.placeholder.com/50" },
-    { name: 'John Doe', title: 'Software Engineer - 1', company: 'Company Logo', img: "https://via.placeholder.com/50" },
-    { name: 'John Doe', title: 'Software Engineer - 1', company: 'Company Logo', img: "https://via.placeholder.com/50" },
-    { name: 'John Doe', title: 'Software Engineer - 1', company: 'Company Logo', img: "https://via.placeholder.com/50" },
-    { name: 'Johnrerger Doeergerg dfherherh', title: 'Software Engineer - 1', company: 'Company Logo', img: "https://via.placeholder.com/50" },
-  ];
-
   const [columns, setColumns] = useState(3);
 
   useEffect(() => {

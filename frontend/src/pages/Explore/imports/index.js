@@ -12,3 +12,5 @@ export {
   splitCardsIntoMainAndLeftover,
   getLeftoverGridClass,
 } from "../gridHelper";
+
+export {default as cardData} from "../cardData"

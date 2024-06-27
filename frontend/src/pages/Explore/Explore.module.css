@@ -39,6 +39,7 @@
   width: 100%;
   max-width: 1200px;
   grid-template-columns: repeat(3, 1fr);
+  min-height: 38vh;
 }
 
 .gridItem {

@@ -12,18 +12,24 @@
 .mainText {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
   width: 100%;
   max-width: 1200px;
 }
 
-.mainText h1 {
+.leftContainer {
+  display: flex;
+  align-items: center;
+}
+
+.leftContainer h1 {
   margin: 0;
   margin-right: 10px;
 }
 
 .arrowIcon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   vertical-align: middle;
 }
 
@@ -50,10 +56,20 @@
   margin-top: 15px;
 }
 
-/* Media query for screens up to 800px */
 @media (max-width: 800px) {
   .gridContainer {
     grid-template-columns: 1fr;
+  }
+
+  .leftContainer h1 {
+    margin: 0;
+    margin-right: 10px;
+    font-size: 24px;
+  }
+
+  .arrowIcon {
+    font-size: 1rem;
+    vertical-align: middle;
   }
 }
 

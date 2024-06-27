@@ -12,7 +12,7 @@ export {
   splitCardsIntoMainAndLeftover,
   getLeftoverGridClass,
   formatName,
-} from "../gridHelper";
+} from "../exploreHelper";
 
 export { default as cardData } from "../cardData";
 export { default as SearchBox } from "../../../components/SearchBox/SearchBox";

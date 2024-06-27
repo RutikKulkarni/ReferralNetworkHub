@@ -14,12 +14,22 @@ import {
 
 const Explore = () => {
   const [columns, setColumns] = useState(3);
+  const [screenType, setScreenType] = useState('desktop');
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCards, setFilteredCards] = useState(cardData);
 
   useEffect(() => {
     const handleResize = () => {
-      setColumns(calculateColumns(window.innerWidth));
+      const width = window.innerWidth;
+      setColumns(calculateColumns(width));
+      
+      if (width <= 800) {
+        setScreenType('mobile');
+      } else if (width <= 1349) {
+        setScreenType('tablet');
+      } else {
+        setScreenType('desktop');
+      }
     };
 
     window.addEventListener("resize", handleResize);
@@ -56,7 +66,7 @@ const Explore = () => {
         <div className={styles.gridContainer}>
           {mainGridCards.map((card, index) => (
             <div key={index} className={styles.gridItem}>
-              <Card {...card} name={formatName(card.name)} />
+              <Card {...card} name={formatName(card.name, true, screenType, false)} />
             </div>
           ))}
         </div>
@@ -69,7 +79,7 @@ const Explore = () => {
           >
             {leftoverCards.map((card, index) => (
               <div key={index} className={styles.gridItem}>
-                <Card {...card} name={formatName(card.name)} />
+                <Card {...card} name={formatName(card.name, true, screenType, true)} />
               </div>
             ))}
           </div>

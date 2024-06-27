@@ -62,7 +62,11 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .leftoverOne .gridItem {
+  .leftoverGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .leftoverGrid .gridItem {
     grid-column: span 2;
   }
 }

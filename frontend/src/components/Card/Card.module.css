@@ -39,8 +39,43 @@
 
 .companyDetails {
   font-weight: bold;
-  color: #78858f;
+  color: hsl(206, 9%, 52%);
 }
 .companyDetails p {
   font-size: 12px;
+}
+
+
+/* Media query for mobile screens */
+@media (max-width: 800px) {
+  .card {
+    padding: 10px;
+  }
+  
+  .imageWrapper {
+    width: 60px;
+    margin-right: 8px;
+  }
+
+  .imageWrapper img {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+  }
+
+  .info {
+    width: calc(100% - 80px);
+  }
+
+  .info h2 {
+    font-size: 14px;
+  }
+
+  .info p {
+    font-size: 12px;
+  }
+
+  .companyDetails p {
+    font-size: 10px;
+  }
 }

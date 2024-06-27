@@ -7,6 +7,7 @@ import {
   calculateColumns,
   getLeftoverGridClass,
   splitCardsIntoMainAndLeftover,
+  SearchBox,
   cardData,
   formatName,
 } from "./imports";
@@ -14,6 +15,8 @@ import {
 const Explore = () => {
   const [columns, setColumns] = useState(3);
   const [screenType, setScreenType] = useState('desktop');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredCards, setFilteredCards] = useState(cardData);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,8 +38,18 @@ const Explore = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const filtered = cardData.filter(
+      (card) =>
+        card.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        card.company.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredCards(filtered);
+  }, [searchQuery]);
+
   const { mainGridCards, leftoverCards } = splitCardsIntoMainAndLeftover(
-    cardData,
+    filteredCards,
     columns
   );
 
@@ -44,8 +57,11 @@ const Explore = () => {
     <>
       <div className={styles.exploreWrapper}>
         <div className={styles.mainText}>
-          <h1>Explore</h1>
-          <IoArrowForward className={styles.arrowIcon} />
+          <div className={styles.leftContainer}>
+            <h1>Explore</h1>
+            <IoArrowForward className={styles.arrowIcon} />
+          </div>
+          <SearchBox onSearch={setSearchQuery} />
         </div>
         <div className={styles.gridContainer}>
           {mainGridCards.map((card, index) => (

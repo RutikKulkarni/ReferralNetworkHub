@@ -1,4 +1,5 @@
-import {formStyles as styles, workHistoryStyles as styles1, FiInfo,FiTrash2, Tooltip} from '../imports'
+import { formStyles as styles, workHistoryStyles as styles1, FiInfo, FiTrash2, Tooltip, DatePicker, } from "../imports";
+import "react-datepicker/dist/react-datepicker.css";
 
 const WorkHistory = ({
   isDisabled,
@@ -20,6 +21,30 @@ const WorkHistory = ({
   const removeWorkHistoryField = (index) => {
     const updatedFields = workHistoryFields.filter((_, i) => i !== index);
     setWorkHistoryFields(updatedFields);
+  };
+
+  const handleDateChange = (dates, index) => {
+    const [start, end] = dates;
+    const startDateString = start
+      ? start.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+      : "";
+    const endDateString = end
+      ? end.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+      : "";
+    const employmentDates = `${startDateString} To ${endDateString}`;
+
+    const updatedFields = [...workHistoryFields];
+    updatedFields[index].employmentDates = employmentDates;
+    setWorkHistoryFields(updatedFields);
+  };
+
+  const parseEmploymentDates = (employmentDates) => {
+    if (!employmentDates || typeof employmentDates !== "string")
+      return [null, null];
+    const dates = employmentDates.split(" To ");
+    const start = dates[0] ? new Date(dates[0]) : null;
+    const end = dates[1] ? new Date(dates[1]) : null;
+    return [start, end];
   };
 
   return (
@@ -83,19 +108,21 @@ const WorkHistory = ({
               />
             </div>
             <div className={styles.inputRow}>
-              <input
+              <DatePicker
                 type="text"
-                placeholder="Employment Dates (e.g., Jan 2020 to Dec 2023)"
+                selectsRange
+                startDate={parseEmploymentDates(field.employmentDates)[0]}
+                endDate={parseEmploymentDates(field.employmentDates)[1]}
+                onChange={(dates) => handleDateChange(dates, index)}
+                disabled={isDisabled}
+                dateFormat="MMM yyyy"
                 className={`${styles.inputField} ${
                   isDisabled ? styles.disabledInput : ""
                 }`}
                 value={field.employmentDates}
-                disabled={isDisabled}
-                onChange={(e) => {
-                  const updatedFields = [...workHistoryFields];
-                  updatedFields[index].employmentDates = e.target.value;
-                  setWorkHistoryFields(updatedFields);
-                }}
+                placeholderText="Select Employment Dates"
+                showMonthYearPicker
+                showFullMonthYearPicker
               />
               <input
                 type="text"

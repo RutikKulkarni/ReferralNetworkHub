@@ -21,7 +21,7 @@ Thank you to all the contributors who have helped make ReferralNetworkHub better
 - Portfolio Link: [Portfolio](https://abuqamar-portfolio.netlify.app/)
 
 
-- ### Name: Somesh pundir 
+ ### Name: Somesh pundir 
 - Email: pundirsomesh@gmail.com
 - LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/somesh-pundir-329551209/)
 - GitHub: [GitHub profile](https://github.com/SomeshPundir)

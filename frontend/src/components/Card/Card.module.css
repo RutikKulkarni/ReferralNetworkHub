@@ -40,18 +40,18 @@
 .companyDetails {
   font-weight: bold;
   color: hsl(206, 9%, 52%);
+  text-align: right;
 }
 .companyDetails p {
   font-size: 12px;
 }
-
 
 /* Media query for mobile screens */
 @media (max-width: 800px) {
   .card {
     padding: 10px;
   }
-  
+
   .imageWrapper {
     width: 60px;
     margin-right: 8px;

@@ -12,23 +12,32 @@ import {
   formatName,
 } from "./imports";
 
+/**
+ * Explore component that displays a grid of cards and a search box to filter them.
+ *
+ * @component
+ * @returns {JSX.Element} The Explore component.
+ */
 const Explore = () => {
   const [columns, setColumns] = useState(3);
-  const [screenType, setScreenType] = useState('desktop');
+  const [screenType, setScreenType] = useState("desktop");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCards, setFilteredCards] = useState(cardData);
 
+  /**
+   * Handles window resize events to adjust the number of columns and screen type.
+   */
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       setColumns(calculateColumns(width));
-      
+
       if (width <= 800) {
-        setScreenType('mobile');
+        setScreenType("mobile");
       } else if (width <= 1349) {
-        setScreenType('tablet');
+        setScreenType("tablet");
       } else {
-        setScreenType('desktop');
+        setScreenType("desktop");
       }
     };
 
@@ -38,6 +47,9 @@ const Explore = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  /**
+   * Filters the card data based on the search query.
+   */
   useEffect(() => {
     const filtered = cardData.filter(
       (card) =>
@@ -66,7 +78,10 @@ const Explore = () => {
         <div className={styles.gridContainer}>
           {mainGridCards.map((card, index) => (
             <div key={index} className={styles.gridItem}>
-              <Card {...card} name={formatName(card.name, true, screenType, false)} />
+              <Card
+                {...card}
+                name={formatName(card.name, true, screenType, false)}
+              />
             </div>
           ))}
         </div>
@@ -79,7 +94,10 @@ const Explore = () => {
           >
             {leftoverCards.map((card, index) => (
               <div key={index} className={styles.gridItem}>
-                <Card {...card} name={formatName(card.name, true, screenType, true)} />
+                <Card
+                  {...card}
+                  name={formatName(card.name, true, screenType, true)}
+                />
               </div>
             ))}
           </div>

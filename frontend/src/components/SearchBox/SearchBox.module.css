@@ -63,21 +63,7 @@
   border: 1px solid #2d79f3;
 }
 
-/* .visible {
-  display: block;
-  width: calc(100% - 20px);
-} */
-
 @media (max-width: 800px) {
-  /* .input {
-    display: none;
-  } */
-
-  /* .visible {
-    display: block;
-    width: calc(100% - 20px);
-  } */
-
   .searchIcon {
     display: block;
   }

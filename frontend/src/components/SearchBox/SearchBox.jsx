@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { LuSearch } from "react-icons/lu";
-import styles from "./SearchBox.module.css";
+import { useState, LuSearch, styles } from "./imports/index";
 
 /**
  * SearchBox component allows users to input a search query.

@@ -91,15 +91,15 @@
 
 .inputField:focus {
   outline: none;
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .inputField:hover {
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .inputField:focus-within {
-  border: 1px solid #2d79f3;
+  border: 1px solid var(--focus-border-color);
 }
 
 .inputField.disabledInput {
@@ -183,15 +183,15 @@
 
 .textArea:focus {
   outline: none;
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .textArea:hover {
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .textArea:focus-within {
-  border: 1px solid #2d79f3;
+  border: 1px solid var(--focus-border-color);
 }
 
 .footerInputes {

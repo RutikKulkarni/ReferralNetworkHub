@@ -55,7 +55,7 @@ const Widget = React.forwardRef((props, ref) => {
           <p className={styles.profileLocation}>Pune, Maharashtra</p>
         </div>
       </div>
-      <div className={styles.divider}></div>
+      <div className={styles.fullDivider}></div>
       <div className={styles.menuItem} onClick={handleMyAccount}>
         <BiUser className={styles.icon} />
         <span>My Account</span>

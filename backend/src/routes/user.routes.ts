@@ -2,7 +2,7 @@ import express from "express";
 import { userController } from "../controllers";
 import { validate } from "../middlewares";
 import { userValidation } from "../validations";
-import { auth } from "../middlewares/auth.middleware";
+import { auth, cookieAuth } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
@@ -20,7 +20,8 @@ const router = express.Router();
  */
 router.get(
   "/details/:userId",
-  auth,
+  //auth,
+  cookieAuth,
   validate.params(userValidation.getUserDetails),
   (req, res, next) => userController.getUserDetails(req, res, next)
 );
@@ -40,7 +41,8 @@ router.get(
  */
 router.patch(
   "/details/:userId",
-  auth,
+  //auth,
+  cookieAuth,
   validate.params(userValidation.getUserDetails),
   validate.body(userValidation.updateUserDetails),
   (req, res, next) => userController.postUserDetails(req, res, next)

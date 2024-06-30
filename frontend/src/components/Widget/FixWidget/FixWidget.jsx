@@ -5,7 +5,7 @@ import styles from "./FixWidget.module.css";
 
 const FixWidget = () => {
   const handleClick = () => {
-    window.open("https://referral-network-hub.vercel.app/", "_blank");
+    window.open("https://forms.gle/3xAT8V3JBenMygLB8", "_blank");
   };
 
   return (

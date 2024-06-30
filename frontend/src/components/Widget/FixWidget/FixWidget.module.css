@@ -33,7 +33,7 @@
 
 .desktopWidget {
   display: none;
-  background-color: var(--bg-component-yellow);
+  background-color: #f6e440;
   color: #000;
   padding: 20px;
   border-radius: 8px;

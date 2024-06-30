@@ -21,7 +21,12 @@ app.use("/api", router);
 
 // Default route handler for the root URL "/"
 app.use("/", (req, res) =>
-  res.status(httpStatus.OK).send("Server is running.")
+  res
+    .status(httpStatus.OK)
+    .json({
+      message: "ReferralNetworkHub's Server is running................",
+      resolvedBy: `${process.pid} Worker Thread.`,
+    })
 );
 
 export default app;

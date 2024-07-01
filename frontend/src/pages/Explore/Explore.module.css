@@ -5,6 +5,7 @@
   background-color: transparent;
   max-width: 100%;
   padding: 0 15px;
+  min-height: 50vh;
   box-sizing: border-box;
   margin: 50px 0 60px 0;
 }
@@ -13,23 +14,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
   width: 100%;
   max-width: 1200px;
+  margin-bottom: 20px;
 }
 
-.leftContainer {
+.contentLeft {
   display: flex;
-  align-items: center;
+  align-items: center; /* Ensure children are centered vertically */
 }
 
-.leftContainer h1 {
+.contentLeft h1 {
   margin: 0;
   margin-right: 10px;
 }
 
 .arrowIcon {
-  font-size: 1.8rem;
+  font-size: 2rem;
   vertical-align: middle;
 }
 
@@ -56,20 +57,20 @@
   margin-top: 15px;
 }
 
+.noMatch {
+  margin-top: 20px;
+  font-size: 18px;
+  color: var(--bg-component-red);
+}
+
+/* Media query for screens up to 800px */
 @media (max-width: 800px) {
   .gridContainer {
     grid-template-columns: 1fr;
   }
 
-  .leftContainer h1 {
-    margin: 0;
-    margin-right: 10px;
-    font-size: 24px;
-  }
-
-  .arrowIcon {
-    font-size: 1rem;
-    vertical-align: middle;
+  .exploreWrapper {
+    min-height: 63vh;
   }
 }
 
@@ -78,11 +79,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .leftoverGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .leftoverGrid .gridItem {
+  .leftoverOne .gridItem {
     grid-column: span 2;
   }
 }

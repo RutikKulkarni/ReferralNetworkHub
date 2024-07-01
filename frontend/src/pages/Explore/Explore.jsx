@@ -54,38 +54,46 @@ const Explore = () => {
   );
 
   return (
-    <>
-      <div className={styles.exploreWrapper}>
-        <div className={styles.mainText}>
-          <div className={styles.leftContainer}>
-            <h1>Explore</h1>
-            <IoArrowForward className={styles.arrowIcon} />
-          </div>
-          <SearchBox onSearch={setSearchQuery} />
+    <div className={styles.exploreWrapper}>
+      <div className={styles.mainText}>
+        <div className={styles.contentLeft}>
+        <h1>Explore</h1>
+        <IoArrowForward className={styles.arrowIcon} />
         </div>
-        <div className={styles.gridContainer}>
-          {mainGridCards.map((card, index) => (
-            <div key={index} className={styles.gridItem}>
-              <Card {...card} name={formatName(card.name, true, screenType, false)} />
-            </div>
-          ))}
-        </div>
-        {leftoverCards.length > 0 && columns > 1 && (
-          <div
-            className={`${styles.leftoverGrid} ${getLeftoverGridClass(
-              leftoverCards.length,
-              styles
-            )}`}
-          >
-            {leftoverCards.map((card, index) => (
+       <div className={styles.contentRight}>
+       <SearchBox onSearch={setSearchQuery} />
+
+       </div>
+      </div>
+     
+      {filteredCards.length === 0 ? (
+        <p className={styles.noMatch}>Sorry, no matching results were found</p>
+      ) : (
+        <>
+          <div className={styles.gridContainer}>
+            {mainGridCards.map((card, index) => (
               <div key={index} className={styles.gridItem}>
-                <Card {...card} name={formatName(card.name, true, screenType, true)} />
+                <Card {...card} name={formatName(card.name, true, screenType, false)} />
               </div>
             ))}
           </div>
-        )}
-      </div>
-    </>
+          {leftoverCards.length > 0 && columns > 1 && (
+            <div
+              className={`${styles.leftoverGrid} ${getLeftoverGridClass(
+                leftoverCards.length,
+                styles
+              )}`}
+            >
+              {leftoverCards.map((card, index) => (
+                <div key={index} className={styles.gridItem}>
+                  <Card {...card} name={formatName(card.name, true, screenType, true)} />
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 };
 

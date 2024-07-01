@@ -2,8 +2,8 @@
   width: 100vw;
   /* position: sticky;
   top: 0;
-  left: 0;
-  z-index: 1000; */
+  left: 0; */
+  z-index: 1;
   background-color: var(--navbar-bg-color);
   padding: 10px 20px;
   display: flex;

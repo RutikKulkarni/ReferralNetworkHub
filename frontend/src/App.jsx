@@ -22,6 +22,7 @@ import {
 import { ThemeProvider } from './context/exports'
 import { getConfig, isLoggedIn } from "./utility/exports";
 import Layout from "./Layout";
+import FixWidget from "./components/Widget/FixWidget/FixWidget"
 
 export const Config = getConfig();
 
@@ -70,6 +71,7 @@ const App = () => {
             />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FixWidget />
         </Layout>
       </ThemeProvider>
     </Router>

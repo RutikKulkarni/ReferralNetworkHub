@@ -72,7 +72,7 @@
 }
 
 .inputForm:focus-within {
-  border: 1.5px solid #2d79f3;
+  border: 1.5px solid var(--focus-border-color);
 }
 
 .flexRow {
@@ -97,7 +97,7 @@
 .span {
   font-size: 14px;
   margin-left: 5px;
-  color: #2d79f3;
+  color: var(--focus-border-color);
   font-weight: 500;
   cursor: pointer;
 }
@@ -105,7 +105,7 @@
 .link {
   font-size: 14px;
   margin-left: 5px;
-  color: #2d79f3;
+  color: var(--focus-border-color);
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;

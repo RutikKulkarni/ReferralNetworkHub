@@ -1,4 +1,9 @@
-import {formStyles as styles, imageSectionStyles as styles1, handleChange, UserSvg} from '../imports'
+import {
+  formStyles as styles,
+  imageSectionStyles as styles1,
+  handleChange,
+  UserSvg,
+} from "../imports";
 
 const ImageSection = ({ setProfileInfo, socialLinks, setSocialLinks }) => {
   return (
@@ -34,34 +39,34 @@ const ImageSection = ({ setProfileInfo, socialLinks, setSocialLinks }) => {
         />
       </div>
       <div className={styles.genderSection}>
-        <label>
+        <label className={styles1.radioLabel}>
           <input
             type="radio"
             name="gender"
             value="male"
             onChange={(e) => handleChange(e, setProfileInfo)}
             required
-          />{" "}
+          />
           Male
         </label>
-        <label>
+        <label className={styles1.radioLabel}>
           <input
             type="radio"
             name="gender"
             value="female"
             onChange={(e) => handleChange(e, setProfileInfo)}
             required
-          />{" "}
+          />
           Female
         </label>
-        <label>
+        <label className={styles1.radioLabel}>
           <input
             type="radio"
             name="gender"
             value="other"
             onChange={(e) => handleChange(e, setProfileInfo)}
             required
-          />{" "}
+          />
           Other
         </label>
       </div>

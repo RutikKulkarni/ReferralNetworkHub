@@ -59,7 +59,7 @@
 
 .input:focus {
   outline: none;
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .mailIcon,

@@ -25,9 +25,9 @@ export const getConfig = () => {
   return {
     endpoint:
       REACT_ENV === "development"
-        ? "http://localhost:8082/api/v1"
+        ? "http://localhost:8082/api/v1/"
         : REACT_ENV === "deployment"
-        ? "https://referralnetworkhub.onrender.com/api/v1"
+        ? "https://referralnetworkhub.onrender.com/api/v1/"
         : "",
   };
 };

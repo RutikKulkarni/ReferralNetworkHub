@@ -1,6 +1,6 @@
+import { React, useContext, useNavigate } from "../imports/index";
 import {
   userStyles as styles,
-  React,
   BiUser,
   FiLogOut,
   HiOutlineLightBulb,
@@ -9,10 +9,7 @@ import {
   ToggleThemeSwitcher,
   UserSvg,
   clearUserData,
-  useContext,
-  useNavigate
-}
-from '../imports'
+} from "./imports/index";
 
 /**
  * User widget component displaying user information and actions.

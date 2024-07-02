@@ -1,7 +1,13 @@
-import React from "react";
-import { FaRocket } from "react-icons/fa";
-import { PiRocketLaunch } from "react-icons/pi";
-import styles from "./FixWidget.module.css";
+import {
+  React,
+}
+from '../imports/index'
+
+import {
+  userStyles as styles,
+  FaRocket,
+  PiRocketLaunch,
+} from "./imports/index";
 
 const FixWidget = () => {
   const handleClick = () => {

@@ -13,3 +13,5 @@ export { default as navbarStyles } from "../Navbar.module.css";
 export { BiUser } from "react-icons/bi";
 export { LiaInfoCircleSolid } from "react-icons/lia";
 export { default as Widget } from "../../Widget/User/User";
+export { CgMenuRightAlt } from "react-icons/cg";
+export { IoIosClose } from "react-icons/io";

@@ -13,7 +13,9 @@ import {
   BiUser,
   LiaInfoCircleSolid,
   Widget,
-  isLoggedIn
+  isLoggedIn,
+  CgMenuRightAlt,
+  IoIosClose,
 }
 from './imports'
 
@@ -150,9 +152,7 @@ const Navbar = () => {
           className={`${styles.hamburger} ${isActive ? styles.active : ""}`}
           onClick={toggleActiveClass}
         >
-          <span className={`${styles.bar}`}></span>
-          <span className={`${styles.bar}`}></span>
-          <span className={`${styles.bar}`}></span>
+          {isActive ? <IoIosClose className={styles.icon} /> : <CgMenuRightAlt className={styles.icon} />}
         </div>
       </div>
     </nav>

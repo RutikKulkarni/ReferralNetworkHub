@@ -1,3 +1,4 @@
+// Explore.jsx
 import {
   exploreStyles as styles,
   useState,
@@ -7,28 +8,34 @@ import {
   calculateColumns,
   getLeftoverGridClass,
   splitCardsIntoMainAndLeftover,
-  SearchBox,
+  DesktopSearchBox,
   cardData,
   formatName,
 } from "./imports";
 
 const Explore = () => {
   const [columns, setColumns] = useState(3);
-  const [screenType, setScreenType] = useState('desktop');
+  const [screenType, setScreenType] = useState("desktop");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showArrow, setArrow] = useState(true);
   const [filteredCards, setFilteredCards] = useState(cardData);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       setColumns(calculateColumns(width));
-      
+
       if (width <= 800) {
-        setScreenType('mobile');
+        setScreenType("mobile");
+        setArrow(false);
       } else if (width <= 1349) {
-        setScreenType('tablet');
+        setScreenType("tablet");
+        setArrow(true);
+
       } else {
-        setScreenType('desktop');
+        setScreenType("desktop");
+        setArrow(true);
+
       }
     };
 
@@ -57,23 +64,25 @@ const Explore = () => {
     <div className={styles.exploreWrapper}>
       <div className={styles.mainText}>
         <div className={styles.contentLeft}>
-        <h1>Explore</h1>
-        <IoArrowForward className={styles.arrowIcon} />
+          <h1>Explore</h1>
+          {showArrow && <IoArrowForward className={styles.arrowIcon} />}
         </div>
-       <div className={styles.contentRight}>
-       <SearchBox onSearch={setSearchQuery} />
-
-       </div>
+        <div className={styles.contentRight}>
+          <DesktopSearchBox onSearch={setSearchQuery} />
+        </div>
       </div>
-     
+
       {filteredCards.length === 0 ? (
-        <p className={styles.noMatch}>Sorry, no matching results were found</p>
+        <p className={styles.noMatch}>Sorry, no matching results were found</p>
       ) : (
         <>
           <div className={styles.gridContainer}>
             {mainGridCards.map((card, index) => (
               <div key={index} className={styles.gridItem}>
-                <Card {...card} name={formatName(card.name, true, screenType, false)} />
+                <Card
+                  {...card}
+                  name={formatName(card.name, true, screenType, false)}
+                />
               </div>
             ))}
           </div>
@@ -86,7 +95,10 @@ const Explore = () => {
             >
               {leftoverCards.map((card, index) => (
                 <div key={index} className={styles.gridItem}>
-                  <Card {...card} name={formatName(card.name, true, screenType, true)} />
+                  <Card
+                    {...card}
+                    name={formatName(card.name, true, screenType, true)}
+                  />
                 </div>
               ))}
             </div>

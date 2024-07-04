@@ -1,5 +1,6 @@
 // This file contains all Imports for Explore Dir
 
+
 // Common || Global imports
 export { useState, useEffect } from "react";
 
@@ -13,6 +14,7 @@ export {
   getLeftoverGridClass,
   formatName,
 } from "../exploreHelper";
+export {default as  DesktopSearchBox} from '../../../components/SearchBox/DesktopSearchBox.jsx';
 
 export { default as cardData } from "../cardData";
-export { default as SearchBox } from "../../../components/SearchBox/SearchBox";
+// export { default as SearchBox } from "../../../components/SearchBox/SearchBox";

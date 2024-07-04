@@ -52,32 +52,18 @@
 
 .input:focus {
   outline: none;
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .inputField:hover {
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .input:focus-within {
-  border: 1px solid #2d79f3;
+  border: 1px solid var(--focus-border-color);
 }
 
-/* .visible {
-  display: block;
-  width: calc(100% - 20px);
-} */
-
 @media (max-width: 800px) {
-  /* .input {
-    display: none;
-  } */
-
-  /* .visible {
-    display: block;
-    width: calc(100% - 20px);
-  } */
-
   .searchIcon {
     display: block;
   }

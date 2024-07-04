@@ -49,9 +49,15 @@
   color: gray;
 }
 
-.divider {
-  border-top: 1px solid #eee;
+.fullDivider {
+  border-top: 1px solid var(--input-border-color);
   margin: 10px 0;
+}
+
+.divider {
+  border-top: 1px solid var(--input-border-color);
+  margin: 10px 0;
+  width: 50%;
 }
 
 .menuItem {

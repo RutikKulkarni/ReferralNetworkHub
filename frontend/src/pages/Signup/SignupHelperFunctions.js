@@ -15,6 +15,7 @@ import { Config } from "../../App";
  * @param {Function} setUserData - Function to set the user data state.
  * @param {Function} navigate - Function to navigate to a different route.
  */
+
 const registerUser = async (userData, setIsLoading, setUserData, navigate) => {
   try {
     const validationMessage = validateUserData(userData);
@@ -22,7 +23,8 @@ const registerUser = async (userData, setIsLoading, setUserData, navigate) => {
       setIsLoading(true);
       const response = await axios.post(
         `${Config.endpoint}auth/register`,
-        userData
+        userData,
+        { withCredentials: true } // This is the important part for the cookies
       );
 
       if (response.status === 201) {

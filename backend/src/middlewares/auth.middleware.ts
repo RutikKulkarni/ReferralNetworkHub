@@ -41,4 +41,25 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export { auth };
+const cookieAuth = (req: Request, res: Response, next: NextFunction) => {
+  const { token } = req.cookies.authToken;
+
+  if (!token) {
+    return res
+      .status(httpStatus.UNAUTHORIZED)
+      .send({ message: "Unauthorized Access!" });
+  }
+
+  jwt.verify(token, config.SECRET_KEY, async (err: any, user: any) => {
+    if (err) {
+      return res
+        .status(httpStatus.FORBIDDEN)
+        .send({ message: "Forbidden Request!" });
+    }
+
+    req.user = user;
+    next();
+  });
+};
+
+export { auth, cookieAuth };

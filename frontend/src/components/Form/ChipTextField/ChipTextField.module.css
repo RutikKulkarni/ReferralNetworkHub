@@ -47,15 +47,15 @@
 
 .chipInput:focus {
   outline: none;
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .chipInput:hover {
-  border-color: #2d79f3;
+  border-color: var(--focus-border-color);
 }
 
 .chipInput:focus-within {
-  border: 1px solid #2d79f3;
+  border: 1px solid var(--focus-border-color);
 }
 
 /* Media query for screens between 801px and 1349px */

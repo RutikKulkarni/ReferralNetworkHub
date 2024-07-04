@@ -1,6 +1,6 @@
+import { React, useContext, useNavigate } from "../imports/index";
 import {
   userStyles as styles,
-  React,
   BiUser,
   FiLogOut,
   HiOutlineLightBulb,
@@ -9,10 +9,7 @@ import {
   ToggleThemeSwitcher,
   UserSvg,
   clearUserData,
-  useContext,
-  useNavigate
-}
-from '../imports'
+} from "./imports/index";
 
 /**
  * User widget component displaying user information and actions.
@@ -55,7 +52,7 @@ const Widget = React.forwardRef((props, ref) => {
           <p className={styles.profileLocation}>Pune, Maharashtra</p>
         </div>
       </div>
-      <div className={styles.divider}></div>
+      <div className={styles.fullDivider}></div>
       <div className={styles.menuItem} onClick={handleMyAccount}>
         <BiUser className={styles.icon} />
         <span>My Account</span>

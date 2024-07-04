@@ -16,6 +16,7 @@
   --button-text-color: #000000;
   --card-bg-color: #f9f9f9;
   --input-border-color: #ecedec;
+  --focus-border-color: #2d79f3;
 
   /* BgComponent Colors */
   --bg-component-skyBlue: #dbf8ff;
@@ -42,6 +43,7 @@
   --button-text-color: #ffffff;
   --card-bg-color: #242424;
   --input-border-color: #444444;
+  --focus-border-color: #2d79f3;
 
   /* Dark Theme BgComponent Colors */
   --bg-component-skyBlue: #004b6b;

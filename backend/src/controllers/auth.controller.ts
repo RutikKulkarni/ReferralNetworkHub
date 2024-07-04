@@ -29,9 +29,15 @@ const login = catchAsync(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await authService.loginUser(email, password);
   const token = await tokenService.generateAuthToken(user);
-  return res
-    .status(httpStatus.OK)
-    .send({ message: "Login successful", user, token });
+  res.cookie("authToken", token, {
+    httpOnly: true,
+    secure: true,
+  });
+  return res.status(httpStatus.OK).send({
+    message: "Login successful",
+    user,
+    //token
+  });
 });
 
 export { register, login };

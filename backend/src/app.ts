@@ -8,6 +8,9 @@ import limiter from "./utils/rateLimiter";
 
 const app: Application = express();
 
+// Enable trust proxy to use headers set by the proxy server
+app.set("trust proxy", 1);
+
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 

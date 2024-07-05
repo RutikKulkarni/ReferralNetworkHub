@@ -26,9 +26,7 @@ const Widget = React.forwardRef((props, ref) => {
    * Handles user logout action, clearing user data from local storage.
    */
   const handleLogout = () => {
-    const loginType = localStorage.getItem("loginType");
-    const retainEmailPassword = loginType === "rememberMe";
-    clearUserData(retainEmailPassword);
+    clearUserData();
     navigate("/login");
     props.closeWidget();
   };

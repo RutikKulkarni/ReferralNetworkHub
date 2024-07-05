@@ -4,6 +4,7 @@ import {
   catchError,
   validateUserData,
   persistUser,
+  clearUserData,
 } from "./imports";
 import { Config } from "../../App";
 
@@ -11,15 +12,12 @@ import { Config } from "../../App";
  * Fetches user details from the API.
  *
  * @param {string} userId - The ID of the user.
- * @param {string} token - The Bearer token for authentication.
  * @returns {Object} - The user details if the request is successful.
  */
-const fetchUserDetails = async (userId, token) => {
+const fetchUserDetails = async (userId) => {
   try {
     let response = await axios.get(`${Config.endpoint}user/details/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      withCredentials: true,
     });
     if (response.status === 200) {
       generateSnackbar(response.data.message, "success", 2000);
@@ -40,50 +38,23 @@ const fetchUserDetails = async (userId, token) => {
  * @param {Function} setUserData - Function to set the user data state.
  * @param {Function} navigate - Function to navigate to a different route.
  */
-
-const loginUser = async (
-  userData,
-  setIsLoading,
-  rememberMe,
-  setUserData,
-  navigate
-) => {
+const loginUser = async (userData, setIsLoading, setUserData, navigate) => {
   try {
-    // Validate user data before sending the login request
     const validationMessage = validateUserData(userData);
     if (validationMessage === true) {
       setIsLoading(true);
-      // Send login request to the API
       const response = await axios.post(
         `${Config.endpoint}auth/login`,
-        userData
+        userData,
+        { withCredentials: true }
       );
 
-      // If login is successful
       if (response.status === 200) {
-        // Fetch additional user details
-        const fetchedUserData = await fetchUserDetails(
-          response?.data?.user?._id,
-          response?.data?.token?.token
-        );
-        generateSnackbar(response?.data?.message, "success", 2000);
+        const fetchedUserData = await fetchUserDetails(response.data.user._id);
+        generateSnackbar(response.data.message, "success", 2000);
 
-        // Persist user data based on the rememberMe flag
-        rememberMe
-          ? persistUser(
-              response.data.user._id,
-              response.data.token.token,
-              "rememberMe",
-              userData.email,
-              userData.password
-            )
-          : persistUser(
-              response.data.user._id,
-              response.data.token.token,
-              "none"
-            );
+        persistUser(response.data.user._id, response.data.token, "session");
 
-        // Clear the user data state
         setUserData({ email: "", password: "" });
 
         if (!fetchedUserData?.userInfo?.userDetails) {

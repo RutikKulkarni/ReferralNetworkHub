@@ -4,6 +4,7 @@ import httpStatus from "http-status";
 import cookieParser from "cookie-parser";
 import router from "./routes";
 import { config } from "./config/config";
+import limiter from "./utils/rateLimiter";
 
 const app: Application = express();
 
@@ -22,7 +23,7 @@ app.use(
 );
 
 // Mounting the router at the "/api/v1" endpoint
-app.use("/api/v1", router);
+app.use("/api/v1", limiter, router);
 
 // Default route handler for the root URL "/"
 app.use("/", (req, res) =>

@@ -11,6 +11,8 @@ export {
   catchError,
   validateUserData,
   persistUser,
+  clearUserData,
+  getCookie,
 } from "../../../utility/exports";
 
 // For ../Login.jsx

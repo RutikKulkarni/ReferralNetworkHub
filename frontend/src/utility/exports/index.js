@@ -6,5 +6,10 @@ export { handleChange } from "../handleChange";
 export { handleNavigate } from "../handleRedirections";
 export { generateSnackbar } from "../snackbarGenerator";
 export { getDeviceTheme, getTheme, setTheme } from "../themeUtils";
-export { clearUserData, isLoggedIn, persistUser } from "../userPersistence";
+export {
+  persistUser,
+  clearUserData,
+  isLoggedIn,
+  getCookie,
+} from "../userPersistence";
 export { validateUserData } from "../validateUserInput";

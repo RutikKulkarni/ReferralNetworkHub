@@ -42,3 +42,4 @@ export { default as professionalInfoStyles } from "../ProfessionalInfo/Professio
 
 // For ../WorkHistory/WorkHistory.jsx
 export { default as workHistoryStyles } from "../WorkHistory/WorkHistory.module.css";
+export { default as DatePicker } from 'react-datepicker';

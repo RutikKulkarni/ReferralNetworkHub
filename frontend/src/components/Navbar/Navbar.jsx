@@ -13,9 +13,10 @@ import {
   BiUser,
   LiaInfoCircleSolid,
   Widget,
-  isLoggedIn
-}
-from './imports'
+  isLoggedIn,
+  CgMenuRightAlt,
+  IoIosClose,
+} from "./imports";
 
 /**
  * Navbar component for navigation within the application.
@@ -63,9 +64,20 @@ const Navbar = () => {
     setIsWidgetVisible(!isWidgetVisible);
   };
 
+  /**
+   * Handles logo click based on user login status.
+   */
+  const handleLogoClick = () => {
+    if (isLoggedIn()) {
+      handleNavigate("explore", navigate);
+    } else {
+      handleNavigate("home", navigate);
+    }
+  };
+
   return (
     <nav className={`${styles.navbar}`}>
-      <div className={`${styles.logo}`}>
+      <div className={`${styles.logo}`} onClick={handleLogoClick}>
         <img src={theme === "dark" ? navWhitelogo : navDarklogo} alt="Logo" />
       </div>
       <ul className={`${styles.navMenu} ${isActive ? styles.active : ""}`}>
@@ -150,9 +162,11 @@ const Navbar = () => {
           className={`${styles.hamburger} ${isActive ? styles.active : ""}`}
           onClick={toggleActiveClass}
         >
-          <span className={`${styles.bar}`}></span>
-          <span className={`${styles.bar}`}></span>
-          <span className={`${styles.bar}`}></span>
+          {isActive ? (
+            <IoIosClose className={styles.icon} />
+          ) : (
+            <CgMenuRightAlt className={styles.icon} />
+          )}
         </div>
       </div>
     </nav>

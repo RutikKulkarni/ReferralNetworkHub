@@ -38,7 +38,7 @@
 }
 
 input:checked + .slider {
-  background-color: #4caf50;
+  background-color: #4b9f3a;
 }
 
 input:checked + .slider:before {
@@ -63,7 +63,7 @@ input:checked + .slider:before {
   background: none;
   cursor: pointer;
   color: var(--icon-color);
-  transition: background-color 0.5s ease; 
+  transition: background-color 0.5s ease;
 }
 
 .themeSwitcherSwitch[data-active="true"] {

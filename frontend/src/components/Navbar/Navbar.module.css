@@ -2,8 +2,8 @@
   width: 100vw;
   /* position: sticky;
   top: 0;
-  left: 0;
-  z-index: 1000; */
+  left: 0; */
+  z-index: 1;
   background-color: var(--navbar-bg-color);
   padding: 10px 20px;
   display: flex;
@@ -15,10 +15,11 @@
 .logo {
   display: flex;
   justify-content: center;
+  cursor: pointer;
 }
 
 .logo img {
-  height: 60px;
+  height: 50px;
 }
 
 .navMenu {
@@ -68,6 +69,10 @@
   font-family: Poppins;
 }
 
+.icon {
+  display: none;
+}
+
 .iconUser {
   font-size: 20px;
   cursor: pointer;
@@ -83,12 +88,14 @@
   .navbar {
     justify-content: space-between;
   }
+
   /* hamburger */
   .hamburger {
     display: block;
     cursor: pointer;
     margin-left: 10px;
   }
+
   .bar {
     background-color: var(--text-color);
     width: 20px;
@@ -103,9 +110,11 @@
   .hamburger.active .bar:nth-child(2) {
     opacity: 0;
   }
+
   .hamburger.active .bar:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
   }
+
   .hamburger.active .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
@@ -115,12 +124,12 @@
     position: absolute;
     flex-direction: column;
     gap: 0;
-    top: 70px;
+    top: 68px;
     left: -100%;
     text-align: start;
     width: 100%;
     transition: 0.7s ease-in-out;
-    background-color: var(--secondary-color);
+    background-color: var(--navbar-bg-color);
     padding: 10px;
     margin-top: -8px;
   }
@@ -132,20 +141,45 @@
   .navMenu li {
     margin: 16px 0;
   }
+
   .navBtns {
     width: auto;
     gap: 10px;
   }
+
   .logo img {
     height: 40px;
   }
+
   .navigations {
     display: flex;
     align-items: center;
   }
+
+  .icon {
+    font-size: 26px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--icon-color);
+  }
+
   .loginBtn,
   .signupBtn {
     width: 80px;
     padding: 10px;
+  }
+}
+
+/* media queries */
+@media screen and (max-width: 350px) {
+  .signupBtn {
+    display: none;
+  }
+
+  .loginBtn {
+    background-color: var(--primary-color);
+    color: #ffffff;
   }
 }

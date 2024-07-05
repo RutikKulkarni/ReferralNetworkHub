@@ -1,6 +1,5 @@
 import { contactStyles as styles } from './imports'
 
-
 /**
  * Contact component representing the Contact page.
  * @returns {JSX.Element} Contact JSX element

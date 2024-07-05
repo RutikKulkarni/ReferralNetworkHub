@@ -1,8 +1,22 @@
 // SearchBox.jsx
+import { useState, LuSearch, styles } from "./imports/index";
 
-import { styles,  useState, LuSearch } from "./imports";
+/**
+ * SearchBox component allows users to input a search query.
+ *
+ * @component
+ * @param {Object} props - The properties object.
+ * @param {function} props.onSearch - The callback function to handle the search query.
+ * @returns {JSX.Element} The SearchBox component.
+ */
 const SearchBox = ({ onSearch }) => {
   const [query, setQuery] = useState("");
+
+  /**
+   * Handles the change in the input field and triggers the onSearch callback.
+   *
+   * @param {Object} e - The event object.
+   */
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);

@@ -1,7 +1,10 @@
+
 // imports/index.js
+// Exporting hooks and icons
 import React, { useState  } from "react";
 
 import { LuSearch } from "react-icons/lu";
-import styles from "../SearchBox.module.css"; // Adjust the path if necessary
+// Exporting styles
+import styles from "../SearchBox.module.css"; 
 
 export { React, useState,  LuSearch, styles };

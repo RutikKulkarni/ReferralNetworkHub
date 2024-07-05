@@ -9,6 +9,13 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  /* border-color: var(--input-border-color-hover); */
+  border-color: var(--focus-border-color); 
 }
 
 .imageWrapper {
@@ -40,18 +47,18 @@
 .companyDetails {
   font-weight: bold;
   color: hsl(206, 9%, 52%);
+  text-align: right;
 }
 .companyDetails p {
   font-size: 12px;
 }
-
 
 /* Media query for mobile screens */
 @media (max-width: 800px) {
   .card {
     padding: 10px;
   }
-  
+
   .imageWrapper {
     width: 60px;
     margin-right: 8px;

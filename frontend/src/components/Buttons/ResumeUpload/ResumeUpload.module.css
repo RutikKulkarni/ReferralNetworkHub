@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: 20px;
-  border: 0.01px solid var(--color-gray);
+  border: 1px solid var(--input-border-color);
   border-radius: 8px;
   background-color: var(--secondary-color);
   color: var(--text-color);
@@ -40,6 +40,10 @@
   margin-right: 20px;
 }
 
+.fileInput {
+  display: none;
+}
+
 .buttonContainer {
   display: flex;
   align-items: center;
@@ -52,21 +56,13 @@
   font-size: 20px;
 }
 
-.fileInput {
-  display: none;
-}
-
 .browseButton {
   padding: 10px 20px;
-  border: 0.1px solid var(--color-gray);
+  border: 1px solid var(--input-border-color);
   border-radius: 4px;
   background-color: var(--button-bg-color);
   cursor: pointer;
   color: var(--text-color);
-}
-
-.deleteButton:hover {
-  background-color: var(--button-bg-color-hover);
 }
 
 .deleteButton svg {

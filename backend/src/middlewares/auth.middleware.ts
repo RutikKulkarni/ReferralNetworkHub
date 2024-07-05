@@ -41,17 +41,16 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-// Cookies Logic
 const cookieAuth = (req: Request, res: Response, next: NextFunction) => {
-  const authTokenCookie = req.cookies.authToken;
+  // Check if req.cookies.authToken exists and has a token value
+  // const { token } = req.cookies.authToken;
+  const token = req.cookies.authToken?.token;
 
-  if (!authTokenCookie) {
+  if (!token) {
     return res
       .status(httpStatus.UNAUTHORIZED)
       .send({ message: "Unauthorized Access!" });
   }
-
-  const { token } = authTokenCookie;
 
   jwt.verify(token, config.SECRET_KEY, async (err: any, user: any) => {
     if (err) {
@@ -64,6 +63,5 @@ const cookieAuth = (req: Request, res: Response, next: NextFunction) => {
     next();
   });
 };
-
 
 export { auth, cookieAuth };

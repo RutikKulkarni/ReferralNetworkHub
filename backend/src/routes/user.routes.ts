@@ -20,7 +20,6 @@ const router = express.Router();
  */
 router.get(
   "/details/:userId",
-  //auth,
   cookieAuth,
   validate.params(userValidation.getUserDetails),
   (req, res, next) => userController.getUserDetails(req, res, next)
@@ -41,7 +40,6 @@ router.get(
  */
 router.patch(
   "/details/:userId",
-  //auth,
   cookieAuth,
   validate.params(userValidation.getUserDetails),
   validate.body(userValidation.updateUserDetails),

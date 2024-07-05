@@ -26,10 +26,13 @@ app.use("/api/v1", router);
 
 // Default route handler for the root URL "/"
 app.use("/", (req, res) =>
-  res.status(httpStatus.OK).json({
-    message: "ReferralNetworkHub's Server is running................",
-    resolvedBy: `${process.pid} Worker Thread.`,
-  })
+  res.status(httpStatus.OK).send("Server is running.")
+
+// Implement Scalable Node app, By creating Worker Threads
+  // res.status(httpStatus.OK).json({
+  //   message: "ReferralNetworkHub's Server is running................",
+  //   resolvedBy: `${process.pid} Worker Thread.`,
+  // })
 );
 
 export default app;

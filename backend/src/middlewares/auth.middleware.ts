@@ -41,6 +41,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
+// Cookies Logic
 const cookieAuth = (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.cookies.authToken;
 

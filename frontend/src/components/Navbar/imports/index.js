@@ -3,7 +3,11 @@
 // Common || Global imports
 export { useState, useEffect, useContext, useRef } from "react";
 export { useNavigate, useLocation } from "react-router-dom";
-export { handleNavigate, isLoggedIn } from "../../../utility/exports";
+export {
+  handleNavigate,
+  getCookie,
+  isLoggedIn,
+} from "../../../utility/exports";
 export { ThemeContext } from "../../../context/exports";
 
 // For ../Navbar

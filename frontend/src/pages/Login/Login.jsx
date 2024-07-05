@@ -11,7 +11,8 @@ import {
   FaLinkedinIn,
   handleChange,
   loginUser,
-} from './imports'
+  getCookie,
+} from "./imports";
 
 /**
  * Login component representing the Login page.
@@ -20,42 +21,35 @@ import {
 const Login = () => {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
   /**
    * useEffect hook to initialize the login form with remembered credentials.
-   * Retrieves stored email and password from local storage and sets them in the
+   * Retrieves stored email and password from cookies and sets them in the
    * component's state if available.
    */
   useEffect(() => {
-    // Retrieve stored email and password from local storage
-    const storedEmail = localStorage.getItem("email");
-    const storedPassword = localStorage.getItem("password");
+    // Retrieve stored email and password from cookies
+    const storedEmail = getCookie("email");
+    const storedPassword = getCookie("password");
 
-    // If email and password are found in local storage, set them in state and mark rememberMe as true
+    // If email and password are found in cookies, set them in state
     if (storedEmail && storedPassword) {
       setUserData({ email: storedEmail, password: storedPassword });
-      setRememberMe(true);
     }
   }, []);
 
   /**
    * Handles the form submission for logging in the user.
-   * If 'Remember me' is checked, stores the user's email in localStorage.
    * Calls the 'loginUser' function to authenticate the user with provided credentials.
    *
    * @param {Object} e - The event object from the form submission.
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    loginUser(userData, setIsLoading, rememberMe, setUserData, navigate);
+    loginUser(userData, setIsLoading, setUserData, navigate);
   };
-
-  /**
-   * Toggles rememberMe
-   */
-  const handleRememberMe = () => setRememberMe(!rememberMe);
 
   return (
     <div className={styles.container}>
@@ -95,15 +89,15 @@ const Login = () => {
           </div>
 
           <div className={styles.flexRow}>
-            <div>
+            {/* <div>
               <input
                 type="checkbox"
                 id="rememberMe"
-                checked={rememberMe}
-                onChange={handleRememberMe}
+                // checked={rememberMe}
+                // onChange={handleRememberMe}
               />
               <label htmlFor="rememberMe">Remember me</label>
-            </div>
+            </div> */}
             <Link to="/forgotpassword" className={styles.span}>
               Forgot password?
             </Link>

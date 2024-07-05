@@ -16,6 +16,7 @@ import {
   isLoggedIn,
   CgMenuRightAlt,
   IoIosClose,
+  getCookie,
 } from "./imports";
 
 /**
@@ -28,13 +29,13 @@ const Navbar = () => {
   let location = useLocation();
   const [isActive, setIsActive] = useState(false);
   const [activePath, setActivePath] = useState(location.pathname);
-  const [userId, setUserId] = useState(localStorage.getItem("userId") || null);
+  const [userId, setUserId] = useState(getCookie("userId") || null);
   const [isWidgetVisible, setIsWidgetVisible] = useState(false);
   const widgetRef = useRef(null);
 
   useEffect(() => {
     setActivePath(location.pathname);
-    setUserId(localStorage.getItem("userId"));
+    setUserId(getCookie("userId"));
   }, [location]);
 
   useEffect(() => {

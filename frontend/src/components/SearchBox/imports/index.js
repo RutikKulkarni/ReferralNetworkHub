@@ -1,6 +1,10 @@
-// Exporting hooks and icons
-export { useState } from "react";
-export { LuSearch } from "react-icons/lu";
 
+// imports/index.js
+// Exporting hooks and icons
+import React, { useState  } from "react";
+
+import { LuSearch } from "react-icons/lu";
 // Exporting styles
-export { default as styles } from "../SearchBox.module.css";
+import styles from "../SearchBox.module.css"; 
+
+export { React, useState,  LuSearch, styles };

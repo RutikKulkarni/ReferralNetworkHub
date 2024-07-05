@@ -1,3 +1,4 @@
+// SearchBox.jsx
 import { useState, LuSearch, styles } from "./imports/index";
 
 /**
@@ -16,23 +17,25 @@ const SearchBox = ({ onSearch }) => {
    *
    * @param {Object} e - The event object.
    */
+
   const handleInputChange = (e) => {
     setQuery(e.target.value);
     onSearch(e.target.value);
   };
 
   return (
-    <div className={styles.searchBoxWrapper}>
-      <div className={styles.group}>
+    <div className={styles.inputWrapper}>
+      <button className={styles.icon}>
         <LuSearch className={styles.searchIcon} />
-        <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          className={styles.input}
-          placeholder="Search..."
-        />
-      </div>
+      </button>
+      <input
+        placeholder="search.."
+        className={styles.input}
+        name="text"
+        type="text"
+        value={query}
+        onChange={handleInputChange}
+      />
     </div>
   );
 };

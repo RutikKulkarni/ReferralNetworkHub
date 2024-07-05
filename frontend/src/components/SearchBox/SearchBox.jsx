@@ -1,26 +1,27 @@
-import React, { useState } from "react";
-import { LuSearch } from "react-icons/lu";
-import styles from "./SearchBox.module.css";
+// SearchBox.jsx
 
+import { styles,  useState, LuSearch } from "./imports";
 const SearchBox = ({ onSearch }) => {
   const [query, setQuery] = useState("");
+
   const handleInputChange = (e) => {
     setQuery(e.target.value);
     onSearch(e.target.value);
   };
 
   return (
-    <div className={styles.searchBoxWrapper}>
-      <div className={styles.group}>
+    <div className={styles.inputWrapper}>
+      <button className={styles.icon}>
         <LuSearch className={styles.searchIcon} />
-        <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          className={styles.input}
-          placeholder="Search..."
-        />
-      </div>
+      </button>
+      <input
+        placeholder="search.."
+        className={styles.input}
+        name="text"
+        type="text"
+        value={query}
+        onChange={handleInputChange}
+      />
     </div>
   );
 };

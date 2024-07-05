@@ -14,7 +14,7 @@ export {
   getLeftoverGridClass,
   formatName,
 } from "../exploreHelper";
-export {default as  DesktopSearchBox} from '../../../components/SearchBox/DesktopSearchBox.jsx';
+export {default as  DesktopSearchBox} from '../../../components/SearchBox/SearchBox.jsx';
 
 export { default as cardData } from "../cardData";
 // export { default as SearchBox } from "../../../components/SearchBox/SearchBox";

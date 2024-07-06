@@ -81,27 +81,27 @@
 
 .icon {
   color: var(--icon-color);
-  font-size: 18px;
+  font-size: 1.1rem;
   margin-right: 10px;
 }
 
 .helpIcon {
   color: var(--icon-color);
-  font-size: 18px;
+  font-size: 1.1rem;
   margin-left: 10px;
   margin-right: 10px;
 }
 
 .logoutIcon {
   color: var(--icon-color);
-  font-size: 18px;
+  font-size: 1.1rem;
   margin-left: 10px;
   margin-right: 10px;
 }
 
 .themeIcon {
   color: var(--icon-color);
-  font-size: 22px;
+  font-size: 1.25rem;
   margin-left: 8px;
   margin-right: 8px;
 }

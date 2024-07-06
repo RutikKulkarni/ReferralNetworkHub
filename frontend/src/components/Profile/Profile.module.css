@@ -38,8 +38,8 @@
 
 .userSvg {
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 5rem;
+  height: 5rem;
 }
 
 .socialLinks {
@@ -50,7 +50,7 @@
 }
 
 .socialLinks a {
-  font-size: 22px;
+  font-size: 1.375rem;
   color: var(--text-color);
 }
 
@@ -59,19 +59,26 @@
   align-items: center;
   padding: 10px 15px;
   border-radius: 7px;
-  font-size: 16px;
+  font-size: 1rem;
   background-color: transparent;
   text-decoration: none;
-  border: 0.1px solid var(--text-color);
+  border: 1px solid var(--input-border-color);
   cursor: pointer;
   color: var(--text-color);
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 400;
   letter-spacing: 0.3px;
+}
+
+.button:hover {
+  border-color: var(--color-gray);
 }
 
 .icon {
   color: var(--icon-color);
   margin-right: 8px;
-  font-size: 22px;
+  font-size: 1.375rem;
 }
 
 .formSection {
@@ -95,12 +102,12 @@
 }
 
 .headerContent .name {
-  font-size: 40px;
+  font-size: 2.5rem;
   font-weight: 600;
 }
 
 .headerContent .designation {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 300;
 }
 
@@ -124,7 +131,7 @@
 }
 
 .section h3 {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-color);
   margin-top: 20px;
@@ -132,7 +139,7 @@
 
 .section p {
   margin-top: 10px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 300;
 }
 
@@ -173,12 +180,12 @@
   }
 
   .userSvg {
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    height: 5rem;
   }
 
   .button {
-    font-size: 16px;
+    font-size: 1rem;
   }
 }
 
@@ -187,7 +194,7 @@
     flex-direction: column;
     padding-top: 40px;
     padding-bottom: 40px;
-    margin: 0 10px; /* Adjust margin as needed */
+    margin: 0 10px;
   }
 
   .formContainer {
@@ -203,8 +210,8 @@
 
   .userSvg,
   .uploadImage {
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    height: 5rem;
   }
 
   .socialLinks {
@@ -233,15 +240,15 @@
   }
 
   .section h3 {
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 600;
     margin-top: 20px;
-    color: var(--text-color); 
+    color: var(--text-color);
   }
 
   .section p {
     margin-top: 0;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 300;
     margin-bottom: 4px;
   }

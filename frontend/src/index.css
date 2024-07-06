@@ -26,6 +26,8 @@
   --bg-component-green: #86fb74;
   --bg-component-darkskyBlue: #badeff;
   --bg-component-Blue: #5856e8;
+  
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 }
 
 /* dark-theme */
@@ -53,6 +55,10 @@
   --bg-component-green: #4b9f3a;
   --bg-component-darkskyBlue: #3a79a5;
   --bg-component-Blue: #3a3aa5;
+}
+
+.theme-transition {
+  transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 }
 
 /* Global Reset */

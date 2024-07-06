@@ -14,8 +14,7 @@
 }
 
 .card:hover {
-  /* border-color: var(--input-border-color-hover); */
-  border-color: var(--focus-border-color); 
+  border-color: 0.01px var(--focus-border-color); 
 }
 
 .imageWrapper {

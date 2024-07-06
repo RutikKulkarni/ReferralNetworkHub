@@ -147,8 +147,7 @@ const Profile = () => {
             </p>
             <div className={styles.inputRow}>
               <p>
-                <strong>Available for Referrals:</strong> Available for
-                Referrals: Yes/No
+                <strong>Available for Referrals:</strong> Yes/No
               </p>
             </div>
             <div className={styles.inputRow}>

@@ -1,4 +1,3 @@
-// Explore.jsx
 import {
   exploreStyles as styles,
   useState,
@@ -8,7 +7,7 @@ import {
   calculateColumns,
   getLeftoverGridClass,
   splitCardsIntoMainAndLeftover,
-  DesktopSearchBox,
+  SearchBox,
   cardData,
   formatName,
 } from "./imports";
@@ -17,7 +16,6 @@ const Explore = () => {
   const [columns, setColumns] = useState(3);
   const [screenType, setScreenType] = useState("desktop");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showArrow, setArrow] = useState(true);
   const [filteredCards, setFilteredCards] = useState(cardData);
 
   useEffect(() => {
@@ -27,15 +25,10 @@ const Explore = () => {
 
       if (width <= 800) {
         setScreenType("mobile");
-        setArrow(false);
       } else if (width <= 1349) {
         setScreenType("tablet");
-        setArrow(true);
-
       } else {
         setScreenType("desktop");
-        setArrow(true);
-
       }
     };
 
@@ -65,15 +58,15 @@ const Explore = () => {
       <div className={styles.mainText}>
         <div className={styles.contentLeft}>
           <h1>Explore</h1>
-          {showArrow && <IoArrowForward className={styles.arrowIcon} />}
+          <IoArrowForward className={styles.arrowIcon} />
         </div>
         <div className={styles.contentRight}>
-          <DesktopSearchBox onSearch={setSearchQuery} />
+          <SearchBox onSearch={setSearchQuery} />
         </div>
       </div>
 
       {filteredCards.length === 0 ? (
-        <p className={styles.noMatch}>Sorry, no matching results were found</p>
+        <p className={styles.noMatch}>Sorry, no matching results were found</p>
       ) : (
         <>
           <div className={styles.gridContainer}>

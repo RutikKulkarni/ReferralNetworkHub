@@ -21,7 +21,7 @@
 
 .contentLeft {
   display: flex;
-  align-items: center; /* Ensure children are centered vertically */
+  align-items: center;
 }
 
 .contentLeft h1 {
@@ -60,7 +60,6 @@
 .noMatch {
   margin-top: 20px;
   font-size: 18px;
-  color: var(--bg-component-red);
 }
 
 /* Media query for screens up to 800px */
@@ -71,6 +70,14 @@
 
   .exploreWrapper {
     min-height: 63vh;
+  }
+
+  .contentLeft h1 {
+    font-size: 20px;
+  }
+
+  .arrowIcon {
+    font-size: 1.3rem;
   }
 }
 

@@ -8,6 +8,8 @@ export { useState, useContext } from "react";
 // For ../JoinNow/JoinNow.jsx
 export { default as joinNowStyles } from "../JoinNow/JoinNow.module.css";
 export { IoArrowForwardCircleOutline } from "react-icons/io5";
+export { useNavigate } from "react-router-dom";
+export { handleNavigate } from "../../../utility/handleRedirections";
 
 // For ../ResumeUpload/ResumeUpload.jsx
 export { FiUploadCloud, FiTrash2 } from "react-icons/fi";

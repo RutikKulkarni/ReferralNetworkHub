@@ -1,4 +1,4 @@
-import {formStyles as styles, preferencesStyles as styles1, FiInfo, Tooltip, handleChange, ChipTextField} from '../imports'
+import { formStyles as styles, preferencesStyles as styles1, FiInfo, Tooltip, handleChange, ChipTextField } from '../imports';
 
 const Preferences = ({ preferences, setPreferences }) => {
   return (
@@ -27,7 +27,7 @@ const Preferences = ({ preferences, setPreferences }) => {
       </Tooltip>
       <div className={styles.inputRow}>
         <select
-          className={styles1.selectField}
+          className={`${styles1.selectField} selectField`}
           name="availabilityForReferrals"
           defaultValue=""
           onChange={(e) => handleChange(e, setPreferences)}
@@ -43,6 +43,7 @@ const Preferences = ({ preferences, setPreferences }) => {
           </option>
         </select>
         <ChipTextField
+          className={`${styles1.chipTextField} chipTextField`}
           placeholder={"Job Preferences"}
           inputName={"jobPreferences"}
           chips={preferences.jobPreferences}

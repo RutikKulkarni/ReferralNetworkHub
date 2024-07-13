@@ -50,3 +50,42 @@
   background-color: var(--input-border-color);
   color: var(--text-color);
 }
+
+
+/* Styles for larger screens (desktop) */
+.inputRow {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  align-items: flex-start; 
+}
+
+/* Styles for tablet and mobile views */
+@media (min-width: 801px) and (max-width: 1024px) {
+  .inputRow {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .selectField,
+  .chipTextField {
+    width: 100%;
+  }
+
+}
+
+/* Mobile view */
+@media (max-width: 800px) {
+  .inputRow {
+    flex-direction: column;
+  }
+
+  .selectField,
+  .chipTextField {
+    width: 100%;
+  }
+}
+

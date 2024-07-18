@@ -26,7 +26,11 @@
   --bg-component-green: #86fb74;
   --bg-component-darkskyBlue: #badeff;
   --bg-component-Blue: #5856e8;
-  
+
+  --scrollbar-track-color: #f1f1f1;
+  --scrollbar-thumb-color: #888;
+  --scrollbar-thumb-hover-color: #555;
+
   transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 }
 
@@ -55,6 +59,10 @@
   --bg-component-green: #4b9f3a;
   --bg-component-darkskyBlue: #3a79a5;
   --bg-component-Blue: #3a3aa5;
+
+  --scrollbar-track-color: #333;
+  --scrollbar-thumb-color: #666;
+  --scrollbar-thumb-hover-color: #aaa;
 }
 
 .theme-transition {
@@ -88,4 +96,23 @@ body {
 .bgCompWrapper {
   position: absolute;
   z-index: -99999;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 10px;
+  border: 3px solid var(--scrollbar-track-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color);
 }

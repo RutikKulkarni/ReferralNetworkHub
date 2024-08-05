@@ -1,0 +1,67 @@
+.widgetContainer {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.widget {
+  width: 50px;
+  height: 50px;
+  background-color: #ffd700;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.widget:hover {
+  transform: scale(1.1);
+}
+
+.icon {
+  color: #000;
+}
+
+.blueIcon {
+  color: #0062ff;
+  vertical-align: middle;
+  font-size: 1.5rem;
+}
+
+.desktopWidget {
+  display: none;
+  background-color: #f6e440;
+  color: #000;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: poppins;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.desktopWidget span {
+  color: #0062ff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .widget {
+    display: none;
+  }
+  .desktopWidget {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .tooltip {
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

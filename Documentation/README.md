@@ -37,23 +37,26 @@ To set up ReferralNetworkHub locally for development or testing purposes, follow
    npm install
    ```
 
-4. Set up the MongoDB database:
+4. Create `.env` files in both the `frontend` and `backend` folders:
+   - Copy the content from `.env.txt` to the newly created `.env` files in each folder. **Do not make any changes to the content.**
+
+5. Set up the MongoDB database:
    - Install MongoDB locally or use a cloud-based service like MongoDB Atlas.
    - Update the database connection URL in the backend configuration files.
 
-5. Start the backend server:
+6. Start the backend server:
    ```bash
    cd ../backend
    npm run dev
    ```
 
-6. Start the frontend development server:
+7. Start the frontend development server:
    ```bash
    cd ../frontend
    npm start
    ```
 
-7. Access the application in your web browser at `http://localhost:3000`.
+8. Access the application in your web browser at `http://localhost:3000`.
 
 ## Usage Guidelines
 

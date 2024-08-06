@@ -1,3 +1,7 @@
+> ##  🚧 Work In Progress<br>
+> ### This project is under active development and might include breaking changes.
+> See open issues to become an early contributor.
+
 # ReferralNetworkHub
 
 Welcome to ReferralNetworkHub - The open-source platform for connecting professionals and facilitating job referrals within companies.

@@ -65,6 +65,3 @@ For more information or inquiries, you can contact at [rutikkulkarni2001@gmail.c
 
 This project is licensed under the [MIT License](LICENSE).
 
-## Legal Notice
-
-For more details, please refer to the [MIT License](LICENSE).

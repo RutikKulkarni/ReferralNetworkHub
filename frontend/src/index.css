@@ -94,7 +94,7 @@ body {
 
 /* BgComponent Styles */
 .bgCompWrapper {
-  position: absolute;
+  position: fixed;
   z-index: -99999;
 }
 

@@ -1,5 +1,5 @@
 import { React } from "../imports/index";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import {
   userStyles as styles,
@@ -8,11 +8,29 @@ import {
 } from "./imports/index";
 
 const Interactive = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const containerRef = useRef(null);
 
-  const handleWidgetClick = () => {
-    const container = containerRef.current;
+  useEffect(() => {
+    const handleBodyClick = () => {
+      if (isExpanded) {
+        containerRef.current.classList.remove(styles.expanded);
+        setIsExpanded(false);
+      }
+    };
 
+    document.body.addEventListener("click", handleBodyClick);
+
+    return () => {
+      document.body.removeEventListener("click", handleBodyClick);
+    };
+  }, [isExpanded]);
+
+  const handleWidgetClick = (e) => {
+    e.stopPropagation();
+    setIsExpanded(true);
+
+    const container = containerRef.current;
     container.classList.toggle(styles.expanded);
   };
 

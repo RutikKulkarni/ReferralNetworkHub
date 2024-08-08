@@ -11,5 +11,6 @@ export {
   clearUserData,
   isLoggedIn,
   getCookie,
+  fetchUserData,
 } from "../userPersistence";
 export { validateUserData } from "../validateUserInput";

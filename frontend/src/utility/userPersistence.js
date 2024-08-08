@@ -1,3 +1,9 @@
+import axios from 'axios';
+import { getConfig } from './exports';
+
+// Retrieve configuration
+const Config = getConfig();
+
 /**
  * Sets a cookie with the given name, value, and expiration days.
  *
@@ -72,4 +78,23 @@ const isLoggedIn = () => {
   return getCookie("token") !== null;
 };
 
-export { persistUser, clearUserData, isLoggedIn, getCookie };
+/**
+ * Fetches user data from the backend.
+ *
+ * @returns {Promise<object>} The user data.
+ */
+const fetchUserData = async () => {
+  try {
+    const response = await axios.get(`${Config.endpoint}/user`, {
+      headers: {
+        'Authorization': `Bearer ${getCookie('token')}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return null;
+  }
+};
+
+export { persistUser, clearUserData, isLoggedIn, getCookie, fetchUserData };

@@ -1,24 +1,26 @@
+import React, { useState } from 'react';
+import { useUser } from '../../context/UserContext';
 import {
   formStyles as styles,
-  useState, 
   useNavigate,
   generateSnackbar,
   updateUserAccountInfo,
   resetStates,
   ImageSection,
-  ResumeUpload, 
+  ResumeUpload,
   PersonalInfo,
-  ProfessionalInfo, 
+  ProfessionalInfo,
   EducationInfo,
-  SkillsExpertise, 
-  WorkHistory, 
-  Preferences, 
+  SkillsExpertise,
+  WorkHistory,
+  Preferences,
   AdditionalInfo
-} from './imports'
+} from './imports';
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("Experienced");
   const navigate = useNavigate();
+  const { setUserData } = useUser();
   const [personalInfo, setPersonalInfo] = useState({
     fullName: "",
     email: "",
@@ -70,7 +72,7 @@ const Form = () => {
     setSelectedOption(option);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!termsAndConditions) {
@@ -92,7 +94,14 @@ const Form = () => {
       additionalInfo,
       socialLinks,
     };
-    updateUserAccountInfo(data, navigate);
+
+    await updateUserAccountInfo(data, navigate);
+
+    // Update user data context
+    setUserData({
+      firstName: personalInfo.fullName,
+      location: personalInfo.location
+    });
 
     resetStates(
       setPersonalInfo,

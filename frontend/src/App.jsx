@@ -23,6 +23,7 @@ import { ThemeProvider } from './context/exports'
 import { getConfig, isLoggedIn } from "./utility/exports";
 import Layout from "./Layout";
 import Interactive from "./components/Widget/Interactive/Interactive"
+import { UserProvider } from "./context/UserContext";
 
 export const Config = getConfig();
 
@@ -37,6 +38,7 @@ const RedirectIfLoggedIn = ({ element, ...rest }) => {
 const App = () => {
   return (
     <Router>
+      <UserProvider>
       <ThemeProvider>
         <Layout>
           <Routes>
@@ -74,6 +76,7 @@ const App = () => {
           <Interactive />
         </Layout>
       </ThemeProvider>
+      </UserProvider>
     </Router>
   );
 };

@@ -1,44 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userStyles as styles, BiUser, FiLogOut, HiOutlineLightBulb, LuLifeBuoy, ThemeContext, ToggleThemeSwitcher, UserSvg, clearUserData, fetchUserData } from './imports/index'; // Ensure this path is correct
+import { useUser } from '../../../context/UserContext';
+import { userStyles as styles, BiUser, FiLogOut, HiOutlineLightBulb, LuLifeBuoy, ToggleThemeSwitcher, UserSvg, clearUserData, fetchUserData } from './imports';
 
-/**
- * User widget component displaying user information and actions.
- *
- * @param {object} props - Component props.
- * @param {React.Ref} ref - Reference to the DOM node of the widget.
- * @returns {JSX.Element} User widget JSX element.
- */
 const Widget = React.forwardRef((props, ref) => {
-  const { theme } = useContext(ThemeContext);
+  const { userData, setUserData } = useUser();
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({ firstName: 'Name', location: 'Location' });
-
+  
   useEffect(() => {
     const loadUserData = async () => {
       const data = await fetchUserData();
       if (data) {
         setUserData({
-          firstName: data.firstName || 'Name',
-          location: data.location || 'Location',
+          firstName: data.firstName || '',
+          location: data.location || '',
         });
       }
     };
     loadUserData();
-  }, []);
+  }, [setUserData]);
 
-  /**
-   * Handles user logout action, clearing user data from local storage.
-   */
   const handleLogout = () => {
     clearUserData();
     navigate('/login');
     props.closeWidget();
   };
 
-  /**
-   * Navigates to the user's account page.
-   */
   const handleMyAccount = () => {
     navigate('/MyAccount');
     props.closeWidget();
@@ -51,8 +38,8 @@ const Widget = React.forwardRef((props, ref) => {
           <UserSvg className={styles.userSvg} />
         </div>
         <div className={styles.profileDetails}>
-          <h2 className={styles.profileName}>{userData.firstName}</h2>
-          <p className={styles.profileLocation}>{userData.location}</p>
+          <h2 className={styles.profileName}>{userData.firstName || 'Name'}</h2>
+          <p className={styles.profileLocation}>{userData.location || 'Location'}</p>
         </div>
       </div>
       <div className={styles.fullDivider}></div>

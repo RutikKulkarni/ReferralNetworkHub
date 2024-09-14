@@ -47,7 +47,7 @@ To develop ReferralNetworkHub, the following technologies we are using:
 
 To get started with ReferralNetworkHub, please refer to the [documentation](./Documentation/README.md) for setup instructions and usage guidelines.
 
-- **Flowchart:** Explore the flowchart illustrating user interactions [Flow Chart](https://excalidraw.com/#json=RNy_lLONHfBN6SjM0z7e3,JHI_PoMoUMCwQ03XRZnqnA).
+- **Flowchart:** Explore the flowchart illustrating user interactions [Flow Chart](https://excalidraw.com/#json=fVIWvKMsb247NQFTL-6Kz,HWjEg-ke3HRe4l0x9cq0XQ).
 
 ## Contributing
 

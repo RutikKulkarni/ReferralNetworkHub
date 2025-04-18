@@ -7,6 +7,9 @@ export interface IUser extends Document {
   firstName: string
   lastName: string
   companyName?: string
+  isBlocked: boolean
+  blockReason?: string
+  blockedAt?: Date
   createdAt: Date
   updatedAt: Date
 }
@@ -43,6 +46,16 @@ const UserSchema = new Schema<IUser>(
       type: String,
       trim: true,
       // Required only for recruiters, handled in controller
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    blockReason: {
+      type: String,
+    },
+    blockedAt: {
+      type: Date,
     },
   },
   { timestamps: true },

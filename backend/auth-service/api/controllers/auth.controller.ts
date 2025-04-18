@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -8,32 +8,10 @@ import PasswordReset from "../models/password-reset.model";
 import { validatePassword } from "../utils/password-validator";
 import { sendPasswordResetEmail } from "../utils/email-service";
 
-// Define type for Express request handler
-type RequestHandler = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => Promise<void>;
-
-export const register: RequestHandler = async (req, res, next) => {
+export const register = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password, role, companyName } =
       req.body;
-
-    // Validate required fields for all roles
-    if (!firstName || !lastName || !email || !password || !role) {
-      res.status(400).json({
-        message:
-          "First name, last name, email, password, and role are required",
-      });
-      return;
-    }
-
-    // Validate role
-    if (!["user", "recruiter", "admin"].includes(role)) {
-      res.status(400).json({ message: "Invalid role" });
-      return;
-    }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -42,10 +20,18 @@ export const register: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    // Validate role-specific fields
-    if (role === "recruiter" && !companyName) {
+    // Validate required fields based on role
+    if (role === "user" && (!firstName || !lastName)) {
+      res
+        .status(400)
+        .json({ message: "First name and last name are required for users" });
+      return;
+    }
+
+    if (role === "recruiter" && (!firstName || !lastName || !companyName)) {
       res.status(400).json({
-        message: "Company name is required for recruiters",
+        message:
+          "Company name, full name, and work email are required for recruiters",
       });
       return;
     }
@@ -65,11 +51,12 @@ export const register: RequestHandler = async (req, res, next) => {
     const user = new User({
       email,
       password: hashedPassword,
-      role,
+      role: role || "user",
       firstName,
       lastName,
       companyName: role === "recruiter" ? companyName : undefined,
     });
+
     await user.save();
 
     // Generate tokens
@@ -85,6 +72,7 @@ export const register: RequestHandler = async (req, res, next) => {
         expiresIn: "1h",
       }
     );
+
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.JWT_REFRESH_SECRET || "refresh-secret",
@@ -118,23 +106,10 @@ export const register: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const login: RequestHandler = async (req, res, next) => {
+// Update the login function to check for blocked users
+export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password, role } = req.body;
-
-    // Validate required fields
-    if (!email || !password || !role) {
-      res.status(400).json({
-        message: "Email, password, and role are required",
-      });
-      return;
-    }
-
-    // Validate role
-    if (!["user", "recruiter", "admin"].includes(role)) {
-      res.status(400).json({ message: "Invalid role" });
-      return;
-    }
+    const { email, password } = req.body;
 
     // Check if user exists
     const user = await User.findOne({ email });
@@ -143,9 +118,14 @@ export const login: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    // Validate role matches
-    if (user.role !== role) {
-      res.status(400).json({ message: "Role does not match" });
+    // Check if user is blocked
+    if (user.isBlocked) {
+      res.status(403).json({
+        message:
+          "Your account has been blocked. Please contact support for assistance.",
+        isBlocked: true,
+        reason: user.blockReason,
+      });
       return;
     }
 
@@ -169,6 +149,7 @@ export const login: RequestHandler = async (req, res, next) => {
         expiresIn: "1h",
       }
     );
+
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.JWT_REFRESH_SECRET || "refresh-secret",
@@ -201,30 +182,35 @@ export const login: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const refreshToken: RequestHandler = async (req, res, next) => {
+export const refreshToken = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
+
     if (!refreshToken) {
       res.status(400).json({ message: "Refresh token is required" });
       return;
     }
+
     // Verify token exists in database
     const tokenDoc = await RefreshToken.findOne({ token: refreshToken });
     if (!tokenDoc) {
       res.status(401).json({ message: "Invalid refresh token" });
       return;
     }
+
     // Verify token
     const decoded = jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET || "refresh-secret"
     ) as { userId: string };
+
     // Get user
     const user = await User.findById(decoded.userId);
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
+
     // Generate new access token
     const accessToken = jwt.sign(
       {
@@ -238,6 +224,7 @@ export const refreshToken: RequestHandler = async (req, res, next) => {
         expiresIn: "1h",
       }
     );
+
     res.status(200).json({ accessToken });
   } catch (error) {
     console.error("Refresh token error:", error);
@@ -245,15 +232,18 @@ export const refreshToken: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const logout: RequestHandler = async (req, res, next) => {
+export const logout = async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
+
     if (!refreshToken) {
       res.status(400).json({ message: "Refresh token is required" });
       return;
     }
+
     // Remove refresh token from database
     await RefreshToken.findOneAndDelete({ token: refreshToken });
+
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Logout error:", error);
@@ -261,13 +251,15 @@ export const logout: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const validateToken: RequestHandler = async (req, res, next) => {
+export const validateToken = async (req: Request, res: Response) => {
   try {
     const { token } = req.body;
+
     if (!token) {
       res.status(400).json({ message: "Token is required" });
       return;
     }
+
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret") as {
       userId: string;
@@ -275,6 +267,7 @@ export const validateToken: RequestHandler = async (req, res, next) => {
       firstName: string;
       lastName: string;
     };
+
     res.status(200).json({
       valid: true,
       userId: decoded.userId,
@@ -289,13 +282,15 @@ export const validateToken: RequestHandler = async (req, res, next) => {
 };
 
 // Forgot password - request reset link
-export const forgotPassword: RequestHandler = async (req, res, next) => {
+export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
+
     if (!email) {
       res.status(400).json({ message: "Email is required" });
       return;
     }
+
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
@@ -306,20 +301,25 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
       });
       return;
     }
+
     // Generate a secure random token
     const resetToken = crypto.randomBytes(32).toString("hex");
+
     // Save the token to the database
     await PasswordReset.findOneAndDelete({ email }); // Remove any existing tokens
     await new PasswordReset({
       email,
       token: resetToken,
     }).save();
+
     // Generate reset link
     const resetLink = `${
       process.env.CLIENT_URL || "http://localhost:3000"
     }/reset-password?token=${resetToken}&email=${email}`;
+
     // Send email with reset link
     await sendPasswordResetEmail(email, resetLink);
+
     res.status(200).json({
       message:
         "If your email is registered, you will receive a password reset link shortly",
@@ -331,43 +331,52 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 };
 
 // Reset password with token
-export const resetPassword: RequestHandler = async (req, res, next) => {
+export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { token, email, newPassword } = req.body;
+
     if (!token || !email || !newPassword) {
       res
         .status(400)
         .json({ message: "Token, email, and new password are required" });
       return;
     }
+
     // Validate password
     const passwordValidation = validatePassword(newPassword);
     if (!passwordValidation.isValid) {
       res.status(400).json({ message: passwordValidation.message });
       return;
     }
+
     // Find the reset token
     const resetRequest = await PasswordReset.findOne({ token, email });
     if (!resetRequest) {
       res.status(400).json({ message: "Invalid or expired reset token" });
       return;
     }
+
     // Find the user
     const user = await User.findOne({ email });
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
+
     // Hash the new password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
+
     // Update the user's password
     user.password = hashedPassword;
     await user.save();
+
     // Delete the reset token
     await PasswordReset.findOneAndDelete({ token, email });
+
     // Invalidate all active sessions
     await RefreshToken.deleteMany({ userId: user._id });
+
     res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
     console.error("Reset password error:", error);

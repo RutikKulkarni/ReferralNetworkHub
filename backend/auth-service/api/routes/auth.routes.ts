@@ -12,7 +12,6 @@ import { rateLimiter } from "../middleware/rate-limiter";
 
 const router = Router();
 
-// Auth routes
 router.post("/register", register);
 router.post("/login", login);
 router.post("/refresh-token", refreshToken);

@@ -1,0 +1,29 @@
+# version: "3.8"
+
+services:
+  # MongoDB
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongo:27017/auth-service
+      - JWT_SECRET=your_jwt_secret
+      - JWT_REFRESH_SECRET=your_refresh_secret
+    volumes:
+      - ./auth-service:/app
+      # - ./tsconfig.json:/app/tsconfig.json
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:

@@ -18,5 +18,5 @@ RUN npm run build
 EXPOSE 3001
 
 # Start the service
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/index.js"]
 

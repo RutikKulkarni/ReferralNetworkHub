@@ -16,17 +16,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { Icons } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { emailSchema } from "@/lib/auth-validations";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   email: emailSchema,
 });
 
 export function ForgotPasswordForm() {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { forgotPassword } = useAuth();
@@ -43,17 +42,10 @@ export function ForgotPasswordForm() {
 
     try {
       await forgotPassword(values.email);
-      toast({
-        title: "Email sent",
-        description: "Check your email for a password reset link.",
-      });
+      toast.success("Check your email for a password reset link.");
       setIsSubmitted(true);
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
+      toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -7,6 +7,7 @@ import {
   validateToken,
   forgotPassword,
   resetPassword,
+  getMe,
 } from "../controllers/auth.controller";
 import { rateLimiter } from "../middleware/rate-limiter";
 
@@ -17,6 +18,7 @@ router.post("/login", login);
 router.post("/refresh-token", refreshToken);
 router.post("/logout", logout);
 router.post("/validate-token", validateToken);
+router.get("/me", getMe);
 
 // Password reset routes with rate limiting
 router.post("/forgot-password", rateLimiter, forgotPassword);

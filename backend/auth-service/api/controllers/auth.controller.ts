@@ -8,6 +8,22 @@ import PasswordReset from "../models/password-reset.model";
 import { validatePassword } from "../utils/password-validator";
 import { sendPasswordResetEmail } from "../utils/email-service";
 
+// Cookie configuration
+const cookieConfig = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+  sameSite:
+    process.env.NODE_ENV === "production" ? "none" : ("lax" as "none" | "lax"),
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  path: "/",
+};
+
+// Access token cookie config (shorter lifespan)
+const accessTokenCookieConfig = {
+  ...cookieConfig,
+  maxAge: 60 * 60 * 1000, // 1 hour
+};
+
 export const register = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password, role, companyName } =
@@ -87,10 +103,12 @@ export const register = async (req: Request, res: Response) => {
       userId: user._id,
     }).save();
 
+    // Set cookies
+    res.cookie("accessToken", accessToken, accessTokenCookieConfig);
+    res.cookie("refreshToken", refreshToken, cookieConfig);
+
     res.status(201).json({
       message: "User registered successfully",
-      accessToken,
-      refreshToken,
       user: {
         id: user._id,
         email: user.email,
@@ -106,7 +124,6 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// Update the login function to check for blocked users
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -164,9 +181,11 @@ export const login = async (req: Request, res: Response) => {
       userId: user._id,
     }).save();
 
+    // Set cookies
+    res.cookie("accessToken", accessToken, accessTokenCookieConfig);
+    res.cookie("refreshToken", refreshToken, cookieConfig);
+
     res.status(200).json({
-      accessToken,
-      refreshToken,
       user: {
         id: user._id,
         email: user.email,
@@ -184,16 +203,19 @@ export const login = async (req: Request, res: Response) => {
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      res.status(400).json({ message: "Refresh token is required" });
+      res.status(401).json({ message: "Refresh token is required" });
       return;
     }
 
     // Verify token exists in database
     const tokenDoc = await RefreshToken.findOne({ token: refreshToken });
     if (!tokenDoc) {
+      // Clear cookies and return error
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
       res.status(401).json({ message: "Invalid refresh token" });
       return;
     }
@@ -207,7 +229,24 @@ export const refreshToken = async (req: Request, res: Response) => {
     // Get user
     const user = await User.findById(decoded.userId);
     if (!user) {
+      // Clear cookies and return error
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
       res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    // Check if user is blocked
+    if (user.isBlocked) {
+      // Clear cookies and return error
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
+      res.status(403).json({
+        message:
+          "Your account has been blocked. Please contact support for assistance.",
+        isBlocked: true,
+        reason: user.blockReason,
+      });
       return;
     }
 
@@ -225,24 +264,40 @@ export const refreshToken = async (req: Request, res: Response) => {
       }
     );
 
-    res.status(200).json({ accessToken });
+    // Set new access token cookie
+    res.cookie("accessToken", accessToken, accessTokenCookieConfig);
+
+    res.status(200).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        companyName: user.companyName,
+      },
+    });
   } catch (error) {
     console.error("Refresh token error:", error);
+    // Clear cookies and return error
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     res.status(401).json({ message: "Invalid refresh token" });
   }
 };
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) {
-      res.status(400).json({ message: "Refresh token is required" });
-      return;
+    if (refreshToken) {
+      // Remove refresh token from database
+      await RefreshToken.findOneAndDelete({ token: refreshToken });
     }
 
-    // Remove refresh token from database
-    await RefreshToken.findOneAndDelete({ token: refreshToken });
+    // Clear cookies
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
 
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
@@ -253,10 +308,10 @@ export const logout = async (req: Request, res: Response) => {
 
 export const validateToken = async (req: Request, res: Response) => {
   try {
-    const { token } = req.body;
+    const token = req.cookies.accessToken;
 
     if (!token) {
-      res.status(400).json({ message: "Token is required" });
+      res.status(401).json({ valid: false, message: "No token provided" });
       return;
     }
 
@@ -278,6 +333,61 @@ export const validateToken = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Token validation error:", error);
     res.status(401).json({ valid: false, message: "Invalid token" });
+  }
+};
+
+// Add a /me endpoint to fetch user data based on the accessToken cookie
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    const token = req.cookies.accessToken;
+
+    if (!token) {
+      res.status(401).json({ message: "Not authenticated" });
+      return;
+    }
+
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret") as {
+      userId: string;
+      role: string;
+      firstName: string;
+      lastName: string;
+    };
+
+    // Get user
+    const user = await User.findById(decoded.userId).select("-password");
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    // Check if user is blocked
+    if (user.isBlocked) {
+      // Clear cookies and return error
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
+      res.status(403).json({
+        message:
+          "Your account has been blocked. Please contact support for assistance.",
+        isBlocked: true,
+        reason: user.blockReason,
+      });
+      return;
+    }
+
+    res.status(200).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        companyName: user.companyName,
+      },
+    });
+  } catch (error) {
+    console.error("Get me error:", error);
+    res.status(401).json({ message: "Not authenticated" });
   }
 };
 

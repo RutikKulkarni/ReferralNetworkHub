@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 import { Icons } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
@@ -38,7 +38,6 @@ const formSchema = z
 
 export function LoginForm() {
   const router = useRouter();
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUserType, setSelectedUserType] = useState<
     "user" | "recruiter"
@@ -56,22 +55,20 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    try {
-      await login(values.email, values.password, values.userType);
-      toast({
-        title: "Success!",
-        description: "You have successfully logged in.",
-      });
-      router.push("/");
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+
+    toast.promise(
+      login(values.email, values.password, values.userType)
+        .then(() => {
+          router.push("/");
+        })
+        .finally(() => setIsLoading(false)),
+      {
+        loading: "Logging in...",
+        success: "You have successfully logged in!",
+        error: (err: Error) =>
+          err?.message || "Something went wrong. Please try again.",
+      }
+    );
   }
 
   return (

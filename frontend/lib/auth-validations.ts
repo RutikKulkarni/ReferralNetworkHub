@@ -67,6 +67,9 @@ export const userTypeEmailRefinement = (
   data: { email: string; userType: "user" | "recruiter" },
   ctx: z.RefinementCtx
 ) => {
+  // Skip validation if email is empty or undefined
+  if (!data.email || data.email.trim() === "") return;
+
   const parts = data.email.split("@");
   if (parts.length !== 2) return;
   const domain = parts[1];

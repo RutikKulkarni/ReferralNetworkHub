@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 @layer utilities {
@@ -90,5 +90,10 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Override toast background in dark mode */
+  .dark .toast {
+    background: hsl(var(--background)) !important;
   }
 }

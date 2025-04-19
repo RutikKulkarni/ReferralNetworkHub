@@ -3,7 +3,7 @@ import { Mona_Sans as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 const fontSans = FontSans({
@@ -15,7 +15,6 @@ export const metadata = {
   title: "Referral Network Hub",
   description:
     "Connect with professionals and get referrals for your dream job",
-  generator: "v0.dev",
 };
 
 export default function RootLayout({
@@ -38,7 +37,17 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>{children}</AuthProvider>
-          <Toaster />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                // background: "hsl(var(--popover))",
+                // color: "hsl(var(--popover-foreground))",
+                // border: "1px solid hsl(var(--border))",
+                // borderRadius: "var(--radius)",
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

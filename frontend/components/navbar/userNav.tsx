@@ -15,25 +15,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
 
 export function UserNav() {
   const { user, logout } = useAuth();
-  const { toast } = useToast();
-
   const handleLogout = async () => {
     try {
-      await logout();
-      toast({
-        title: "Logged out",
-        description: "You have successfully logged out.",
+      toast.promise(logout(), {
+        loading: "Logging out...",
+        success: "You have successfully logged out.",
+        error: (err) => err?.message || "Failed to log out. Please try again.",
       });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to log out. Please try again.",
-        variant: "destructive",
-      });
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
 

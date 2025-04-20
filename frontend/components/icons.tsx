@@ -30,6 +30,10 @@ import {
   Clock,
   ExternalLink,
   MessageCircle,
+  Mail,
+  Phone,
+  MapPin,
+  MessageSquare,
   type LucideIcon,
 } from "lucide-react";
 import { Github } from "lucide-react";
@@ -70,4 +74,8 @@ export const Icons = {
   externalLink: ExternalLink,
   message: MessageCircle,
   building: Building,
+  mail: Mail,
+  phone: Phone,
+  mapPin: MapPin,
+  messageSquare: MessageSquare,
 };

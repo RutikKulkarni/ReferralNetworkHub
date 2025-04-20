@@ -15,8 +15,8 @@ const routePermissions = {
     "/explore",
     "/about",
     "/contact",
-    "/terms",
-    "/privacy",
+    "/terms-of-service",
+    "/privacy-policy",
     "/faq",
   ],
 

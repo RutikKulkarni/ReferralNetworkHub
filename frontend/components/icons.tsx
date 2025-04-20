@@ -34,6 +34,8 @@ import {
   Phone,
   MapPin,
   MessageSquare,
+  Shield,
+  Info,
   type LucideIcon,
 } from "lucide-react";
 import { Github } from "lucide-react";
@@ -78,4 +80,6 @@ export const Icons = {
   phone: Phone,
   mapPin: MapPin,
   messageSquare: MessageSquare,
+  shield: Shield,
+  info: Info,
 };

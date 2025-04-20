@@ -79,26 +79,8 @@ The platform supports public job sharing (even for logged-out users), secure ref
 - **Git**: Version control for collaboration.
 - **Docker (optional)**: Containerization for consistent environments.
 
-## 🚀 Getting Started
-
-To set up **ReferralNetworkHub** locally, follow the detailed instructions in:
-- [Frontend README](./frontend/README.md) (Next.js, Tailwind CSS, shadcn/ui)
-- [Backend README](./backend/README.md) (Node.js microservices, MongoDB)
-
-### Prerequisites
-- **Node.js**: v22.13.0 or higher
-- **MongoDB**: Local or cloud instance (e.g., MongoDB Atlas)
-- **Git**: For cloning and contributing
-
-### Quick Start
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/RutikKulkarni/ReferralNetworkHub.git
-   cd ReferralNetworkHub
-   ```
-2. Set up the frontend ([Frontend README](./frontend/README.md)).
-3. Set up the backend microservices ([Backend README](./backend/README.md)).
-4. Explore the [Flowchart](#) for user interactions.
+### 🚀 Getting Started
+To begin, please refer to the [Setup Instructions](https://github.com/RutikKulkarni/ReferralNetworkHub/edit/main/Documentation/README.md#%EF%B8%8F-setup-instructions) for a detailed guide on how to configure and run the project.
 
 ## 🖌️ Design Philosophy
 

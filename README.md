@@ -1,67 +1,128 @@
+
+# ReferralNetworkHub 🌐
+
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Next.js](https://img.shields.io/badge/Next.js-15.2.4-black?logo=next.js)
+![Node.js](https://img.shields.io/badge/Node.js-22.x-green?logo=node.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
+
+
 > ##  🚧 Work In Progress<br>
 > ### This project is under active development and might include breaking changes.
-> See open issues to become an early contributor.
+> Check [open issues](https://github.com/RutikKulkarni/ReferralNetworkHub/issues) to become an early contributor! 👩‍💻👨‍💻
 
-# ReferralNetworkHub
+**ReferralNetworkHub** is an open-source platform that revolutionizes job referrals by connecting professionals, enabling seamless networking, and streamlining the hiring process. Users can browse and apply for jobs, request referrals from company employees, and track referral progress, while recruiters create company profiles and post job listings. Built with a microservices architecture and a stunning UI, ReferralNetworkHub offers a secure, scalable, and delightful experience for all users.
 
-Welcome to ReferralNetworkHub - The open-source platform for connecting professionals and facilitating job referrals within companies.
+## 📖 Overview
 
-## Overview
+ReferralNetworkHub empowers **Users**, **Referral Providers** and **Recruiters** to collaborate in a dynamic job referral ecosystem:
+- **Users** browse jobs, apply directly, or request referrals from employees at target companies.
+- **Referral Providers** (employees) generate unique referral links for candidates, track referral progress, and earn points for successful referrals.
+- **Recruiters** create company profiles, post jobs, and view analytics on applications and referrals.
+- **Admins** manage users, recruiters, companies, and platform metrics.
 
-ReferralNetworkHub is a web-based platform designed to streamline the job referral process. It allows professionals to connect with each other and refer job candidates who may be interested in opportunities within their companies. This platform aims to simplify the referral process, enhance collaboration among professionals, and improve job search outcomes for candidates.
+The platform supports public job sharing (even for logged-out users), secure referral tracking, and gamified rewards, making job hunting and hiring intuitive and engaging.
 
-## Features
+## ✨ Features
 
-- **User Registration and Authentication:** Secure user sign-up and login functionality for both referrers and candidates.
-- **Professional Networking:** Allows candidates to connect with employees who can provide referrals for job opportunities within their companies.
-- **Referral Tracking and Management:** Tools to track and manage the status of referrals.
-- **Communication Features:** Messaging system for referrers and candidates to communicate directly.
-- **Responsive Design:** Seamless user experience across various devices (desktops, tablets, and mobile phones).
+### For Users
+- **🔍 Job Exploration**: Browse, apply, save, or view recommended jobs in a dedicated jobs section.
+- **🤝 Referral Requests**: Request referrals from Referral Providers employed at the job’s company, with profile visibility restricted until a request is made.
+- **💬 In-Platform Messaging**: Chat with Referral Providers to discuss job opportunities or share external job IDs/links (requires a complete user profile).
+- **📈 Application Tracking**: Monitor application status (e.g., “Interviewing - Round 1”) and referral confirmations.
 
-## Technologies Used
+### For Referral Providers
+- **🔗 Referral Links**: Generate single-use referral links for specific candidates (tied to their email) for jobs at their current company only.
+- **📊 Referral Dashboard**: Track referral applications, progress (e.g., “Referral in Progress”), and successes (e.g., “1 Successful Referral at Company X”).
+- **🏆 Points & Rewards**: Earn points for sharing jobs, generating referrals, and successful hires, with potential for leaderboards or badges.
+- **📝 Custom Notes**: Add personalized messages to referral links for candidates.
 
-To develop ReferralNetworkHub, the following technologies we are using:
+### For Recruiters
+- **🏢 Company Profiles**: Create and manage company profiles using a verified company email.
+- **📢 Job Posting**: Post jobs from a recruiter dashboard, visible to all users (logged-in or logged-out).
+- **📩 Application Notifications**: Receive messages when users apply or when Referral Providers submit referrals (e.g., “User referred by Employee X for Position Y”).
+- **📊 Analytics Dashboard**: View job views, shares, clicks, and application metrics.
+
+### For Admins
+- **🛠️ Control Panel**: Manage users, recruiters, companies, and referrals, including blocking/banning users.
+- **📈 Platform Metrics**: Track job shares, referral success rates, and top Referral Providers.
+- **🔍 Referral Oversight**: View who referred whom for which job and company.
+
+### General Features
+- **🔒 Secure Authentication**: Role-based access (User, Recruiter, Admin) with JWT and `httpOnly` cookies.
+- **🌍 Public Job Sharing**:
+  - Share jobs publicly without login, visible to logged-out users.
+  - Logged-in users’ shares are trackable for points (based on views, clicks, etc.).
+- **🔐 Security**: Rate limiting, CAPTCHA for non-logged-in sharing, and referral link expiry to prevent abuse.
+- **📱 Mobile Compatibility**: Responsive design with sharing options (copy link, QR code, WhatsApp/Telegram).
+- **📧 Email Notifications**: Notify Referral Providers and Recruiters about referral applications and job updates.
+- **🎨 Beautiful UI**: Modern, intuitive interface powered by Tailwind CSS and shadcn/ui components.
+
+## 🛠️ Technologies Used
 
 ### Frontend
-
-- **HTML/CSS/JavaScript:** Basic building blocks for the web interface.
-- **React.js:** A powerful JavaScript library for building web/user interfaces.
-- **React JSX & Module CSS:** For component-based architecture and scoped styling.
+- **Next.js (15.2.4)**: React framework with App Router for SSR and static site generation.
+- **TypeScript**: Static typing for robust, maintainable code.
+- **Tailwind CSS**: Utility-first CSS for rapid, responsive styling.
+- **shadcn/ui**: Accessible, customizable UI components for a polished interface.
+- **Axios**: HTTP client for secure, cookie-based API requests.
 
 ### Backend
-
-- **Node.js:** A JavaScript runtime for building fast and scalable server-side applications.
-- **Express.js:** A web application framework for Node.js.
-- **MongoDB:** A NoSQL database for storing user data, job listings, and referrals.
-- **Mongoose:** An ODM (Object Data Modeling) library for MongoDB and Node.js.
-
-### Authentication
-
-- **JWT (JSON Web Tokens):** For secure authentication and authorization.
+- **Node.js (22.13.0)**: JavaScript runtime for scalable microservices.
+- **Express.js**: Framework for building RESTful APIs.
+- **MongoDB**: NoSQL database for users, jobs, referrals, and analytics.
+- **Mongoose**: ODM for MongoDB schema and query management.
+- **JWT**: Secure authentication with `httpOnly`, `secure`, and `sameSite` cookies.
+- **Microservices Architecture**: Modular services (e.g., `auth-service`, `job-service`) for scalability.
 
 ### Other Tools
+- **Git**: Version control for collaboration.
+- **Docker (optional)**: Containerization for consistent environments.
 
-- **Git:** Version control system for tracking changes and collaboration.
+## 🚀 Getting Started
 
-## Getting Started
+To set up **ReferralNetworkHub** locally, follow the detailed instructions in:
+- [Frontend README](./frontend/README.md) (Next.js, Tailwind CSS, shadcn/ui)
+- [Backend README](./backend/README.md) (Node.js microservices, MongoDB)
 
-To get started with ReferralNetworkHub, please refer to the [documentation](./Documentation/README.md) for setup instructions and usage guidelines.
+### Prerequisites
+- **Node.js**: v22.13.0 or higher
+- **MongoDB**: Local or cloud instance (e.g., MongoDB Atlas)
+- **Git**: For cloning and contributing
 
-- **Flowchart:** Explore the flowchart illustrating user interactions [Flow Chart](https://excalidraw.com/#json=fVIWvKMsb247NQFTL-6Kz,HWjEg-ke3HRe4l0x9cq0XQ).
+### Quick Start
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/RutikKulkarni/ReferralNetworkHub.git
+   cd ReferralNetworkHub
+   ```
+2. Set up the frontend ([Frontend README](./frontend/README.md)).
+3. Set up the backend microservices ([Backend README](./backend/README.md)).
+4. Explore the [Flowchart](#) for user interactions.
 
-## Contributing
+## 🖌️ Design Philosophy
 
-We welcome contributions from the community! If you're interested in contributing to the development of ReferralNetworkHub, you can do so by:
+ReferralNetworkHub prioritizes a **beautiful, user-centric UI**:
+- **Tailwind CSS**: Enables consistent, responsive styling.
+- **shadcn/ui**: Provides reusable components (e.g., buttons, modals, dashboards) for a modern aesthetic.
+- **Responsive Design**: Optimized for desktops, tablets, and mobiles.
 
-- **Code Contributions:** Please read the [contribution guidelines](CONTRIBUTING.md) for details on how to contribute to the codebase.
+## 🤝 Contributing
 
-- **Design Contributions:** If you're interested in contributing to the design of ReferralNetworkHub, you can access our Figma file to contribute to the design progression. [Figma Design Progression](https://www.figma.com/file/O25SL6ufvv67r4vBz31jgf/ReferralNetworkHub?type=design&node-id=4%3A19&mode=design&t=h5XaukC9ULBDOzHo-1)
+We welcome contributions from developers, designers, and enthusiasts! Help us build a vibrant referral community:
+- **Code Contributions**: See the [Contribution Guidelines](./CONTRIBUTING.md) for pull request details.
+- **Feedback**: Open issues for bugs, features, or suggestions. [Submit an issue](https://github.com/RutikKulkarni/ReferralNetworkHub/issues/new).
 
-For more information or inquiries, you can contact at [rutikkulkarni2001@gmail.com](mailto:rutikkulkarni2001@gmail.com).
-
-## License
+## 📜 License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](./LICENSE).
 
+## 📬 Contact
+
+Questions or ideas? Reach out:
+- **Email**: [rutikkulkarni2001@gmail.com](mailto:rutikkulkarni2001@gmail.com)
+- **GitHub Issues**: [Submit an issue](https://github.com/RutikKulkarni/ReferralNetworkHub/issues/new)
+
+Join now in transforming job referrals and professional networking! 🌟

@@ -1,71 +1,63 @@
 # Contribution Guidelines
 
-Thank you for considering contributing to ReferralNetworkHub! By participating in this project, you agree to abide by the [code of conduct](./CODE_OF_CONDUCT.md).
+Thank you for considering contributing to ReferralNetworkHub! By participating in this project, you agree to abide by the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## How to Contribute
 
-1. **Fork** the repository to your GitHub account.
-2. **Clone** the forked repository to your local machine.
+1. **Check or Create an Issue**:
+   - Browse the project’s issue tracker to find an existing issue to work on, or create a new one to propose a feature or report a bug.
+   - Ensure your contribution aligns with the project’s goals by discussing it in the issue.
+
+2. **Fork** the repository to your GitHub account.
+
+3. **Clone** the forked repository to your local machine:
 
    ```bash
    git clone https://github.com/YourUsername/ReferralNetworkHub.git
    ```
 
-3. **Create** a new branch for your feature, resolved issue, or bug fix.
+4. **Create** a new branch for your feature, resolved issue, or bug fix:
 
-   - For a new feature, create a new branch with the following format:
+   - For a new feature (e.g., adding a referral form):
      ```bash
-     git checkout -b feature/new-feature-<name>
+     git checkout -b feature/add-referral-form
+     ```
+   - For a resolved issue (e.g., fixing issue #123):
+     ```bash
+     git checkout -b issue/fix-issue-123
+     ```
+   - For a bug fix (e.g., fixing a login bug):
+     ```bash
+     git checkout -b bug/fix-login-error
      ```
 
-   - For a resolved issue, create a new branch with the following format:
-     ```bash
-     git checkout -b issue/resolved-issue-<name>
-     ```
-
-   - For a bug fix, create a new branch with the following format:
-     ```bash
-     git checkout -b bug/bug-fix-<name>
-     ```
-
-4. **Make** changes to the codebase and commit them to your branch.
+5. **Make** changes to the codebase and commit them to your branch:
 
    ```bash
    git add .
-   git commit -m "Your commit message"
+   git commit -m "Descriptive commit message (e.g., Add referral form UI)"
    ```
 
-5. **Push** your changes to your forked repository.
+6. **Push** your changes to your forked repository:
 
-   - For a new feature:
-     ```bash
-     git checkout -b feature/new-feature-<name>
-     ```
+   ```bash
+   git push origin <branch-name>
+   ```
 
-   - For a resolved issue:
-     ```bash
-     git checkout -b issue/resolved-issue-<name>
-     ```
+7. **Submit** a pull request to the `main` branch of the main repository:
+   - Explain the changes you’ve made, reference the related issue (e.g., “Closes #123”), and provide relevant details.
+   - Add your name and info to the [CONTRIBUTION_COUNT.md](./Documentation/CONTRIBUTION_COUNT.md) file in your pull request to be recognized for your contribution.
 
-   - For a bug fix:
-     ```bash
-     git checkout -b bug/bug-fix-<name>
-     ```
+8. **Participate** in the code review process and address any feedback from maintainers.
 
-6. **Submit** a pull request to the main repository, explaining the changes you've made and providing relevant details.
-
-7. **Participate** in the code review process and address any feedback from maintainers.
-
-8. **Once approved**, your changes will be merged into the main repository.
-
-- Don't forget to add your name & info to the [CONTRIBUTION_COUNT.md](./Documentation/CONTRIBUTION_COUNT.md) file to be recognized for your contribution!
+9. **Once approved**, your changes will be merged into the main repository.
 
 ## Contribution Guidelines
 
-- Follow the coding standards and conventions used in the project.
-- Ensure that your contributions align with the project's goals and objectives.
-- Provide clear and descriptive commit messages and pull request descriptions.
-- Test your changes thoroughly and ensure they do not introduce regressions.
+- Follow the project’s coding standards and conventions.
+- Ensure contributions align with the project’s goals and objectives.
+- Provide clear, descriptive commit messages and pull request descriptions.
+- Test your changes thoroughly (e.g., run unit tests, verify functionality) to avoid regressions. Refer to the [Testing Guide](./Documentation/TESTING.md) if available.
 - Be respectful and considerate of other contributors and maintainers.
 
 We appreciate your contributions and look forward to working with you!

@@ -12,7 +12,7 @@ Thank you to all the contributors who have helped make ReferralNetworkHub better
 - Email: rutikkulkarni2001@gmail.com
 - LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/rutikkulkarni)
 - GitHub: [GitHub profile](https://github.com/RutikKulkarni)
-- Portfolio Link: [Portfolio](https://www.crio.do/learn/portfolio/rutikkulkarni2001/)
+- Portfolio Link: [Portfolio](https://rutik-kulkarni.vercel.app/)
 
 ### Name: Abu Qamar Shaikh
 - Email: shaikhqamar7379@gmail.com

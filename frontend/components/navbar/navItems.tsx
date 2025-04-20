@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
 
 import { cn } from "@/lib/utils";
 
@@ -11,9 +10,8 @@ interface MainNavProps {
   className?: string;
 }
 
-export function MainNav({ mobile = false, className }: MainNavProps) {
+export function MainNav({ mobile = false }: MainNavProps) {
   const pathname = usePathname();
-  const { user } = useAuth();
 
   const links = [
     { href: "/", label: "Home" },
@@ -22,14 +20,13 @@ export function MainNav({ mobile = false, className }: MainNavProps) {
     { href: "/blogs", label: "Blogs" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-  ].filter((link) => !user || link.href !== "/");
+  ];
 
   return (
     <nav
       className={cn(
         "flex items-center space-x-4 lg:space-x-6",
-        mobile && "flex-col items-start space-x-0 space-y-2",
-        className
+        mobile && "flex-col items-start space-x-0 space-y-2"
       )}
     >
       {links.map((link) => (

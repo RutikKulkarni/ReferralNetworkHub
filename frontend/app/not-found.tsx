@@ -21,7 +21,7 @@ export default function NotFoundPage() {
       case "user":
         return "/jobs";
       default:
-        return "/";
+        return "/jobs";
     }
   };
 

@@ -1,146 +1,261 @@
 "use client";
 
-import {
+import React, {
   createContext,
-  useContext,
   useState,
+  useContext,
   useEffect,
   ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
-import api from "@/lib/auth";
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  refreshUserToken,
+  getCurrentUser,
+} from "@/lib/auth";
 
-interface User {
+export interface User {
   id: string;
   email: string;
-  role: "user" | "recruiter" | "admin";
-  firstName: string;
-  lastName: string;
+  role: "user" | "admin" | "recruiter";
+  firstName?: string;
+  lastName?: string;
   companyName?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  isLoading: boolean;
-  signup: (
-    fullName: string,
-    email: string,
-    password: string,
-    role: "user" | "recruiter",
-    companyName?: string
-  ) => Promise<any>;
-  login: (
-    email: string,
-    password: string,
-    role: "user" | "recruiter"
-  ) => Promise<any>;
+  loading: boolean;
+  error: string | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (userData: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
-  forgotPassword: (email: string) => Promise<any>;
+  clearError: () => void;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (
+    token: string,
+    email: string,
+    newPassword: string
+  ) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export interface RegisterData {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+  role?: "user" | "recruiter" | "admin";
+  companyName?: string;
+}
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const router = useRouter();
+export const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  error: null,
+  isAuthenticated: false,
+  login: async () => {},
+  register: async () => {},
+  logout: async () => {},
+  clearError: () => {},
+  forgotPassword: async () => {},
+  resetPassword: async () => {},
+});
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load user from localStorage on mount
+  // Initialize auth state
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    const initAuth = async () => {
+      try {
+        setLoading(true);
+        // Try to get current user from token
+        const userData = await getCurrentUser();
+        setUser(userData);
+      } catch (err) {
+        // Token is invalid or expired
+        setUser(null);
+        console.error("Auth initialization error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initAuth();
   }, []);
 
-  const signup = async (
-    fullName: string,
-    email: string,
-    password: string,
-    role: "user" | "recruiter",
-    companyName?: string
-  ) => {
-    try {
-      const [firstName, ...lastNameParts] = fullName.split(" ");
-      const lastName = lastNameParts.join(" ");
-      const { data } = await api.post("/register", {
-        firstName,
-        lastName,
-        email,
-        password,
-        role,
-        companyName: role === "recruiter" ? companyName : undefined,
-      });
+  // Set up token refresh interval
+  useEffect(() => {
+    if (!user) return;
 
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
-      return data;
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Signup failed");
+    // Refresh token every 45 minutes (to ensure we refresh before 1 hour expiry)
+    const refreshInterval = setInterval(async () => {
+      try {
+        const userData = await refreshUserToken();
+        setUser(userData);
+      } catch (err) {
+        // If refresh fails, log out user
+        setUser(null);
+        console.error("Token refresh failed:", err);
+      }
+    }, 45 * 60 * 1000);
+
+    return () => clearInterval(refreshInterval);
+  }, [user]);
+
+  const login = async (email: string, password: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const userData = await loginUser(email, password);
+      setUser(userData);
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+      throw err;
+    } finally {
+      setLoading(false);
     }
   };
 
-  const login = async (
-    email: string,
-    password: string,
-    role: "user" | "recruiter"
-  ) => {
+  const register = async (userData: RegisterData) => {
     try {
-      const { data } = await api.post("/login", { email, password, role });
-
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
-      return data;
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Login failed");
+      setLoading(true);
+      setError(null);
+      const newUser = await registerUser(userData);
+      setUser(newUser);
+    } catch (err: any) {
+      setError(err.message || "Registration failed");
+      throw err;
+    } finally {
+      setLoading(false);
     }
   };
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (refreshToken) {
-        await api.post("/logout", { refreshToken });
-      }
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
+      setLoading(true);
+      await logoutUser();
       setUser(null);
-      router.push("/login");
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Logout failed");
+    } catch (err: any) {
+      setError(err.message || "Logout failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   const forgotPassword = async (email: string) => {
     try {
-      const { data } = await api.post("/forgot-password", { email });
-      return data;
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Failed to send reset email"
-      );
+      setLoading(true);
+      setError(null);
+      await forgotPassword(email);
+    } catch (err: any) {
+      setError(err.message || "Password reset request failed");
+      throw err;
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const resetPassword = async (
+    token: string,
+    email: string,
+    newPassword: string
+  ) => {
+    try {
+      setLoading(true);
+      setError(null);
+      await resetPassword(token, email, newPassword);
+    } catch (err: any) {
+      setError(err.message || "Password reset failed");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearError = () => {
+    setError(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, signup, login, logout, forgotPassword }}
+      value={{
+        user,
+        loading,
+        error,
+        isAuthenticated: !!user,
+        login,
+        register,
+        logout,
+        clearError,
+        forgotPassword,
+        resetPassword,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-}
+export const useAuth = () => useContext(AuthContext);
+
+// Add a higher-order component for protected routes
+import { useRouter } from "next/navigation";
+
+export const withAuth = (Component: React.ComponentType<any>) => {
+  const AuthenticatedComponent = (props: any) => {
+    const { isAuthenticated, loading } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+      if (!loading && !isAuthenticated) {
+        router.replace("/login");
+      }
+    }, [loading, isAuthenticated, router]);
+
+    if (loading) {
+      return <div>Loading...</div>; // You can replace this with a proper loading component
+    }
+
+    return isAuthenticated ? <Component {...props} /> : null;
+  };
+
+  return AuthenticatedComponent;
+};
+
+// Add role-based authorization
+export const withRole = (
+  Component: React.ComponentType<any>,
+  allowedRoles: string[]
+) => {
+  const AuthorizedComponent = (props: any) => {
+    const { user, loading, isAuthenticated } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+      if (!loading) {
+        if (!isAuthenticated) {
+          router.replace("/login");
+        } else if (user && !allowedRoles.includes(user.role)) {
+          router.replace("/unauthorized");
+        }
+      }
+    }, [loading, isAuthenticated, user, router]);
+
+    if (loading) {
+      return <div>Loading...</div>; // You can replace this with a proper loading component
+    }
+
+    return isAuthenticated && user && allowedRoles.includes(user.role) ? (
+      <Component {...props} />
+    ) : null;
+  };
+
+  return AuthorizedComponent;
+};

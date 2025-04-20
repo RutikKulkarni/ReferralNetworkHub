@@ -21,9 +21,7 @@ import { cn } from "@/lib/utils";
 import {
   emailSchema,
   passwordSchema,
-  // userTypeSchema,
   companyNameSchema,
-  // personalDomains,
   userTypeEmailRefinement,
 } from "@/lib/auth-validations";
 import toast from "react-hot-toast";
@@ -76,7 +74,7 @@ export function SignupForm() {
   const [selectedUserType, setSelectedUserType] = useState<
     "user" | "recruiter"
   >("user");
-  const { signup } = useAuth();
+  const { register, error, clearError } = useAuth();
 
   const userForm = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
@@ -117,33 +115,35 @@ export function SignupForm() {
 
     setConfirmPasswordError(null);
     setIsLoading(true);
-    const isRecruiter = values.userType === "recruiter";
-    const companyName = isRecruiter
-      ? (values as RecruiterFormValues).companyName
-      : undefined;
+    clearError();
 
-    toast
-      .promise(
-        signup(
-          `${values.firstName} ${values.lastName}`,
-          values.email,
-          values.password,
-          values.userType,
-          companyName
-        ).then(() => {
-          router.push("/");
-        }),
-        {
-          loading: `Creating your ${values.userType} account...`,
-          success: `You have successfully created a ${values.userType} account!`,
-          error: (err) =>
-            err?.message || "Something went wrong. Please try again.",
-        }
-      )
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const userData = {
+        email: values.email,
+        password: values.password,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        role: values.userType,
+        companyName:
+          values.userType === "recruiter"
+            ? (values as RecruiterFormValues).companyName
+            : undefined,
+      };
+
+      await register(userData);
+      toast.success(
+        `You have successfully created a ${values.userType} account!`
+      );
+      router.push("/");
+    } catch (err: any) {
+      toast.error(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // const activeForm = selectedUserType === "user" ? userForm : recruiterForm;
+  // const formSchema = selectedUserType === "user" ? userFormSchema : recruiterFormSchema;
 
   // Render name fields (common to both forms)
   const renderNameFields = (form: any) => (

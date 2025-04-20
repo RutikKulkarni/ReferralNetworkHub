@@ -95,7 +95,9 @@ export function Navbar() {
       {/* Mobile menu with slide-down animation */}
       {showMobileMenu && (
         <div className="container pb-4 md:hidden animate-in slide-in-from-top duration-300 ease-out">
-          <MainNav mobile />
+          <div className="mt-6">
+            <MainNav mobile className="space-y-4" />
+          </div>
 
           <div className="mt-4 flex items-center animate-in fade-in duration-500 delay-100">
             <span className="text-sm mr-2">Theme:</span>

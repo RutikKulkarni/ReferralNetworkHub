@@ -1,11 +1,9 @@
 "use client";
-
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
-import { useAuth } from "@/contexts/AuthContext";
+import { forgotPassword } from "@/lib/auth"; // Import directly from auth.ts
 import { emailSchema } from "@/lib/auth-validations";
 import toast from "react-hot-toast";
 
@@ -28,7 +26,6 @@ const formSchema = z.object({
 export function ForgotPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { forgotPassword } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -94,6 +91,7 @@ export function ForgotPasswordForm() {
           password
         </p>
       </div>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -117,6 +115,7 @@ export function ForgotPasswordForm() {
           </Button>
         </form>
       </Form>
+
       <p className="text-center text-sm text-muted-foreground">
         Remember your password?{" "}
         <Link

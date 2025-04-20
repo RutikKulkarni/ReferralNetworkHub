@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { Icons } from "@/components/icons";
 
 export default function AuthLayout({
   children,
@@ -19,9 +20,13 @@ export default function AuthLayout({
     }
   }, [user, isLoading, router]);
 
-  // Render nothing or a loading state while checking auth
+  // Render loading spinner while checking auth
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Icons.spinner className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
 
   // Render children only if user is not logged in

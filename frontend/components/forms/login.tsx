@@ -6,6 +6,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,7 +17,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import toast from "react-hot-toast";
 import { Icons } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
@@ -42,7 +42,7 @@ export function LoginForm() {
   const [selectedUserType, setSelectedUserType] = useState<
     "user" | "recruiter"
   >("user");
-  const { login } = useAuth();
+  const { login, error, clearError } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,21 +55,26 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
+    clearError();
 
-    toast.promise(
-      login(values.email, values.password, values.userType)
-        .then(() => {
-          router.push("/");
-        })
-        .finally(() => setIsLoading(false)),
-      {
-        loading: "Logging in...",
-        success: "You have successfully logged in!",
-        error: (err: Error) =>
-          err?.message || "Something went wrong. Please try again.",
-      }
-    );
+    try {
+      await login(values.email, values.password);
+      toast.success("You have successfully logged in!");
+
+      // Redirect based on role
+      router.push("/");
+    } catch (err: any) {
+      toast.error(err.message || "Invalid credentials. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }
+
+  // Handle user type change
+  const handleUserTypeChange = (type: "user" | "recruiter") => {
+    setSelectedUserType(type);
+    form.setValue("userType", type);
+  };
 
   return (
     <div className="grid gap-6">

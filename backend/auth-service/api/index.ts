@@ -10,25 +10,15 @@ import { errorHandler } from "./middleware/error-handler";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Set trust proxy for proper X-Forwarded-For header handling
-app.set('trust proxy', 1);
-
-// CORS configuration with credentials - allow all origins
+// CORS configuration with credentials
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow any origin
-    callback(null, true);
-  },
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 
 // Middleware
 app.use(cors(corsOptions));
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("combined"));

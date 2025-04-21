@@ -1,14 +1,14 @@
 import type React from "react";
-import { Mona_Sans as FontSans } from "next/font/google";
+import { Inter as FontSans } from "next/font/google"; // ✅ use Inter instead of Mona_Sans
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/contexts/AuthContext";
 
-const fontSans = FontSans({
+const fontInter = FontSans({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-inter",
 });
 
 export const metadata = {
@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontInter.variable
         )}
       >
         <ThemeProvider

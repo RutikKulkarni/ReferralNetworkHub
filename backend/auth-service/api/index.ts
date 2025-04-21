@@ -12,7 +12,14 @@ const PORT = process.env.PORT || 3001;
 
 // CORS configuration with credentials
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: function (
+    origin: any,
+    callback: (arg0: null, arg1: boolean) => void
+  ) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    callback(null, true); // Allow all origins
+  },
   credentials: true,
 };
 

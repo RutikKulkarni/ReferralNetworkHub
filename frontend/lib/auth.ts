@@ -1,7 +1,8 @@
 import axios from "axios";
 import { User, RegisterData } from "@/contexts/AuthContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_URL =
+  process.env.NEXT_PUBLIC_AUTH_API_URL || "http://localhost:3001/";
 
 // Configure axios to include credentials
 const api = axios.create({
@@ -30,7 +31,7 @@ const handleApiError = (error: any) => {
 // Register a new user
 export const registerUser = async (userData: RegisterData): Promise<User> => {
   try {
-    const response = await api.post("/auth/register", userData);
+    const response = await api.post("/register", userData);
     return response.data.user;
   } catch (error) {
     handleApiError(error);
@@ -44,7 +45,7 @@ export const loginUser = async (
   password: string
 ): Promise<User> => {
   try {
-    const response = await api.post("/auth/login", { email, password });
+    const response = await api.post("/login", { email, password });
     return response.data.user;
   } catch (error) {
     handleApiError(error);
@@ -55,7 +56,7 @@ export const loginUser = async (
 // Get current user
 export const getCurrentUser = async (): Promise<User> => {
   try {
-    const response = await api.get("/auth/me");
+    const response = await api.get("/me");
     return response.data.user;
   } catch (error) {
     handleApiError(error);
@@ -66,7 +67,7 @@ export const getCurrentUser = async (): Promise<User> => {
 // Refresh token
 export const refreshUserToken = async (): Promise<User> => {
   try {
-    const response = await api.post("/auth/refresh-token");
+    const response = await api.post("/refresh-token");
     return response.data.user;
   } catch (error) {
     handleApiError(error);
@@ -77,7 +78,7 @@ export const refreshUserToken = async (): Promise<User> => {
 // Logout user
 export const logoutUser = async (): Promise<void> => {
   try {
-    await api.post("/auth/logout");
+    await api.post("/logout");
   } catch (error) {
     handleApiError(error);
     throw error;
@@ -89,7 +90,7 @@ export const forgotPassword = async (
   email: string
 ): Promise<{ message: string }> => {
   try {
-    const response = await api.post("/auth/forgot-password", { email });
+    const response = await api.post("/forgot-password", { email });
     return response.data;
   } catch (error) {
     handleApiError(error);
@@ -104,7 +105,7 @@ export const resetPassword = async (
   newPassword: string
 ): Promise<{ message: string }> => {
   try {
-    const response = await api.post("/auth/reset-password", {
+    const response = await api.post("/reset-password", {
       token,
       email,
       newPassword,

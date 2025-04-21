@@ -1,8 +1,7 @@
 import axios from "axios";
 import { User, RegisterData } from "@/contexts/AuthContext";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_AUTH_API_URL || "http://localhost:3001/";
+const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
 
 // Configure axios to include credentials
 const api = axios.create({

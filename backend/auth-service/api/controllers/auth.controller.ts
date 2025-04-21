@@ -8,14 +8,16 @@ import PasswordReset from "../models/password-reset.model";
 import { validatePassword } from "../utils/password-validator";
 import { sendPasswordResetEmail } from "../utils/email-service";
 
-// Cookie configuration
 const cookieConfig = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+  secure: process.env.NODE_ENV === "production", // Only use secure in production
   sameSite:
     process.env.NODE_ENV === "production" ? "none" : ("lax" as "none" | "lax"),
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: 7 * 24 * 60 * 60 * 1000,
   path: "/",
+  ...(process.env.NODE_ENV === "production" && process.env.COOKIE_DOMAIN
+    ? { domain: process.env.COOKIE_DOMAIN }
+    : {}),
 };
 
 // Access token cookie config (shorter lifespan)

@@ -7,7 +7,7 @@ const routePermissions = {
   public: [
     "/",
     "/login",
-    "/register",
+    "/signup",
     "/forgot-password",
     "/reset-password",
     "/jobs",

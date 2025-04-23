@@ -13,6 +13,8 @@ import {
   logoutUser,
   refreshUserToken,
   getCurrentUser,
+  forgotPassword as apiRequestPasswordReset,
+  resetPassword as apiResetPassword,
 } from "@/lib/auth";
 
 export interface User {
@@ -153,7 +155,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setLoading(true);
       setError(null);
-      await forgotPassword(email);
+      // await forgotPassword(email);
+      await apiRequestPasswordReset(email);
     } catch (err: any) {
       setError(err.message || "Password reset request failed");
       throw err;

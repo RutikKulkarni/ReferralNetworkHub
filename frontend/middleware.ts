@@ -112,13 +112,10 @@ export async function middleware(request: NextRequest) {
 
   if (accessToken) {
     try {
-      // In a real application, you'd verify the token here
-      // For now, we'll parse it to get the role (NOT SECURE for production)
       const payload = JSON.parse(atob(accessToken.split(".")[1]));
       role = payload.role;
     } catch (error) {
       console.error("Error parsing token:", error);
-      // If token is invalid, treat as not authenticated
     }
   }
 

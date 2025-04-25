@@ -17,14 +17,7 @@ import {
   resetPassword as apiResetPassword,
 } from "@/lib/auth";
 
-export interface User {
-  id: string;
-  email: string;
-  role: "user" | "admin" | "recruiter";
-  firstName?: string;
-  lastName?: string;
-  companyName?: string;
-}
+import { User, RegisterData } from "@/lib/types";
 
 interface AuthContextType {
   user: User | null;
@@ -41,15 +34,6 @@ interface AuthContextType {
     email: string,
     newPassword: string
   ) => Promise<void>;
-}
-
-export interface RegisterData {
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  role?: "user" | "recruiter" | "admin";
-  companyName?: string;
 }
 
 export const AuthContext = createContext<AuthContextType>({

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User, RegisterData } from "@/contexts/AuthContext";
+import { User, RegisterData } from "@/lib/types";
 
 const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
 

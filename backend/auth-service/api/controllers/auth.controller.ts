@@ -7,27 +7,10 @@ import RefreshToken from "../models/refresh-token.model";
 import PasswordReset from "../models/password-reset.model";
 import { validatePassword } from "../utils/password-validator";
 import { sendPasswordResetEmail } from "../utils/email-service";
-
-const cookieConfig = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite:
-    process.env.NODE_ENV === "production"
-      ? ("none" as "none")
-      : ("lax" as "lax"),
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-  path: "/",
-  domain:
-    process.env.NODE_ENV === "production"
-      ? process.env.COOKIE_DOMAIN || ".vercel.app"
-      : undefined,
-};
-
-// Access token cookie config (shorter lifespan)
-const accessTokenCookieConfig = {
-  ...cookieConfig,
-  maxAge: 60 * 60 * 1000, // 1 hour
-};
+import {
+  cookieConfig,
+  accessTokenCookieConfig,
+} from "../config/cookies.config";
 
 export const register = async (req: Request, res: Response) => {
   try {

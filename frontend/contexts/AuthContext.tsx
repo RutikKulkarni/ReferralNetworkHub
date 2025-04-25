@@ -19,7 +19,7 @@ import {
 
 import { User, RegisterData } from "@/lib/types";
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: string | null;

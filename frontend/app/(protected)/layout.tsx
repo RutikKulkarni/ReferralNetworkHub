@@ -12,24 +12,27 @@ export default function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isLoading } = useAuth();
+  const {
+    user,
+    // isLoading
+  } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    // Only redirect if not loading and user is not logged in
-    if (!isLoading && !user) {
-      router.replace("/login");
-    }
-  }, [user, isLoading, router]);
+  // useEffect(() => {
+  //   // Only redirect if not loading and user is not logged in
+  //   if (!isLoading && !user) {
+  //     router.replace("/login");
+  //   }
+  // }, [user, isLoading, router]);
 
   // Show loading spinner while checking auth
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Icons.spinner className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex min-h-screen items-center justify-center">
+  //       <Icons.spinner className="h-8 w-8 animate-spin text-primary" />
+  //     </div>
+  //   );
+  // }
 
   // Render children only if user is logged in
   if (user) {

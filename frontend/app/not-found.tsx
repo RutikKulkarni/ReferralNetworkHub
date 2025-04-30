@@ -1,12 +1,14 @@
 "use client";
-import React from "react";
+
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
-export default function NotFoundPage() {
+function NotFoundContent() {
   const { user } = useAuth();
 
   // Determine redirect link based on user role
@@ -61,5 +63,19 @@ export default function NotFoundPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function NotFoundPage() {
+  return (
+    <Suspense
+      fallback={
+        <div>
+          <LoadingSpinner />
+        </div>
+      }
+    >
+      <NotFoundContent />
+    </Suspense>
   );
 }

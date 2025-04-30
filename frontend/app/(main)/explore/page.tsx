@@ -374,7 +374,7 @@ export default function ExplorePage() {
         </TabsContent>
 
         <TabsContent value="companies" className="mt-0">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {COMPANIES_DATA.map((company) => (
               <CompanyCard key={company.id} {...company} />
             ))}

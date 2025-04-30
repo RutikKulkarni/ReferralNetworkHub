@@ -126,7 +126,7 @@ export function HeroSection() {
             >
               <Card className="bg-background/50 backdrop-blur-sm border-primary/10">
                 <CardContent className="p-4 flex flex-col items-center text-center">
-                  <Icons.building className="h-8 w-8 text-primary mb-2" />
+                  <Icons.buildingSkyscraper className="h-8 w-8 text-primary mb-2" />
                   <p className="text-sm font-medium">250+ Companies</p>
                 </CardContent>
               </Card>

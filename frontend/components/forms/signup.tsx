@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation"; // Add useSearchParams
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -66,6 +66,7 @@ type RecruiterFormValues = z.infer<typeof recruiterFormSchema>;
 
 export function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState<
@@ -134,7 +135,8 @@ export function SignupForm() {
       toast.success(
         `You have successfully created a ${values.userType} account!`
       );
-      router.push("/");
+      const from = searchParams.get("from") || "/profile";
+      router.push(decodeURIComponent(from));
     } catch (err: any) {
       toast.error(err.message || "Something went wrong. Please try again.");
     } finally {
@@ -142,10 +144,6 @@ export function SignupForm() {
     }
   };
 
-  // const activeForm = selectedUserType === "user" ? userForm : recruiterForm;
-  // const formSchema = selectedUserType === "user" ? userFormSchema : recruiterFormSchema;
-
-  // Render name fields (common to both forms)
   const renderNameFields = (form: any) => (
     <div className="grid grid-cols-2 gap-4">
       <FormField

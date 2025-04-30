@@ -16,8 +16,8 @@ import {
   forgotPassword as apiRequestPasswordReset,
   resetPassword as apiResetPassword,
 } from "@/lib/auth";
-
 import { User, RegisterData } from "@/lib/types";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export interface AuthContextType {
   user: User | null;
@@ -55,17 +55,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Initialize auth state
   useEffect(() => {
     const initAuth = async () => {
       try {
         setLoading(true);
-        // Try to get current user from token
         const userData = await getCurrentUser();
         setUser(userData);
       } catch (err) {
-        // Token is invalid or expired
         setUser(null);
         console.error("Auth initialization error:", err);
       } finally {
@@ -80,13 +80,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     if (!user) return;
 
-    // Refresh token every 45 minutes (to ensure we refresh before 1 hour expiry)
     const refreshInterval = setInterval(async () => {
       try {
         const userData = await refreshUserToken();
         setUser(userData);
       } catch (err) {
-        // If refresh fails, log out user
         setUser(null);
         console.error("Token refresh failed:", err);
       }
@@ -128,6 +126,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       await logoutUser();
       setUser(null);
+      const from = searchParams.get("from") || "/";
+      router.push(decodeURIComponent(from));
     } catch (err: any) {
       setError(err.message || "Logout failed");
     } finally {
@@ -139,7 +139,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setLoading(true);
       setError(null);
-      // await forgotPassword(email);
       await apiRequestPasswordReset(email);
     } catch (err: any) {
       setError(err.message || "Password reset request failed");
@@ -157,7 +156,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setLoading(true);
       setError(null);
-      await resetPassword(token, email, newPassword);
+      await apiResetPassword(token, email, newPassword);
     } catch (err: any) {
       setError(err.message || "Password reset failed");
       throw err;
@@ -193,8 +192,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 export const useAuth = () => useContext(AuthContext);
 
 // Add a higher-order component for protected routes
-import { useRouter } from "next/navigation";
-
 export const withAuth = (Component: React.ComponentType<any>) => {
   const AuthenticatedComponent = (props: any) => {
     const { isAuthenticated, loading } = useAuth();
@@ -207,7 +204,7 @@ export const withAuth = (Component: React.ComponentType<any>) => {
     }, [loading, isAuthenticated, router]);
 
     if (loading) {
-      return <div>Loading...</div>; // You can replace this with a proper loading component
+      return <div>Loading...</div>;
     }
 
     return isAuthenticated ? <Component {...props} /> : null;
@@ -236,7 +233,7 @@ export const withRole = (
     }, [loading, isAuthenticated, user, router]);
 
     if (loading) {
-      return <div>Loading...</div>; // You can replace this with a proper loading component
+      return <div>Loading...</div>;
     }
 
     return isAuthenticated && user && allowedRoles.includes(user.role) ? (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation"; // Add useSearchParams
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -38,6 +38,7 @@ const formSchema = z
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams(); // Get query parameters
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUserType, setSelectedUserType] = useState<
     "user" | "recruiter"
@@ -61,8 +62,9 @@ export function LoginForm() {
       await login(values.email, values.password);
       toast.success("You have successfully logged in!");
 
-      // Redirect based on role
-      router.push("/");
+      // Get the 'from' query parameter, default to '/profile' if not present
+      const from = searchParams.get("from") || "/profile";
+      router.push(decodeURIComponent(from)); // Redirect to the intended page
     } catch (err: any) {
       toast.error(err.message || "Invalid credentials. Please try again.");
     } finally {

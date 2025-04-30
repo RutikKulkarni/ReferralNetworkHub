@@ -6,7 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
 // Configure axios to include credentials
 const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true, // Important for cookies
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -18,8 +18,6 @@ const api = axios.create({
 const handleApiError = (error: any) => {
   if (error.response) {
     throw new Error(error.response.data.message || "An error occurred");
-    // } else if (error.request) {
-    //   throw new Error("No response from server. Please check your connection");
   } else {
     throw new Error(error.message || "An error occurred");
   }

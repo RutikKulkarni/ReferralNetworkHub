@@ -48,7 +48,7 @@ function NotFoundContent() {
             Page Not Found
           </h2>
           <p className="text-sm text-muted-foreground">
-            Sorry, we couldn’t find the page you’re looking for or you don't
+            Sorry, we couldn't find the page you're looking for or you don't
             have permission to access it.{" "}
             <Link
               href="/contact"
@@ -70,7 +70,7 @@ export default function NotFoundPage() {
   return (
     <Suspense
       fallback={
-        <div>
+        <div className="flex h-screen w-screen items-center justify-center">
           <LoadingSpinner />
         </div>
       }

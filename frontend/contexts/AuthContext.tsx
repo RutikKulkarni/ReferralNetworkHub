@@ -1,11 +1,11 @@
 "use client";
-
 import React, {
   createContext,
   useState,
   useContext,
   useEffect,
   ReactNode,
+  useCallback,
 } from "react";
 import {
   loginUser,
@@ -17,7 +17,7 @@ import {
   resetPassword as apiResetPassword,
 } from "@/lib/auth";
 import { User, RegisterData } from "@/lib/types";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export interface AuthContextType {
   user: User | null;
@@ -26,7 +26,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
-  logout: () => Promise<void>;
+  logout: (redirectPath?: string) => Promise<void>;
   clearError: () => void;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (
@@ -56,7 +56,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   // Initialize auth state
   useEffect(() => {
@@ -72,14 +71,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setLoading(false);
       }
     };
-
     initAuth();
   }, []);
 
   // Set up token refresh interval
   useEffect(() => {
     if (!user) return;
-
     const refreshInterval = setInterval(async () => {
       try {
         const userData = await refreshUserToken();
@@ -88,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setUser(null);
         console.error("Token refresh failed:", err);
       }
-    }, 45 * 60 * 1000);
+    }, 45 * 60 * 1000); // 45 minutes
 
     return () => clearInterval(refreshInterval);
   }, [user]);
@@ -121,19 +118,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const logout = async () => {
-    try {
-      setLoading(true);
-      await logoutUser();
-      setUser(null);
-      const from = searchParams.get("from") || "/";
-      router.push(decodeURIComponent(from));
-    } catch (err: any) {
-      setError(err.message || "Logout failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const logout = useCallback(
+    async (redirectPath = "/") => {
+      try {
+        setLoading(true);
+        await logoutUser();
+        setUser(null);
+        router.push(redirectPath);
+      } catch (err: any) {
+        setError(err.message || "Logout failed");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router]
+  );
 
   const forgotPassword = async (email: string) => {
     try {
@@ -199,7 +198,9 @@ export const withAuth = (Component: React.ComponentType<any>) => {
 
     useEffect(() => {
       if (!loading && !isAuthenticated) {
-        router.replace("/login");
+        router.replace(
+          `/login?from=${encodeURIComponent(window.location.pathname)}`
+        );
       }
     }, [loading, isAuthenticated, router]);
 
@@ -225,7 +226,9 @@ export const withRole = (
     useEffect(() => {
       if (!loading) {
         if (!isAuthenticated) {
-          router.replace("/login");
+          router.replace(
+            `/login?from=${encodeURIComponent(window.location.pathname)}`
+          );
         } else if (user && !allowedRoles.includes(user.role)) {
           router.replace("/unauthorized");
         }

@@ -1,20 +1,19 @@
 "use client";
-
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import { useAuth } from "@/contexts/AuthContext";
 
+// Separate component that safely uses useAuth() inside the Suspense boundary
 function NotFoundContent() {
   const { user } = useAuth();
 
   // Determine redirect link based on user role
   const getHomeLink = () => {
     if (!user) return "/";
-
     switch (user.role) {
       case "admin":
         return "/admin/dashboard";

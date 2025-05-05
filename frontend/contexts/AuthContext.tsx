@@ -16,7 +16,8 @@ import {
   resetPassword as apiResetPassword,
 } from "@/lib/auth";
 import { User, RegisterData } from "@/lib/types";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Cookies from "js-cookie";
 
 export interface AuthContextType {
   user: User | null;
@@ -48,6 +49,26 @@ export const AuthContext = createContext<AuthContextType>({
   resetPassword: async () => {},
 });
 
+// Set auth cookies that can be read by middleware
+const setAuthCookies = (isAuthenticated: boolean) => {
+  if (typeof window !== "undefined") {
+    if (isAuthenticated) {
+      // Set auth status cookie (accessible by middleware)
+      Cookies.set("auth_status", "authenticated", {
+        path: "/",
+        secure: window.location.protocol === "https:",
+        sameSite: "strict",
+      });
+
+      // Also set localStorage for client-side checks
+      localStorage.setItem("isLoggedIn", "true");
+    } else {
+      Cookies.remove("auth_status");
+      localStorage.removeItem("isLoggedIn");
+    }
+  }
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -55,6 +76,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Handle redirection after login
+  const handleRedirectAfterAuth = useCallback(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromPath = urlParams.get("from");
+      if (pathname === "/login" && fromPath) {
+        setTimeout(() => {
+          router.push(fromPath);
+        }, 100);
+      }
+    }
+  }, [pathname, router]);
 
   // Initialize auth state
   useEffect(() => {
@@ -63,12 +98,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     // Check localStorage first to avoid unnecessary API calls
     const isLoggedIn =
       typeof window !== "undefined" &&
-      localStorage.getItem("isLoggedIn") === "true";
+      (localStorage.getItem("isLoggedIn") === "true" ||
+        Cookies.get("auth_status") === "authenticated");
 
     const initAuth = async () => {
       // Skip initialization if clearly not logged in
       if (!isLoggedIn) {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+          setAuthCookies(false);
+        }
         return;
       }
 
@@ -77,14 +116,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const userData = await getCurrentUser();
         if (isMounted) {
           setUser(userData);
+          setAuthCookies(true);
+          handleRedirectAfterAuth();
         }
       } catch (err) {
         if (isMounted) {
           setUser(null);
-          // Clear stale login state if API call fails
-          if (typeof window !== "undefined") {
-            localStorage.removeItem("isLoggedIn");
-          }
+          setAuthCookies(false);
         }
       } finally {
         if (isMounted) {
@@ -98,7 +136,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [handleRedirectAfterAuth]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -106,8 +144,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setError(null);
       const userData = await loginUser(email, password);
       setUser(userData);
+      setAuthCookies(true);
+      handleRedirectAfterAuth();
     } catch (err: any) {
       setError(err.message || "Login failed");
+      setAuthCookies(false);
       throw err;
     } finally {
       setLoading(false);
@@ -120,8 +161,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setError(null);
       const newUser = await registerUser(userData);
       setUser(newUser);
+      setAuthCookies(true);
+      handleRedirectAfterAuth();
     } catch (err: any) {
       setError(err.message || "Registration failed");
+      setAuthCookies(false);
       throw err;
     } finally {
       setLoading(false);
@@ -134,9 +178,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setLoading(true);
         await logoutUser();
         setUser(null);
+        setAuthCookies(false);
         router.push(redirectPath);
       } catch (err: any) {
         setError(err.message || "Logout failed");
+        setUser(null);
+        setAuthCookies(false);
       } finally {
         setLoading(false);
       }
@@ -200,19 +247,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useAuth = () => useContext(AuthContext);
 
-// Add a higher-order component for protected routes
 export const withAuth = (Component: React.ComponentType<any>) => {
   const AuthenticatedComponent = (props: any) => {
     const { isAuthenticated, loading } = useAuth();
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
       if (!loading && !isAuthenticated) {
-        router.replace(
-          `/login?from=${encodeURIComponent(window.location.pathname)}`
-        );
+        router.replace(`/login?from=${encodeURIComponent(pathname)}`);
       }
-    }, [loading, isAuthenticated, router]);
+    }, [loading, isAuthenticated, router, pathname]);
 
     if (loading) {
       return <div>Loading...</div>;
@@ -232,18 +277,17 @@ export const withRole = (
   const AuthorizedComponent = (props: any) => {
     const { user, loading, isAuthenticated } = useAuth();
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
       if (!loading) {
         if (!isAuthenticated) {
-          router.replace(
-            `/login?from=${encodeURIComponent(window.location.pathname)}`
-          );
+          router.replace(`/login?from=${encodeURIComponent(pathname)}`);
         } else if (user && !allowedRoles.includes(user.role)) {
           router.replace("/unauthorized");
         }
       }
-    }, [loading, isAuthenticated, user, router]);
+    }, [loading, isAuthenticated, user, router, pathname]);
 
     if (loading) {
       return <div>Loading...</div>;

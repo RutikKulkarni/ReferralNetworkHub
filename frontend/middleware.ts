@@ -55,6 +55,7 @@ function matchRoute(requestPath: string, routePattern: string): boolean {
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
+  // Skip middleware for static files, API routes, etc.
   if (
     path.startsWith("/_next") ||
     path.startsWith("/api") ||
@@ -64,22 +65,32 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Check if it's a public route
   const isPublicRoute = routePermissions.public.some(
     (route) => route === path || matchRoute(path, route)
   );
-
   if (isPublicRoute) {
     return NextResponse.next();
   }
 
+  // Check for authentication in two ways:
+  // 1. Check for accessToken cookie
+  // 2. Check for auth status in a special cookie we'll set client-side
   const accessToken = request.cookies.get("accessToken");
+  const authStatus = request.cookies.get("auth_status");
 
-  if (!accessToken) {
-    return NextResponse.redirect(
-      new URL(`/login?from=${encodeURIComponent(path)}`, request.url)
-    );
+  if (accessToken || (authStatus && authStatus.value === "authenticated")) {
+    return NextResponse.next();
   }
-  return NextResponse.next();
+
+  // If not authenticated, redirect to login
+  const from = encodeURIComponent(path);
+  const loginUrl = new URL(`/login?from=${from}`, request.url);
+
+  // Add a cache-busting parameter to prevent caching issues
+  loginUrl.searchParams.append("_ts", Date.now().toString());
+
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {

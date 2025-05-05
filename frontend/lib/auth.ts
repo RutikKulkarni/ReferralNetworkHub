@@ -3,6 +3,10 @@ import { User, RegisterData } from "./types";
 const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
 const AUTH_API = `${API_URL}/api/auth`;
 
+// Flag to prevent multiple simultaneous refresh attempts
+let isRefreshing = false;
+let refreshSubscribers: ((token: any) => void)[] = [];
+
 /**
  * Configure axios instance with auth interceptors
  */
@@ -11,7 +15,6 @@ const authApi = axios.create({
   withCredentials: true,
 });
 
-// Add response interceptor to handle unsuccessful requests
 authApi.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -20,19 +23,47 @@ authApi.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      hasRefreshToken()
+      hasRefreshToken() &&
+      !originalRequest.url.includes("refresh-token") &&
+      !originalRequest.url.includes("me")
     ) {
       originalRequest._retry = true;
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          refreshSubscribers.push((token) => {
+            if (token) {
+              resolve(authApi(originalRequest));
+            } else {
+              reject(error);
+            }
+          });
+        });
+      }
+
+      isRefreshing = true;
+
       try {
         const res = await authApi.post(`/refresh-token`);
         if (res.status === 200) {
+          refreshSubscribers.forEach((callback) => callback(true));
+          refreshSubscribers = [];
+
           return authApi(originalRequest);
         }
       } catch (refreshError) {
+        refreshSubscribers.forEach((callback) => callback(false));
+        refreshSubscribers = [];
+
         clearAuthState();
-        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
+    if (originalRequest.url.includes("me")) {
+      clearAuthState();
+    }
+
     return Promise.reject(error);
   }
 );
@@ -40,10 +71,7 @@ authApi.interceptors.response.use(
 // Helper to check if we likely have a refresh token
 function hasRefreshToken() {
   if (typeof window !== "undefined") {
-    // Check for a flag in localStorage
     return localStorage.getItem("isLoggedIn") === "true";
-    // If you're using an auth state in memory
-    // return !!currentUser;
   }
   return false;
 }
@@ -101,15 +129,12 @@ export const loginUser = async (
 export const logoutUser = async (): Promise<void> => {
   try {
     await authApi.post("/logout");
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("isLoggedIn");
-    }
   } catch (error) {
     console.error("Logout API error:", error);
+  } finally {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
     }
-    throw error;
   }
 };
 
@@ -118,7 +143,12 @@ export const logoutUser = async (): Promise<void> => {
  */
 export const getCurrentUser = async (): Promise<User> => {
   try {
-    const response = await authApi.get("/me");
+    const response = await authApi.get("/me", {
+      headers: {
+        "X-No-Retry-Auth": "true",
+      },
+    });
+
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
     }

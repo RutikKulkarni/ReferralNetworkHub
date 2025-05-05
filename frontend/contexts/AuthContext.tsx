@@ -58,19 +58,46 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // Initialize auth state
   useEffect(() => {
+    let isMounted = true;
+
+    // Check localStorage first to avoid unnecessary API calls
+    const isLoggedIn =
+      typeof window !== "undefined" &&
+      localStorage.getItem("isLoggedIn") === "true";
+
     const initAuth = async () => {
+      // Skip initialization if clearly not logged in
+      if (!isLoggedIn) {
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         const userData = await getCurrentUser();
-        setUser(userData);
+        if (isMounted) {
+          setUser(userData);
+        }
       } catch (err) {
-        setUser(null);
-        console.error("Auth initialization error:", err);
+        if (isMounted) {
+          setUser(null);
+          // Clear stale login state if API call fails
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("isLoggedIn");
+          }
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+
     initAuth();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -173,6 +200,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useAuth = () => useContext(AuthContext);
 
+// Add a higher-order component for protected routes
 export const withAuth = (Component: React.ComponentType<any>) => {
   const AuthenticatedComponent = (props: any) => {
     const { isAuthenticated, loading } = useAuth();

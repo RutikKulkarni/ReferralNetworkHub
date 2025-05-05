@@ -1,5 +1,5 @@
 import type React from "react";
-import { Inter as FontSans } from "next/font/google"; // ✅ use Inter instead of Mona_Sans
+import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -29,6 +29,7 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontInter.variable
         )}
+        suppressHydrationWarning
       >
         <ThemeProvider
           attribute="class"

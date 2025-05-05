@@ -43,34 +43,13 @@ const routePermissions = {
   ],
 };
 
+// Helper function to match dynamic routes
 function matchRoute(requestPath: string, routePattern: string): boolean {
   const dynamicRouteRegex = routePattern
     .replace(/\[\w+\]/g, "[^/]+")
     .replace(/\//g, "\\/");
   const regex = new RegExp(`^${dynamicRouteRegex}$`);
   return regex.test(requestPath);
-}
-
-function isRouteAccessibleToRole(path: string, role: string | null): boolean {
-  if (routePermissions.public.some((route) => matchRoute(path, route))) {
-    return true;
-  }
-  if (!role) {
-    return false;
-  }
-  switch (role) {
-    case "admin":
-      return true;
-    case "recruiter":
-      return (
-        routePermissions.recruiter.some((route) => matchRoute(path, route)) ||
-        routePermissions.user.some((route) => matchRoute(path, route))
-      );
-    case "user":
-      return routePermissions.user.some((route) => matchRoute(path, route));
-    default:
-      return false;
-  }
 }
 
 export async function middleware(request: NextRequest) {
@@ -85,37 +64,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const accessToken = request.cookies.get("accessToken")?.value;
-  let role: string | null = null;
+  const isPublicRoute = routePermissions.public.some(
+    (route) => route === path || matchRoute(path, route)
+  );
 
-  if (accessToken) {
-    try {
-      const payload = JSON.parse(atob(accessToken.split(".")[1]));
-      role = payload.role;
-    } catch (error) {
-      console.error("Error parsing token:", error);
-    }
+  if (isPublicRoute) {
+    return NextResponse.next();
   }
 
-  if (!isRouteAccessibleToRole(path, role)) {
-    if (
-      !role &&
-      !routePermissions.public.some((route) => matchRoute(path, route))
-    ) {
-      const url = new URL("/login", request.url);
-      url.searchParams.set("from", request.nextUrl.pathname);
-      return NextResponse.redirect(url);
-    }
-    return NextResponse.rewrite(new URL("/404", request.url));
-  }
+  const accessToken = request.cookies.get("accessToken");
 
-  if (path === "/login" && role) {
-    const from = request.nextUrl.searchParams.get("from") || "/profile";
+  if (!accessToken) {
     return NextResponse.redirect(
-      new URL(decodeURIComponent(from), request.url)
+      new URL(`/login?from=${encodeURIComponent(path)}`, request.url)
     );
   }
-
   return NextResponse.next();
 }
 

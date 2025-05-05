@@ -320,6 +320,10 @@ export function SignupForm() {
                   <FormControl>
                     <Input placeholder="name@company.com" {...field} />
                   </FormControl>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                    <Icons.info className="h-4 w-4" />
+                    You must use a work email to get a login.
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}

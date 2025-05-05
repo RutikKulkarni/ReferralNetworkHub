@@ -11,7 +11,6 @@ import {
   loginUser,
   registerUser,
   logoutUser,
-  refreshUserToken,
   getCurrentUser,
   forgotPassword as apiRequestPasswordReset,
   resetPassword as apiResetPassword,
@@ -73,22 +72,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     };
     initAuth();
   }, []);
-
-  // Set up token refresh interval
-  useEffect(() => {
-    if (!user) return;
-    const refreshInterval = setInterval(async () => {
-      try {
-        const userData = await refreshUserToken();
-        setUser(userData);
-      } catch (err) {
-        setUser(null);
-        console.error("Token refresh failed:", err);
-      }
-    }, 45 * 60 * 1000); // 45 minutes
-
-    return () => clearInterval(refreshInterval);
-  }, [user]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -190,7 +173,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useAuth = () => useContext(AuthContext);
 
-// Add a higher-order component for protected routes
 export const withAuth = (Component: React.ComponentType<any>) => {
   const AuthenticatedComponent = (props: any) => {
     const { isAuthenticated, loading } = useAuth();

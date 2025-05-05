@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import config from "../config";
 
 interface DecodedToken {
   userId: string;
@@ -32,10 +33,7 @@ export const verifyToken = (
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "secret"
-    ) as DecodedToken;
+    const decoded = jwt.verify(token, config.jwt.secret) as DecodedToken;
     req.user = decoded;
     next();
   } catch (error) {
@@ -64,7 +62,6 @@ export const isRecruiter = (
       res
         .status(403)
         .json({ message: "Access denied. Recruiter role required." });
-      return;
     }
     next();
   });
@@ -74,6 +71,7 @@ export const isUser = (req: Request, res: Response, next: NextFunction) => {
   verifyToken(req, res, () => {
     if (req.user?.role !== "user" && req.user?.role !== "admin") {
       res.status(403).json({ message: "Access denied. User role required." });
+      return;
     }
     next();
   });

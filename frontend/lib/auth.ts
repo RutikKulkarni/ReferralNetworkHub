@@ -1,168 +1,176 @@
 import axios from "axios";
-import { User, RegisterData } from "@/lib/types";
-
+import { User, RegisterData } from "./types";
 const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
+const AUTH_API = `${API_URL}/api/auth`;
 
-// Configure axios to include credentials
-const api = axios.create({
-  baseURL: API_URL,
+/**
+ * Configure axios instance with auth interceptors
+ */
+const authApi = axios.create({
+  baseURL: AUTH_API,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  xsrfCookieName: "",
-  xsrfHeaderName: "",
 });
 
-// Handle API errors consistently
-const handleApiError = (error: any) => {
-  if (error.response) {
-    throw new Error(error.response.data.message || "An error occurred");
-  } else {
-    throw new Error(error.message || "An error occurred");
-  }
-};
+// Add response interceptor to handle unsuccessful requests
+authApi.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-// Register a new user
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      hasRefreshToken()
+    ) {
+      originalRequest._retry = true;
+      try {
+        const res = await authApi.post(`/refresh-token`);
+        if (res.status === 200) {
+          return authApi(originalRequest);
+        }
+      } catch (refreshError) {
+        clearAuthState();
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Helper to check if we likely have a refresh token
+function hasRefreshToken() {
+  if (typeof window !== "undefined") {
+    // Check for a flag in localStorage
+    return localStorage.getItem("isLoggedIn") === "true";
+    // If you're using an auth state in memory
+    // return !!currentUser;
+  }
+  return false;
+}
+
+// Helper to clear auth state on failed refresh
+function clearAuthState() {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("isLoggedIn");
+  }
+}
+
+/**
+ * Register a new user
+ */
 export const registerUser = async (userData: RegisterData): Promise<User> => {
   try {
-    const response = await api.post("/register", userData);
+    const response = await authApi.post("/register", userData);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("isLoggedIn", "true");
+    }
     return response.data.user;
-  } catch (error) {
-    handleApiError(error);
-    throw error; // This line will never execute but is needed for TypeScript
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Registration failed");
   }
 };
 
-// Login user
+/**
+ * Login a user
+ */
 export const loginUser = async (
   email: string,
   password: string
 ): Promise<User> => {
   try {
-    const response = await api.post("/login", { email, password });
+    const response = await authApi.post("/login", { email, password });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("isLoggedIn", "true");
+    }
     return response.data.user;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
+  } catch (error: any) {
+    if (error.response?.data?.isBlocked) {
+      throw new Error(
+        `Account blocked: ${
+          error.response.data.reason || "Please contact support."
+        }`
+      );
+    }
+    throw new Error(error.response?.data?.message || "Invalid credentials");
   }
 };
 
-// Get current user
-export const getCurrentUser = async (): Promise<User> => {
-  try {
-    const response = await api.get("/me");
-    return response.data.user;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
-  }
-};
-
-// Refresh token
-export const refreshUserToken = async (): Promise<User> => {
-  try {
-    const response = await api.post("/refresh-token");
-    return response.data.user;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
-  }
-};
-
-// Logout user
+/**
+ * Logout a user
+ */
 export const logoutUser = async (): Promise<void> => {
   try {
-    await api.post("/logout");
+    await authApi.post("/logout");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("isLoggedIn");
+    }
   } catch (error) {
-    handleApiError(error);
+    console.error("Logout API error:", error);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("isLoggedIn");
+    }
     throw error;
   }
 };
 
-// Forgot password
-export const forgotPassword = async (
-  email: string
-): Promise<{ message: string }> => {
+/**
+ * Get current authenticated user
+ */
+export const getCurrentUser = async (): Promise<User> => {
   try {
-    const response = await api.post("/forgot-password", { email });
-    return response.data;
+    const response = await authApi.get("/me");
+    if (typeof window !== "undefined") {
+      localStorage.setItem("isLoggedIn", "true");
+    }
+    return response.data.user;
   } catch (error) {
-    handleApiError(error);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("isLoggedIn");
+    }
     throw error;
   }
 };
 
-// Reset password
+/**
+ * Request password reset
+ */
+export const forgotPassword = async (email: string): Promise<void> => {
+  try {
+    await authApi.post("/forgot-password", { email });
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Password reset request failed"
+    );
+  }
+};
+
+/**
+ * Reset password with token
+ */
 export const resetPassword = async (
   token: string,
   email: string,
   newPassword: string
-): Promise<{ message: string }> => {
+): Promise<void> => {
   try {
-    const response = await api.post("/reset-password", {
+    await authApi.post("/reset-password", {
       token,
       email,
       newPassword,
     });
-    return response.data;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Password reset failed");
   }
 };
 
-// Admin functions
-export const blockUser = async (
-  userId: string,
-  reason: string
-): Promise<{ message: string; user: User }> => {
-  try {
-    const response = await api.post(`/admin/users/${userId}/block`, { reason });
-    return response.data;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
-  }
-};
-
-export const unblockUser = async (
-  userId: string
-): Promise<{ message: string; user: User }> => {
-  try {
-    const response = await api.post(`/admin/users/${userId}/unblock`);
-    return response.data;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
-  }
-};
-
-export const getBlockedUsers = async (
-  page = 1,
-  limit = 20
-): Promise<{
-  users: User[];
-  pagination: {
-    total: number;
-    page: number;
-    limit: number;
-    pages: number;
-  };
-}> => {
-  try {
-    const response = await api.get(
-      `/admin/users/blocked?page=${page}&limit=${limit}`
-    );
-    return response.data;
-  } catch (error) {
-    handleApiError(error);
-    throw error;
-  }
-};
-
-// Check if a user has one of the required roles
-export const hasRole = (user: User | null, roles: string[]): boolean => {
+/**
+ * Function to check if user has required permissions
+ */
+export const hasPermission = (
+  user: User | null,
+  requiredRoles: string[]
+): boolean => {
   if (!user) return false;
-  return roles.includes(user.role);
+  if (user.role === "admin") return true;
+  return requiredRoles.includes(user.role);
 };

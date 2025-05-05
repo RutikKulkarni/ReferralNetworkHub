@@ -7,10 +7,25 @@ import RefreshToken from "../models/refresh-token.model";
 import PasswordReset from "../models/password-reset.model";
 import { validatePassword } from "../utils/password-validator";
 import { sendPasswordResetEmail } from "../utils/email-service";
-import {
-  cookieConfig,
-  accessTokenCookieConfig,
-} from "../config/cookies.config";
+import config from "../config";
+
+// Cookie configuration
+const cookieConfig = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite:
+    process.env.NODE_ENV === "production" ? "none" : ("lax" as "none" | "lax"),
+  // secure: config.cookie.secure,
+  // sameSite: config.cookie.sameSite,
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  path: "/",
+};
+
+// Access token cookie config (shorter lifespan)
+const accessTokenCookieConfig = {
+  ...cookieConfig,
+  maxAge: 60 * 60 * 1000, // 1 hour
+};
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -71,7 +86,7 @@ export const register = async (req: Request, res: Response) => {
         firstName: user.firstName,
         lastName: user.lastName,
       },
-      process.env.JWT_SECRET || "secret",
+      config.jwt.secret,
       {
         expiresIn: "1h",
       }
@@ -79,7 +94,7 @@ export const register = async (req: Request, res: Response) => {
 
     const refreshToken = jwt.sign(
       { userId: user._id },
-      process.env.JWT_REFRESH_SECRET || "refresh-secret",
+      config.jwt.refreshSecret,
       {
         expiresIn: "7d",
       }
@@ -149,7 +164,7 @@ export const login = async (req: Request, res: Response) => {
         firstName: user.firstName,
         lastName: user.lastName,
       },
-      process.env.JWT_SECRET || "secret",
+      config.jwt.secret,
       {
         expiresIn: "1h",
       }
@@ -157,7 +172,7 @@ export const login = async (req: Request, res: Response) => {
 
     const refreshToken = jwt.sign(
       { userId: user._id },
-      process.env.JWT_REFRESH_SECRET || "refresh-secret",
+      config.jwt.refreshSecret,
       {
         expiresIn: "7d",
       }
@@ -209,10 +224,9 @@ export const refreshToken = async (req: Request, res: Response) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_SECRET || "refresh-secret"
-    ) as { userId: string };
+    const decoded = jwt.verify(refreshToken, config.jwt.refreshSecret) as {
+      userId: string;
+    };
 
     // Get user
     const user = await User.findById(decoded.userId);
@@ -246,7 +260,7 @@ export const refreshToken = async (req: Request, res: Response) => {
         firstName: user.firstName,
         lastName: user.lastName,
       },
-      process.env.JWT_SECRET || "secret",
+      config.jwt.secret,
       {
         expiresIn: "1h",
       }
@@ -304,7 +318,7 @@ export const validateToken = async (req: Request, res: Response) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret") as {
+    const decoded = jwt.verify(token, config.jwt.secret) as {
       userId: string;
       role: string;
       firstName: string;
@@ -335,7 +349,7 @@ export const getMe = async (req: Request, res: Response) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret") as {
+    const decoded = jwt.verify(token, config.jwt.secret || "secret") as {
       userId: string;
       role: string;
       firstName: string;
@@ -412,7 +426,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     // Generate reset link
     const resetLink = `${
-      process.env.CLIENT_URL || "http://localhost:3000"
+      config.clientUrl || "http://localhost:3000"
     }/reset-password?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
@@ -460,19 +474,12 @@ export const resetPassword = async (req: Request, res: Response) => {
       res.status(404).json({ message: "User not found" });
       return;
     }
-
-    // Hash the new password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-    // Update the user's password
     user.password = hashedPassword;
     await user.save();
-
-    // Delete the reset token
     await PasswordReset.findOneAndDelete({ token, email });
-
-    // Invalidate all active sessions
     await RefreshToken.deleteMany({ userId: user._id });
 
     res.status(200).json({ message: "Password reset successful" });

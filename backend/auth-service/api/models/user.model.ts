@@ -1,17 +1,17 @@
-import mongoose, { type Document, Schema } from "mongoose"
+import mongoose, { type Document, Schema } from "mongoose";
 
 export interface IUser extends Document {
-  email: string
-  password: string
-  role: "user" | "recruiter" | "admin"
-  firstName: string
-  lastName: string
-  companyName?: string
-  isBlocked: boolean
-  blockReason?: string
-  blockedAt?: Date
-  createdAt: Date
-  updatedAt: Date
+  email: string;
+  password: string;
+  role: "user" | "recruiter" | "admin";
+  firstName: string;
+  lastName: string;
+  companyName?: string;
+  isBlocked: boolean;
+  blockReason?: string;
+  blockedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -58,7 +58,7 @@ const UserSchema = new Schema<IUser>(
       type: Date,
     },
   },
-  { timestamps: true },
-)
+  { timestamps: true }
+);
 
-export default mongoose.model<IUser>("User", UserSchema)
+export default mongoose.model<IUser>("User", UserSchema);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // Add useSearchParams
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -38,7 +38,7 @@ const formSchema = z
 
 export function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams(); // Get query parameters
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUserType, setSelectedUserType] = useState<
     "user" | "recruiter"
@@ -62,9 +62,8 @@ export function LoginForm() {
       await login(values.email, values.password);
       toast.success("You have successfully logged in!");
 
-      // Get the 'from' query parameter, default to '/profile' if not present
       const from = searchParams.get("from") || "/profile";
-      router.push(decodeURIComponent(from)); // Redirect to the intended page
+      router.push(decodeURIComponent(from));
     } catch (err: any) {
       toast.error(err.message || "Invalid credentials. Please try again.");
     } finally {
@@ -151,6 +150,12 @@ export function LoginForm() {
                     {...field}
                   />
                 </FormControl>
+                {selectedUserType === "recruiter" && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                    <Icons.info className="h-4 w-4" />
+                    You must use a work email to get a login.
+                  </div>
+                )}
                 <FormMessage />
               </FormItem>
             )}

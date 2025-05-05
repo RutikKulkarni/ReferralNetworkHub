@@ -1,31 +1,35 @@
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
+import config from "../config";
 
 // Configure email transporter
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || "smtp.example.com",
-  port: Number.parseInt(process.env.EMAIL_PORT || "587"),
-  secure: process.env.EMAIL_SECURE === "true",
+  host: config.email.host,
+  port: config.email.port,
+  secure: config.email.secure,
   auth: {
-    user: process.env.EMAIL_USER || "user@example.com",
-    pass: process.env.EMAIL_PASSWORD || "password",
+    user: config.email.auth.user,
+    pass: config.email.auth.pass,
   },
-})
+});
 
 /**
  * Sends a password reset email with a secure link
  * @param email Recipient email address
  * @param resetLink Password reset link
  */
-export const sendPasswordResetEmail = async (email: string, resetLink: string): Promise<void> => {
+export const sendPasswordResetEmail = async (
+  email: string,
+  resetLink: string
+): Promise<void> => {
   try {
     // For development/testing, log the reset link instead of sending an email
-    if (process.env.NODE_ENV === "development") {
-      console.log(`Password reset link for ${email}: ${resetLink}`)
-      return
+    if (config.env === "development") {
+      console.log(`Password reset link for ${email}: ${resetLink}`);
+      return;
     }
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@referralnetworkhub.com",
+      from: config.email.from,
       to: email,
       subject: "Reset Your Password - Referral Network Hub",
       html: `
@@ -42,11 +46,11 @@ export const sendPasswordResetEmail = async (email: string, resetLink: string): 
           <p style="font-size: 12px; color: #777;">Referral Network Hub</p>
         </div>
       `,
-    }
+    };
 
-    await transporter.sendMail(mailOptions)
+    await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.error("Error sending password reset email:", error)
-    throw new Error("Failed to send password reset email")
+    console.error("Error sending password reset email:", error);
+    throw new Error("Failed to send password reset email");
   }
-}
+};

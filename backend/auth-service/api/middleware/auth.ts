@@ -62,6 +62,7 @@ export const isRecruiter = (
       res
         .status(403)
         .json({ message: "Access denied. Recruiter role required." });
+      return;
     }
     next();
   });

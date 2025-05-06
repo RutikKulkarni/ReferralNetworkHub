@@ -6,7 +6,6 @@ import { SignupForm } from "@/components/forms/signup";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
-// Separate the actual content in a component to wrap with Suspense
 function SignupContent() {
   return (
     <>
@@ -25,7 +24,7 @@ function SignupContent() {
           href="/login"
           className="underline underline-offset-4 hover:text-primary"
         >
-          Sign in
+          Log in
         </Link>
       </p>
     </>

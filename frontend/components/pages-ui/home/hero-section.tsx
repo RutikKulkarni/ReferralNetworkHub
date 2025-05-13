@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 
 export default function HeroSection() {
   const [activeTab, setActiveTab] = useState("referral");
@@ -66,7 +67,7 @@ export default function HeroSection() {
             </motion.div>
             <motion.h1
               variants={item}
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100"
+              className="text-3xl sm:text-4xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100"
             >
               Your career starts with{" "}
               <span className="text-gray-500 dark:text-gray-400">
@@ -80,24 +81,21 @@ export default function HeroSection() {
               Connect with insiders who can vouch for you at top companies and
               land your dream job faster.
             </motion.p>
-            <motion.div
-              variants={item}
-              className="flex flex-col sm:flex-row gap-3"
-            >
-              <button
+            <motion.div variants={item} className="flex flex-row gap-3">
+              <Button
                 onClick={() => (window.location.href = "/jobs")}
-                className="flex items-center justify-center flex-1 px-6 py-3 rounded-lg bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+                className="flex items-center justify-center w-48 py-2 rounded-lg bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
               >
                 <Icons.briefcase className="mr-2 h-4 w-4" />
                 Find Jobs
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => (window.location.href = "/")}
-                className="flex items-center justify-center flex-1 px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="flex items-center justify-center w-48 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 <Icons.users className="mr-2 h-4 w-4" />
                 Give Referrals
-              </button>
+              </Button>
             </motion.div>
             <motion.div
               variants={item}

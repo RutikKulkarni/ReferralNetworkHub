@@ -1,21 +1,13 @@
-import Link from "next/link";
-import { ArrowRight, CheckCircle2, Network, Users } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { HeroSection } from "@/components/hero-section";
+import HeroSection from "@/components/pages-ui/home/hero-section";
+import HowItWorks from "@/components/pages-ui/home/HowItWorks";
+import WhyChoose from "@/components/pages-ui/home/WhyChoose";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <HeroSection />
+      <WhyChoose />
+      <HowItWorks />
     </div>
   );
 }

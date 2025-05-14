@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/form";
 import { useFormState } from "@/contexts/UserFormContext";
 import { ImageCropper } from "@/components/forms/profile/image-cropper";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { CountryDropdown } from "@/components/ui/country-dropdown";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const ACCEPTED_IMAGE_TYPES = [
@@ -45,15 +47,27 @@ const ACCEPTED_RESUME_TYPES = [
 
 const basicInfoSchema = z
   .object({
-    fullName: z
+    firstName: z
       .string()
-      .min(2, "Full name must be at least 2 characters")
-      .max(100, "Full name is too long"),
+      .min(2, "First name must be at least 2 characters")
+      .max(50, "First name is too long"),
+    lastName: z
+      .string()
+      .min(2, "Last name must be at least 2 characters")
+      .max(50, "Last name is too long"),
     email: z.string().email("Please enter a valid email address"),
-    location: z
+    address: z
       .string()
-      .min(2, "Location must be at least 2 characters")
-      .max(100, "Location is too long"),
+      .min(2, "Address must be at least 2 characters")
+      .max(100, "Address is too long"),
+    state: z
+      .string()
+      .min(2, "State must be at least 2 characters")
+      .max(100, "State is too long"),
+    country: z
+      .string()
+      .min(2, "Country must be at least 2 characters")
+      .max(100, "Country is too long"),
     phone: z
       .string()
       .regex(/^\+?[\d\s-]{8,}$/, "Please enter a valid phone number"),
@@ -106,9 +120,12 @@ export function PersonalInformationForm() {
   const form = useForm<BasicInfoValues>({
     resolver: zodResolver(basicInfoSchema),
     defaultValues: {
-      fullName: formData.basic.fullName || "",
+      firstName: formData.basic.firstName || "",
+      lastName: formData.basic.lastName || "",
       email: formData.basic.email || "",
-      location: formData.basic.location || "",
+      address: formData.basic.address || "",
+      state: formData.basic.state || "",
+      country: formData.basic.country || "India",
       phone: formData.basic.phone || "",
       gender: formData.basic.gender || "male",
       genderOther: formData.basic.genderOther || "",
@@ -216,7 +233,7 @@ export function PersonalInformationForm() {
   };
 
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-border dark:bg-black">
       <CardHeader>
         <CardTitle className="text-2xl font-semibold text-foreground">
           Personal Information
@@ -246,7 +263,7 @@ export function PersonalInformationForm() {
                     </div>
                   )}
                 </div>
-                {/* <Button
+                <Button
                   type="button"
                   variant="secondary"
                   size="icon"
@@ -263,7 +280,7 @@ export function PersonalInformationForm() {
                     onChange={handleImageChange}
                     title="Upload profile image"
                   />
-                </Button> */}
+                </Button>
               </div>
               <div className="flex-1 space-y-2">
                 <Label className="text-sm font-medium text-foreground">
@@ -310,13 +327,30 @@ export function PersonalInformationForm() {
             <div className="grid gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
-                name="fullName"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Full Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="John Doe"
+                        placeholder="John"
+                        {...field}
+                        className="bg-background"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Doe"
                         {...field}
                         className="bg-background"
                       />
@@ -345,13 +379,13 @@ export function PersonalInformationForm() {
               />
               <FormField
                 control={form.control}
-                name="location"
+                name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="San Francisco, CA"
+                      <PhoneInput
+                        placeholder="Enter phone number"
                         {...field}
                         className="bg-background"
                       />
@@ -362,16 +396,50 @@ export function PersonalInformationForm() {
               />
               <FormField
                 control={form.control}
-                name="phone"
+                name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel>Address</FormLabel>
                     <FormControl>
                       <Input
-                        type="tel"
-                        placeholder="+1 (555) 123-4567"
+                        placeholder="123 Main St"
                         {...field}
                         className="bg-background"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="state"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>State</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="California"
+                        {...field}
+                        className="bg-background"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <CountryDropdown
+                        placeholder="Select country"
+                        defaultValue="India"
+                        onChange={field.onChange}
+                        // value={field.value}
                       />
                     </FormControl>
                     <FormMessage />
@@ -412,25 +480,6 @@ export function PersonalInformationForm() {
                 </FormItem>
               )}
             />
-            {form.watch("gender") === "other" && (
-              <FormField
-                control={form.control}
-                name="genderOther"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Specify Gender</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Please specify"
-                        {...field}
-                        className="bg-background"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
 
             {/* Social Links */}
             <div className="grid gap-6 md:grid-cols-3">

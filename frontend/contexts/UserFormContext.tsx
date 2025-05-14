@@ -10,9 +10,12 @@ import {
 
 // Form state interfaces
 export interface BasicInfo {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  location: string;
+  address: string;
+  state: string;
+  country: string;
   phone: string;
   gender: "male" | "female" | "other";
   genderOther?: string;
@@ -76,9 +79,12 @@ export interface FormData {
 // Initialize with default values
 const defaultFormData: FormData = {
   basic: {
-    fullName: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    location: "",
+    address: "",
+    state: "",
+    country: "India",
     phone: "",
     gender: "male",
     profileImage: null,

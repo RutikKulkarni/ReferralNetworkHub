@@ -7,7 +7,7 @@ import { UserProfileForm } from "@/components/forms/profile/user/userProfile";
 import { RecruiterProfileForm } from "@/components/forms/profile/recruiter/recruiterProfile";
 import { toast } from "react-hot-toast";
 
-export default function Profile() {
+export default function ProfileEdit() {
   const { user, loading, error } = useAuth();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function Profile() {
 
   return (
     <FormProvider>
-      <main className="container py-8">
+      <main className="container py-16">
         {user.role === "recruiter" ? (
           <RecruiterProfileForm />
         ) : (

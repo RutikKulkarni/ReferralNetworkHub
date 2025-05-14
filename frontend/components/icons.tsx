@@ -43,7 +43,7 @@ import { FaRegUser } from "react-icons/fa";
 import { TbBuildingSkyscraper } from "react-icons/tb";
 import { LuBriefcaseBusiness } from "react-icons/lu";
 import { TbMailCheck } from "react-icons/tb";
-import { LuNetwork } from "react-icons/lu";
+import { LuNetwork, LuCloudUpload } from "react-icons/lu";
 
 import type { IconType } from "react-icons";
 
@@ -95,4 +95,5 @@ export const Icons = {
   userCircle: FaRegUser,
   mailCheck: TbMailCheck,
   network: LuNetwork,
+  upload: LuCloudUpload,
 };

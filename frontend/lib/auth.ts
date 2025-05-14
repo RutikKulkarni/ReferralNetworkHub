@@ -80,6 +80,7 @@ function hasRefreshToken() {
 function clearAuthState() {
   if (typeof window !== "undefined") {
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
   }
 }
 
@@ -134,6 +135,7 @@ export const logoutUser = async (): Promise<void> => {
   } finally {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("user");
     }
   }
 };
@@ -151,11 +153,13 @@ export const getCurrentUser = async (): Promise<User> => {
 
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("user", JSON.stringify(response.data.user));
     }
     return response.data.user;
   } catch (error) {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("user");
     }
     throw error;
   }

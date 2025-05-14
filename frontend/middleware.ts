@@ -52,6 +52,14 @@ function matchRoute(requestPath: string, routePattern: string): boolean {
   return regex.test(requestPath);
 }
 
+// Prevent infinite redirect loops
+function isRedirectLoop(request: NextRequest): boolean {
+  const redirectCount = parseInt(
+    request.headers.get("x-redirect-count") || "0"
+  );
+  return redirectCount >= 3; // Allow max 3 redirects to prevent infinite loops
+}
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
@@ -69,17 +77,32 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute = routePermissions.public.some(
     (route) => route === path || matchRoute(path, route)
   );
+
   if (isPublicRoute) {
     return NextResponse.next();
+  }
+
+  // Prevent infinite redirect loops
+  if (isRedirectLoop(request)) {
+    console.error("Detected redirect loop for:", path);
+    // Clear problematic cookies to break the loop
+    const response = NextResponse.next();
+    response.cookies.delete("auth_status");
+    return response;
   }
 
   // Check for authentication in two ways:
   // 1. Check for accessToken cookie
   // 2. Check for auth status in a special cookie we'll set client-side
+  // 3. Check for refreshToken if accessToken is missing
   const accessToken = request.cookies.get("accessToken");
+  const refreshToken = request.cookies.get("refreshToken");
   const authStatus = request.cookies.get("auth_status");
 
-  if (accessToken || (authStatus && authStatus.value === "authenticated")) {
+  if (
+    accessToken?.value ||
+    (authStatus?.value === "authenticated" && refreshToken?.value)
+  ) {
     return NextResponse.next();
   }
 
@@ -90,7 +113,17 @@ export async function middleware(request: NextRequest) {
   // Add a cache-busting parameter to prevent caching issues
   loginUrl.searchParams.append("_ts", Date.now().toString());
 
-  return NextResponse.redirect(loginUrl);
+  // Track redirect count to prevent infinite loops
+  const response = NextResponse.redirect(loginUrl);
+  const currentRedirectCount = parseInt(
+    request.headers.get("x-redirect-count") || "0"
+  );
+  response.headers.set(
+    "x-redirect-count",
+    (currentRedirectCount + 1).toString()
+  );
+
+  return response;
 }
 
 export const config = {

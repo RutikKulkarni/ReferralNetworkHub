@@ -14,6 +14,7 @@ import {
   getCurrentUser,
   forgotPassword as apiRequestPasswordReset,
   resetPassword as apiResetPassword,
+  hasPermission,
 } from "@/lib/auth";
 import { User, RegisterData } from "@/lib/types";
 import { useRouter, usePathname } from "next/navigation";
@@ -34,6 +35,7 @@ export interface AuthContextType {
     email: string,
     newPassword: string
   ) => Promise<void>;
+  checkPermission: (requiredRoles: string[]) => boolean;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -47,6 +49,7 @@ export const AuthContext = createContext<AuthContextType>({
   clearError: () => {},
   forgotPassword: async () => {},
   resetPassword: async () => {},
+  checkPermission: () => false,
 });
 
 // Set auth cookies that can be read by middleware
@@ -58,13 +61,12 @@ const setAuthCookies = (isAuthenticated: boolean) => {
         path: "/",
         secure: window.location.protocol === "https:",
         sameSite: "strict",
+        expires: 7, // Set an expiration to match refresh token
       });
-
-      // Also set localStorage for client-side checks
-      localStorage.setItem("isLoggedIn", "true");
     } else {
       Cookies.remove("auth_status");
       localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("user");
     }
   }
 };
@@ -75,6 +77,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [initializationAttempted, setInitializationAttempted] =
+    useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -91,15 +95,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [pathname, router]);
 
+  // Load user from localStorage if available
+  const loadUserFromLocalStorage = useCallback(() => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          return JSON.parse(storedUser);
+        } catch (e) {
+          console.error("Failed to parse user from localStorage:", e);
+          return null;
+        }
+      }
+    }
+    return null;
+  }, []);
+
   // Initialize auth state
   useEffect(() => {
     let isMounted = true;
 
-    // Check localStorage first to avoid unnecessary API calls
+    // Check auth status
     const isLoggedIn =
       typeof window !== "undefined" &&
       (localStorage.getItem("isLoggedIn") === "true" ||
         Cookies.get("auth_status") === "authenticated");
+
+    // Only attempt initialization once
+    if (initializationAttempted && !isLoggedIn) {
+      return;
+    }
 
     const initAuth = async () => {
       // Skip initialization if clearly not logged in
@@ -113,20 +138,44 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       try {
         setLoading(true);
+
+        // Load user from localStorage first for immediate UI rendering
+        const storedUser = loadUserFromLocalStorage();
+        if (storedUser && isMounted) {
+          setUser(storedUser);
+        }
+
+        // Then validate with the API
         const userData = await getCurrentUser();
         if (isMounted) {
           setUser(userData);
           setAuthCookies(true);
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("user", JSON.stringify(userData));
           handleRedirectAfterAuth();
         }
       } catch (err) {
+        console.error("Auth initialization error:", err);
         if (isMounted) {
-          setUser(null);
-          setAuthCookies(false);
+          // Check if we have access to tokens
+          const hasTokens =
+            typeof window !== "undefined" &&
+            (!!Cookies.get("accessToken") || !!Cookies.get("refreshToken"));
+
+          // If we have tokens but API call failed, keep stored user
+          // This handles temporary API failures
+          if (hasTokens && loadUserFromLocalStorage()) {
+            setAuthCookies(true);
+          } else {
+            // Clear everything if we don't have tokens or user
+            setUser(null);
+            setAuthCookies(false);
+          }
         }
       } finally {
         if (isMounted) {
           setLoading(false);
+          setInitializationAttempted(true);
         }
       }
     };
@@ -136,7 +185,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return () => {
       isMounted = false;
     };
-  }, [handleRedirectAfterAuth]);
+  }, [
+    handleRedirectAfterAuth,
+    loadUserFromLocalStorage,
+    initializationAttempted,
+  ]);
+
+  // Check token status periodically
+  useEffect(() => {
+    // Only set up refresh interval if user is logged in
+    if (!user) return;
+
+    // Re-validate auth every 10 minutes
+    const refreshInterval = setInterval(async () => {
+      try {
+        const userData = await getCurrentUser();
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+      } catch (err) {
+        console.log("Session validation failed", err);
+        // Only clear state if there's a 401 (token invalid)
+        if ((err as any)?.response?.status === 401) {
+          setUser(null);
+          setAuthCookies(false);
+        }
+      }
+    }, 10 * 60 * 1000); // 10 minutes
+
+    return () => clearInterval(refreshInterval);
+  }, [user]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -144,6 +221,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setError(null);
       const userData = await loginUser(email, password);
       setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
       setAuthCookies(true);
       handleRedirectAfterAuth();
     } catch (err: any) {
@@ -161,6 +239,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setError(null);
       const newUser = await registerUser(userData);
       setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
       setAuthCookies(true);
       handleRedirectAfterAuth();
     } catch (err: any) {
@@ -225,6 +304,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setError(null);
   };
 
+  const checkPermission = (requiredRoles: string[]): boolean => {
+    return hasPermission(user, requiredRoles);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -238,6 +321,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         clearError,
         forgotPassword,
         resetPassword,
+        checkPermission,
       }}
     >
       {children}
@@ -249,20 +333,23 @@ export const useAuth = () => useContext(AuthContext);
 
 export const withAuth = (Component: React.ComponentType<any>) => {
   const AuthenticatedComponent = (props: any) => {
-    const { isAuthenticated, loading } = useAuth();
+    const { isAuthenticated, loading, user } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
 
     useEffect(() => {
+      // Wait for auth to be fully initialized before redirecting
       if (!loading && !isAuthenticated) {
         router.replace(`/login?from=${encodeURIComponent(pathname)}`);
       }
     }, [loading, isAuthenticated, router, pathname]);
 
+    // Show loading state while auth is initializing
     if (loading) {
       return <div>Loading...</div>;
     }
 
+    // If user data is loaded and authenticated, render the component
     return isAuthenticated ? <Component {...props} /> : null;
   };
 
@@ -275,27 +362,27 @@ export const withRole = (
   allowedRoles: string[]
 ) => {
   const AuthorizedComponent = (props: any) => {
-    const { user, loading, isAuthenticated } = useAuth();
+    const { user, loading, isAuthenticated, checkPermission } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
+
+    const hasAccess = checkPermission(allowedRoles);
 
     useEffect(() => {
       if (!loading) {
         if (!isAuthenticated) {
           router.replace(`/login?from=${encodeURIComponent(pathname)}`);
-        } else if (user && !allowedRoles.includes(user.role)) {
+        } else if (!hasAccess) {
           router.replace("/unauthorized");
         }
       }
-    }, [loading, isAuthenticated, user, router, pathname]);
+    }, [loading, isAuthenticated, hasAccess, router, pathname]);
 
     if (loading) {
       return <div>Loading...</div>;
     }
 
-    return isAuthenticated && user && allowedRoles.includes(user.role) ? (
-      <Component {...props} />
-    ) : null;
+    return isAuthenticated && hasAccess ? <Component {...props} /> : null;
   };
 
   return AuthorizedComponent;

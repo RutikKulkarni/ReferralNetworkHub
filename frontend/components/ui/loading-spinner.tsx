@@ -17,7 +17,9 @@ export default function LoadingSpinner({
         className={`h-8 w-8 animate-spin text-primary ${className}`}
       />
       {showText && (
-        <span className="mt-2 text-sm font-medium text-gray-600">{text}</span>
+        <span className="mt-2 text-sm font-medium text-gray-600 font-newYork">
+          {text}
+        </span>
       )}
     </div>
   );

@@ -12,14 +12,15 @@ import config from "../config";
 // Cookie configuration
 const cookieConfig = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite:
-    process.env.NODE_ENV === "production" ? "none" : ("lax" as "none" | "lax"),
-  // secure: config.cookie.secure,
-  // sameSite: config.cookie.sameSite,
+  // secure: config.env === "production",
+  // sameSite: config.env === "production" ? "none" : ("lax" as "none" | "lax"),
+  secure: config.cookie.secure,
+  sameSite: config.cookie.sameSite,
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   path: "/",
+  domain: config.cookie.domain || undefined,
 };
+// console.log("Cookie config:", cookieConfig);
 
 // Access token cookie config (shorter lifespan)
 const accessTokenCookieConfig = {

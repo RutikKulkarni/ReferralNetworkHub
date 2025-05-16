@@ -1,7 +1,5 @@
 import axios from "axios";
 import { User, RegisterData } from "./types";
-import Cookies from "js-cookie";
-
 const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
 const AUTH_API = `${API_URL}/api/auth`;
 
@@ -21,6 +19,7 @@ authApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -43,27 +42,28 @@ authApi.interceptors.response.use(
       }
 
       isRefreshing = true;
+
       try {
         const res = await authApi.post(`/refresh-token`);
         if (res.status === 200) {
-          setIsLoggedInCookie(true);
-
           refreshSubscribers.forEach((callback) => callback(true));
           refreshSubscribers = [];
+
           return authApi(originalRequest);
         }
       } catch (refreshError) {
         refreshSubscribers.forEach((callback) => callback(false));
         refreshSubscribers = [];
+
         clearAuthState();
       } finally {
         isRefreshing = false;
       }
     }
-
     if (originalRequest.url.includes("me")) {
       clearAuthState();
     }
+
     return Promise.reject(error);
   }
 );
@@ -81,25 +81,6 @@ function clearAuthState() {
   if (typeof window !== "undefined") {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user");
-    Cookies.remove("isLoggedIn");
-  }
-}
-
-function setIsLoggedInCookie(isLoggedIn: boolean) {
-  if (typeof window !== "undefined") {
-    const secure = window.location.protocol === "https:";
-    const sameSite = secure ? "none" : "lax";
-
-    if (isLoggedIn) {
-      Cookies.set("isLoggedIn", "true", {
-        path: "/",
-        secure: secure,
-        sameSite: sameSite as "none" | "lax" | "strict",
-        expires: 7,
-      });
-    } else {
-      Cookies.remove("isLoggedIn");
-    }
   }
 }
 
@@ -111,7 +92,6 @@ export const registerUser = async (userData: RegisterData): Promise<User> => {
     const response = await authApi.post("/register", userData);
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
-      setIsLoggedInCookie(true);
     }
     return response.data.user;
   } catch (error: any) {
@@ -130,7 +110,6 @@ export const loginUser = async (
     const response = await authApi.post("/login", { email, password });
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
-      setIsLoggedInCookie(true);
     }
     return response.data.user;
   } catch (error: any) {
@@ -157,7 +136,6 @@ export const logoutUser = async (): Promise<void> => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("user");
-      setIsLoggedInCookie(false);
     }
   }
 };
@@ -172,17 +150,16 @@ export const getCurrentUser = async (): Promise<User> => {
         "X-No-Retry-Auth": "true",
       },
     });
+
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      setIsLoggedInCookie(true);
     }
     return response.data.user;
   } catch (error) {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("user");
-      setIsLoggedInCookie(false);
     }
     throw error;
   }

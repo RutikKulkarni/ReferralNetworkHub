@@ -60,6 +60,18 @@ function isRedirectLoop(request: NextRequest): boolean {
   return redirectCount >= 3; // Allow max 3 redirects to prevent infinite loops
 }
 
+function isRouteAllowed(path: string, isAuthenticated: boolean): boolean {
+  const isPublicRoute = routePermissions.public.some(
+    (route) => route === path || matchRoute(path, route)
+  );
+
+  if (isPublicRoute) {
+    return true;
+  }
+
+  return isAuthenticated;
+}
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
@@ -73,40 +85,25 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check if it's a public route
-  const isPublicRoute = routePermissions.public.some(
-    (route) => route === path || matchRoute(path, route)
-  );
-
-  if (isPublicRoute) {
-    return NextResponse.next();
-  }
-
-  // Prevent infinite redirect loops
   if (isRedirectLoop(request)) {
     console.error("Detected redirect loop for:", path);
-    // Clear problematic cookies to break the loop
-    const response = NextResponse.next();
-    response.cookies.delete("auth_status");
-    return response;
-  }
-
-  // Check for authentication in two ways:
-  // 1. Check for accessToken cookie
-  // 2. Check for auth status in a special cookie we'll set client-side
-  // 3. Check for refreshToken if accessToken is missing
-  const accessToken = request.cookies.get("accessToken");
-  const refreshToken = request.cookies.get("refreshToken");
-  const authStatus = request.cookies.get("auth_status");
-
-  if (
-    accessToken?.value ||
-    (authStatus?.value === "authenticated" && refreshToken?.value)
-  ) {
     return NextResponse.next();
   }
 
-  // If not authenticated, redirect to login
+  const accessToken = request.cookies.get("accessToken");
+  const refreshToken = request.cookies.get("refreshToken");
+  const isLoggedInCookie = request.cookies.get("isLoggedIn");
+
+  const isAuthenticated = Boolean(
+    accessToken?.value ||
+      (refreshToken?.value && isLoggedInCookie?.value === "true")
+  );
+
+  if (isRouteAllowed(path, isAuthenticated)) {
+    return NextResponse.next();
+  }
+
+  // If not authenticated and trying to access protected route, redirect to login
   const from = encodeURIComponent(path);
   const loginUrl = new URL(`/login?from=${from}`, request.url);
 

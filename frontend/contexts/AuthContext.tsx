@@ -1,4 +1,5 @@
 "use client";
+
 import React, {
   createContext,
   useState,
@@ -54,20 +55,34 @@ export const AuthContext = createContext<AuthContextType>({
 
 // Set auth cookies that can be read by middleware
 const setAuthCookies = (isAuthenticated: boolean) => {
-  if (typeof window !== "undefined") {
-    if (isAuthenticated) {
-      // Set auth status cookie (accessible by middleware)
-      Cookies.set("auth_status", "authenticated", {
-        path: "/",
-        secure: window.location.protocol === "https:",
-        sameSite: "strict",
-        expires: 7, // Set an expiration to match refresh token
-      });
-    } else {
-      Cookies.remove("auth_status");
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("user");
-    }
+  if (typeof window === "undefined") return;
+
+  const isSecure = window.location.protocol === "https:";
+  const sameSite = isSecure ? "none" : "lax";
+
+  if (isAuthenticated) {
+    Cookies.set("auth_status", "authenticated", {
+      path: "/",
+      secure: isSecure,
+      sameSite: sameSite as "none" | "lax" | "strict",
+      expires: 7,
+    });
+
+    Cookies.set("isLoggedIn", "true", {
+      path: "/",
+      secure: isSecure,
+      sameSite: sameSite as "none" | "lax" | "strict",
+      expires: 7,
+    });
+
+    // Set localStorage state
+    localStorage.setItem("isLoggedIn", "true");
+  } else {
+    // Clear all auth indicators
+    Cookies.remove("auth_status");
+    Cookies.remove("isLoggedIn");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
   }
 };
 
@@ -84,34 +99,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // Handle redirection after login
   const handleRedirectAfterAuth = useCallback(() => {
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      const fromPath = urlParams.get("from");
-      if (pathname === "/login" && fromPath) {
-        setTimeout(() => {
-          router.push(fromPath);
-        }, 100);
-      }
+    if (typeof window === "undefined") return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromPath = urlParams.get("from");
+
+    if (pathname === "/login" && fromPath) {
+      router.push(fromPath);
     }
   }, [pathname, router]);
 
   // Load user from localStorage if available
   const loadUserFromLocalStorage = useCallback(() => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        try {
-          return JSON.parse(storedUser);
-        } catch (e) {
-          console.error("Failed to parse user from localStorage:", e);
-          return null;
-        }
-      }
+    if (typeof window === "undefined") return null;
+
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return null;
+
+    try {
+      return JSON.parse(storedUser);
+    } catch (e) {
+      console.error("Failed to parse user from localStorage:", e);
+      return null;
     }
-    return null;
   }, []);
 
-  // Initialize auth state
   useEffect(() => {
     let isMounted = true;
 
@@ -119,9 +131,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     const isLoggedIn =
       typeof window !== "undefined" &&
       (localStorage.getItem("isLoggedIn") === "true" ||
-        Cookies.get("auth_status") === "authenticated");
+        Cookies.get("auth_status") === "authenticated" ||
+        Cookies.get("isLoggedIn") === "true");
 
-    // Only attempt initialization once
+    // Only attempt initialization once if not logged in
     if (initializationAttempted && !isLoggedIn) {
       return;
     }
@@ -132,6 +145,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         if (isMounted) {
           setLoading(false);
           setAuthCookies(false);
+          setInitializationAttempted(true);
         }
         return;
       }
@@ -143,31 +157,49 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const storedUser = loadUserFromLocalStorage();
         if (storedUser && isMounted) {
           setUser(storedUser);
+          // Set cookies IMMEDIATELY for localStorage user
+          setAuthCookies(true);
         }
 
         // Then validate with the API
-        const userData = await getCurrentUser();
-        if (isMounted) {
-          setUser(userData);
-          setAuthCookies(true);
-          localStorage.setItem("isLoggedIn", "true");
-          localStorage.setItem("user", JSON.stringify(userData));
-          handleRedirectAfterAuth();
+        try {
+          const userData = await getCurrentUser();
+          if (isMounted) {
+            setUser(userData);
+            setAuthCookies(true);
+            localStorage.setItem("user", JSON.stringify(userData));
+            handleRedirectAfterAuth();
+          }
+        } catch (apiErr) {
+          console.error("API validation failed:", apiErr);
+
+          // Check for token existence
+          const hasAccessToken = !!Cookies.get("accessToken");
+          const hasRefreshToken = !!Cookies.get("refreshToken");
+          const isUnauthorized = (apiErr as any)?.response?.status === 401;
+
+          if ((!hasAccessToken && !hasRefreshToken) || isUnauthorized) {
+            // Only clear if we got a 401 or have no tokens
+            if (isMounted) {
+              setUser(null);
+              setAuthCookies(false);
+            }
+          } else if (storedUser) {
+            // Keep stored user if we have tokens but API failed for other reasons
+            console.log("Using stored user data due to API error");
+          }
         }
       } catch (err) {
         console.error("Auth initialization error:", err);
         if (isMounted) {
-          // Check if we have access to tokens
+          // Check for tokens
           const hasTokens =
-            typeof window !== "undefined" &&
-            (!!Cookies.get("accessToken") || !!Cookies.get("refreshToken"));
+            !!Cookies.get("accessToken") || !!Cookies.get("refreshToken");
 
-          // If we have tokens but API call failed, keep stored user
-          // This handles temporary API failures
+          // Keep auth state if we have tokens
           if (hasTokens && loadUserFromLocalStorage()) {
             setAuthCookies(true);
           } else {
-            // Clear everything if we don't have tokens or user
             setUser(null);
             setAuthCookies(false);
           }
@@ -202,6 +234,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const userData = await getCurrentUser();
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
+        setAuthCookies(true);
       } catch (err) {
         console.log("Session validation failed", err);
         // Only clear state if there's a 401 (token invalid)
@@ -219,6 +252,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setLoading(true);
       setError(null);
+
       const userData = await loginUser(email, password);
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
@@ -237,6 +271,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       setLoading(true);
       setError(null);
+
       const newUser = await registerUser(userData);
       setUser(newUser);
       localStorage.setItem("user", JSON.stringify(newUser));
@@ -256,15 +291,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       try {
         setLoading(true);
         await logoutUser();
-        setUser(null);
-        setAuthCookies(false);
-        router.push(redirectPath);
       } catch (err: any) {
         setError(err.message || "Logout failed");
+      } finally {
         setUser(null);
         setAuthCookies(false);
-      } finally {
         setLoading(false);
+        router.push(redirectPath);
       }
     },
     [router]
@@ -333,7 +366,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const withAuth = (Component: React.ComponentType<any>) => {
   const AuthenticatedComponent = (props: any) => {
-    const { isAuthenticated, loading, user } = useAuth();
+    const { isAuthenticated, loading } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -356,13 +389,13 @@ export const withAuth = (Component: React.ComponentType<any>) => {
   return AuthenticatedComponent;
 };
 
-// Add role-based authorization
+// Role-based authorization HOC
 export const withRole = (
   Component: React.ComponentType<any>,
   allowedRoles: string[]
 ) => {
   const AuthorizedComponent = (props: any) => {
-    const { user, loading, isAuthenticated, checkPermission } = useAuth();
+    const { loading, isAuthenticated, checkPermission } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
 

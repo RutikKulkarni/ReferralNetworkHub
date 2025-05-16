@@ -1,11 +1,12 @@
 import axios from "axios";
 import { User, RegisterData } from "./types";
+import Cookies from "js-cookie";
+
 const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
 const AUTH_API = `${API_URL}/api/auth`;
 
-// Flag to prevent multiple simultaneous refresh attempts
 let isRefreshing = false;
-let refreshSubscribers: ((token: any) => void)[] = [];
+let refreshSubscribers: ((token: boolean) => void)[] = [];
 
 /**
  * Configure axios instance with auth interceptors
@@ -19,7 +20,6 @@ authApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -31,8 +31,8 @@ authApi.interceptors.response.use(
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
-          refreshSubscribers.push((token) => {
-            if (token) {
+          refreshSubscribers.push((success) => {
+            if (success) {
               resolve(authApi(originalRequest));
             } else {
               reject(error);
@@ -46,21 +46,22 @@ authApi.interceptors.response.use(
       try {
         const res = await authApi.post(`/refresh-token`);
         if (res.status === 200) {
+          setIsLoggedInCookie(true);
+
           refreshSubscribers.forEach((callback) => callback(true));
           refreshSubscribers = [];
-
           return authApi(originalRequest);
         }
       } catch (refreshError) {
         refreshSubscribers.forEach((callback) => callback(false));
         refreshSubscribers = [];
-
         clearAuthState();
       } finally {
         isRefreshing = false;
       }
     }
-    if (originalRequest.url.includes("me")) {
+
+    if (originalRequest.url?.includes("me")) {
       clearAuthState();
     }
 
@@ -68,19 +69,45 @@ authApi.interceptors.response.use(
   }
 );
 
-// Helper to check if we likely have a refresh token
-function hasRefreshToken() {
+/**
+ * Helper to check if we likely have a refresh token
+ */
+function hasRefreshToken(): boolean {
   if (typeof window !== "undefined") {
     return localStorage.getItem("isLoggedIn") === "true";
   }
   return false;
 }
 
-// Helper to clear auth state on failed refresh
-function clearAuthState() {
+/**
+ * Helper to clear auth state on failed refresh
+ */
+function clearAuthState(): void {
   if (typeof window !== "undefined") {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user");
+    Cookies.remove("isLoggedIn");
+  }
+}
+
+/**
+ * Set isLoggedIn cookie that can be read by middleware
+ */
+function setIsLoggedInCookie(isLoggedIn: boolean): void {
+  if (typeof window !== "undefined") {
+    const secure = window.location.protocol === "https:";
+    const sameSite = secure ? "none" : "lax";
+
+    if (isLoggedIn) {
+      Cookies.set("isLoggedIn", "true", {
+        path: "/",
+        secure: secure,
+        sameSite: sameSite as "none" | "lax" | "strict",
+        expires: 7,
+      });
+    } else {
+      Cookies.remove("isLoggedIn");
+    }
   }
 }
 
@@ -92,6 +119,7 @@ export const registerUser = async (userData: RegisterData): Promise<User> => {
     const response = await authApi.post("/register", userData);
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
+      setIsLoggedInCookie(true);
     }
     return response.data.user;
   } catch (error: any) {
@@ -110,6 +138,7 @@ export const loginUser = async (
     const response = await authApi.post("/login", { email, password });
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
+      setIsLoggedInCookie(true);
     }
     return response.data.user;
   } catch (error: any) {
@@ -136,6 +165,7 @@ export const logoutUser = async (): Promise<void> => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("user");
+      setIsLoggedInCookie(false);
     }
   }
 };
@@ -150,16 +180,17 @@ export const getCurrentUser = async (): Promise<User> => {
         "X-No-Retry-Auth": "true",
       },
     });
-
     if (typeof window !== "undefined") {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      setIsLoggedInCookie(true);
     }
     return response.data.user;
   } catch (error) {
     if (typeof window !== "undefined") {
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("user");
+      setIsLoggedInCookie(false);
     }
     throw error;
   }

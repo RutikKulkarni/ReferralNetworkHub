@@ -43,7 +43,9 @@ const routePermissions = {
   ],
 };
 
-// Helper function to match dynamic routes
+/**
+ * Helper function to match dynamic routes
+ */
 function matchRoute(requestPath: string, routePattern: string): boolean {
   const dynamicRouteRegex = routePattern
     .replace(/\[\w+\]/g, "[^/]+")
@@ -52,18 +54,37 @@ function matchRoute(requestPath: string, routePattern: string): boolean {
   return regex.test(requestPath);
 }
 
-// Prevent infinite redirect loops
+/**
+ * Prevent infinite redirect loops
+ */
 function isRedirectLoop(request: NextRequest): boolean {
   const redirectCount = parseInt(
     request.headers.get("x-redirect-count") || "0"
   );
-  return redirectCount >= 3; // Allow max 3 redirects to prevent infinite loops
+  return redirectCount >= 3;
 }
 
+/**
+ * Check if route is allowed for the current user state
+ */
+function isRouteAllowed(path: string, isAuthenticated: boolean): boolean {
+  const isPublicRoute = routePermissions.public.some(
+    (route) => route === path || matchRoute(path, route)
+  );
+
+  if (isPublicRoute) {
+    return true;
+  }
+
+  return isAuthenticated;
+}
+
+/**
+ * Middleware function to handle authentication and route protection
+ */
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  // Skip middleware for static files, API routes, etc.
   if (
     path.startsWith("/_next") ||
     path.startsWith("/api") ||
@@ -73,46 +94,32 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check if it's a public route
-  const isPublicRoute = routePermissions.public.some(
-    (route) => route === path || matchRoute(path, route)
-  );
-
-  if (isPublicRoute) {
+  if (isRedirectLoop(request)) {
+    console.error("Detected redirect loop for:", path);
     return NextResponse.next();
   }
 
-  // Prevent infinite redirect loops
-  if (isRedirectLoop(request)) {
-    console.error("Detected redirect loop for:", path);
-    // Clear problematic cookies to break the loop
-    const response = NextResponse.next();
-    response.cookies.delete("auth_status");
-    return response;
-  }
-
-  // Check for authentication in two ways:
-  // 1. Check for accessToken cookie
-  // 2. Check for auth status in a special cookie we'll set client-side
-  // 3. Check for refreshToken if accessToken is missing
   const accessToken = request.cookies.get("accessToken");
   const refreshToken = request.cookies.get("refreshToken");
-  const authStatus = request.cookies.get("auth_status");
+  const isLoggedInCookie = request.cookies.get("isLoggedIn");
+  const authStatusCookie = request.cookies.get("auth_status");
 
-  if (
+  const isAuthenticated = Boolean(
     accessToken?.value ||
-    (authStatus?.value === "authenticated" && refreshToken?.value)
-  ) {
+      (refreshToken?.value &&
+        (isLoggedInCookie?.value === "true" ||
+          authStatusCookie?.value === "authenticated"))
+  );
+
+  if (isRouteAllowed(path, isAuthenticated)) {
     return NextResponse.next();
   }
 
   const from = encodeURIComponent(path);
   const loginUrl = new URL(`/login?from=${from}`, request.url);
 
-  // Add a cache-busting parameter to prevent caching issues
   loginUrl.searchParams.append("_ts", Date.now().toString());
 
-  // Track redirect count to prevent infinite loops
   const response = NextResponse.redirect(loginUrl);
   const currentRedirectCount = parseInt(
     request.headers.get("x-redirect-count") || "0"

@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type React from "react";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
+        <SpeedInsights />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

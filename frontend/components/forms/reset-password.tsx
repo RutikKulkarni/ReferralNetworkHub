@@ -20,7 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
-import { emailSchema, passwordSchema } from "@/lib/auth-validations";
+import { emailSchema, passwordSchema } from "@/lib/validations/auth-validations";
 
 const formSchema = z
   .object({

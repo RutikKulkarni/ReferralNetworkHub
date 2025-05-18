@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { FormProvider } from "@/contexts/UserFormContext";
-import { UserProfileForm } from "@/components/forms/profile/user/userProfile";
+import UserProfile from "@/components/forms/profile/user-profile";
 import { RecruiterProfileForm } from "@/components/forms/profile/recruiter/recruiterProfile";
 import { toast } from "react-hot-toast";
 
@@ -40,12 +40,26 @@ export default function ProfileEdit() {
   return (
     <FormProvider>
       <main className="container py-16">
-        {user.role === "recruiter" ? (
-          <RecruiterProfileForm />
-        ) : (
-          <UserProfileForm />
-        )}
+        {user.role === "recruiter" ? <RecruiterProfileForm /> : <UserProfile />}
       </main>
     </FormProvider>
   );
 }
+
+// import UserProfile from "@/components/forms/profile/user-profile";
+
+// export default function ProfileEditPage() {
+//   return (
+//     <div className="container mx-auto py-8 px-4 md:px-6">
+//       <div className="mb-8">
+//         <h1 className="text-3xl font-bold tracking-tight">
+//           Complete Your Profile
+//         </h1>
+//         <p className="text-muted-foreground mt-2">
+//           Please complete your profile to continue using the application.
+//         </p>
+//       </div>
+//       <UserProfile />
+//     </div>
+//   );
+// }

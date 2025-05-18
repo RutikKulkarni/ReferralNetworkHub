@@ -28,9 +28,9 @@ export default function AuthLayout({
 }) {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+  // if (loading) {
+  //   return <LoadingSpinner />;
+  // }
 
   if (!user) {
     return (
@@ -40,7 +40,6 @@ export default function AuthLayout({
     );
   }
 
-  // Wrap client-side redirect logic in Suspense
   return (
     <Suspense fallback={null}>
       <AuthRedirect />

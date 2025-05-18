@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
-import { forgotPassword } from "@/lib/auth"; // Import directly from auth.ts
-import { emailSchema } from "@/lib/auth-validations";
+import { forgotPassword } from "@/lib/auth";
+import { emailSchema } from "@/lib/validations/auth-validations";
 import toast from "react-hot-toast";
 
 const formSchema = z.object({

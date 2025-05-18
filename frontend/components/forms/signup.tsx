@@ -23,7 +23,7 @@ import {
   passwordSchema,
   companyNameSchema,
   userTypeEmailRefinement,
-} from "@/lib/auth-validations";
+} from "@/lib/validations/auth-validations";
 import toast from "react-hot-toast";
 
 const userFormSchema = z

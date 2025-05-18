@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PersonalInformationForm } from "@/components/forms/profile/user/basic-info";
-import { ProfessionalForm } from "@/components/forms/profile/user/professional";
-import { EducationForm } from "@/components/forms/profile/user/education";
-import { SkillsForm } from "@/components/forms/profile/user/skills";
-import { PreferencesForm } from "@/components/forms/profile/user/preferences";
+import EducationStep from "@/components/forms/profile/user/education-step";
+// import PersonalInfoStep from "@/components/forms/profile/user/personal-info-step";
+// import { ProfessionalForm } from "@/components/forms/profile/user/professional-info-step";
+// import SkillsStep from "@/components/forms/profile/user/skills-step";
+// import PreferencesStep from "@/components/forms/profile/user/preferences-step";
 import { FormSkeleton } from "@/components/forms/profile/skeleton";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
@@ -164,7 +164,7 @@ export function RecruiterProfileForm() {
             ))}
           </TabsList>
           <TabsContent value="education" className="mt-0">
-            <EducationForm />
+            <EducationStep />
           </TabsContent>
         </Tabs>
 

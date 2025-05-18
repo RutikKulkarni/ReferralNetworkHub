@@ -1,7 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Info, Plus, Trash2, Edit } from "lucide-react";
 import {
   Card,
@@ -45,35 +46,16 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useFormState, WorkExperience } from "@/contexts/UserFormContext";
-
-// Experience Form Schema
-const experienceSchema = z.object({
-  title: z.string().min(1, { message: "Job title is required" }),
-  company: z.string().min(1, { message: "Company name is required" }),
-  startDate: z.date({ required_error: "Start date is required" }),
-  endDate: z.date().optional(),
-  current: z.boolean().optional(),
-  responsibilities: z.string().optional(),
-});
-
-// Experience Edit Schema (same as experience schema but with an id)
-const experienceEditSchema = experienceSchema.extend({
-  id: z.string(),
-});
-
-// Professional Form Schema
-const professionalSchema = z.object({
-  experienceType: z.enum(["experienced", "fresher"]),
-  currentTitle: z.string().optional(),
-  currentCompany: z.string().optional(),
-  industry: z.string().optional(),
-  yearsOfExperience: z.string().optional(),
-});
-
-type ExperienceValues = z.infer<typeof experienceSchema>;
-type ExperienceEditValues = z.infer<typeof experienceEditSchema>;
-type ProfessionalValues = z.infer<typeof professionalSchema>;
+import { useFormState } from "@/contexts/UserFormContext";
+import {
+  experienceSchema,
+  experienceEditSchema,
+  professionalSchema,
+  ExperienceValues,
+  ExperienceEditValues,
+  ProfessionalValues,
+  WorkExperience,
+} from "@/lib/types";
 
 export function ProfessionalForm() {
   const {
@@ -164,7 +146,7 @@ export function ProfessionalForm() {
         ? data.endDate.toISOString()
         : data.current
         ? ""
-        : "",
+        : "", // Ensure endDate is always a string
       current: data.current,
       responsibilities: data.responsibilities,
     };
@@ -185,7 +167,7 @@ export function ProfessionalForm() {
         ? data.endDate.toISOString()
         : data.current
         ? ""
-        : "",
+        : "", // Ensure endDate is always a string
       current: data.current,
       responsibilities: data.responsibilities,
     };
@@ -205,7 +187,7 @@ export function ProfessionalForm() {
         ? data.endDate.toISOString()
         : data.current
         ? ""
-        : "",
+        : "", // Ensure endDate is always a string
       current: data.current,
       responsibilities: data.responsibilities,
     };
@@ -593,6 +575,7 @@ export function ProfessionalForm() {
                                         checked={field.value}
                                         onChange={field.onChange}
                                         className="h-4 w-4 rounded border-gray-300"
+                                        aria-label="I currently work here"
                                       />
                                     </FormControl>
                                     <FormLabel>I currently work here</FormLabel>
@@ -863,6 +846,7 @@ export function ProfessionalForm() {
                                       checked={field.value}
                                       onChange={field.onChange}
                                       className="h-4 w-4 rounded border-gray-300"
+                                      aria-label="I currently work here"
                                     />
                                   </FormControl>
                                   <FormLabel>I currently work here</FormLabel>
@@ -1065,6 +1049,7 @@ export function ProfessionalForm() {
                               checked={field.value}
                               onChange={field.onChange}
                               className="h-4 w-4 rounded border-gray-300"
+                              aria-label="I currently work here"
                             />
                           </FormControl>
                           <FormLabel>I currently work here</FormLabel>

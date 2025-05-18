@@ -26,7 +26,7 @@ import {
   passwordSchema,
   userTypeSchema,
   userTypeEmailRefinement,
-} from "@/lib/auth-validations";
+} from "@/lib/validations/auth-validations";
 
 const formSchema = z
   .object({

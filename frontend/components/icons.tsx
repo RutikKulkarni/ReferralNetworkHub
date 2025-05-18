@@ -37,9 +37,8 @@ import {
   FiGithub,
   FiLinkedin,
   FiUserPlus,
-  FiHome as FiBuilding,
 } from "react-icons/fi";
-import { FaRegUser } from "react-icons/fa";
+import { FaRegUser, FaGlobeAmericas } from "react-icons/fa";
 import { TbBuildingSkyscraper } from "react-icons/tb";
 import { LuBriefcaseBusiness } from "react-icons/lu";
 import { TbMailCheck } from "react-icons/tb";
@@ -96,4 +95,6 @@ export const Icons = {
   mailCheck: TbMailCheck,
   network: LuNetwork,
   upload: LuCloudUpload,
+  globe: FaGlobeAmericas,
+  file: FiFile,
 };

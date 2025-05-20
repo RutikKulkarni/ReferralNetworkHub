@@ -1,8 +1,9 @@
 "use client";
-
+import { Suspense } from "react";
 import { ResetPasswordForm } from "@/components/forms/reset-password";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 export default function ResetPasswordPage() {
   return (
@@ -18,7 +19,15 @@ export default function ResetPasswordPage() {
         </Button>
       </div>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <ResetPasswordForm />
+        <Suspense
+          fallback={
+            <div>
+              <LoadingSpinner />
+            </div>
+          }
+        >
+          <ResetPasswordForm />
+        </Suspense>
       </div>
     </div>
   );

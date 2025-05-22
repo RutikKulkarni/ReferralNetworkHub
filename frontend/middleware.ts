@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { validateAccessToken } from "@/lib/auth";
 
 const routePermissions = {
   public: [
@@ -19,6 +20,7 @@ const routePermissions = {
   ],
   user: [
     "/profile",
+    "/profile/edit",
     "/settings",
     "/jobs/saved",
     "/jobs/recommended",
@@ -27,6 +29,7 @@ const routePermissions = {
   recruiter: [
     "/dashboard",
     "/profile",
+    "/profile/edit",
     "/settings",
     "/jobs/create",
     "/jobs/edit/[id]",
@@ -65,26 +68,12 @@ function isRedirectLoop(request: NextRequest): boolean {
 }
 
 /**
- * Check if route is allowed for the current user state
- */
-function isRouteAllowed(path: string, isAuthenticated: boolean): boolean {
-  const isPublicRoute = routePermissions.public.some(
-    (route) => route === path || matchRoute(path, route)
-  );
-
-  if (isPublicRoute) {
-    return true;
-  }
-
-  return isAuthenticated;
-}
-
-/**
  * Middleware function to handle authentication and route protection
  */
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
+  // Skip middleware for Next.js internals and static files
   if (
     path.startsWith("/_next") ||
     path.startsWith("/api") ||
@@ -94,42 +83,55 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Prevent redirect loops
   if (isRedirectLoop(request)) {
     console.error("Detected redirect loop for:", path);
     return NextResponse.next();
   }
 
-  const accessToken = request.cookies.get("accessToken");
-  const refreshToken = request.cookies.get("refreshToken");
-  const isLoggedInCookie = request.cookies.get("isLoggedIn");
-  const authStatusCookie = request.cookies.get("auth_status");
-
-  const isAuthenticated = Boolean(
-    accessToken?.value ||
-      (refreshToken?.value &&
-        (isLoggedInCookie?.value === "true" ||
-          authStatusCookie?.value === "authenticated"))
+  // Check if it's a public route - if so, allow access
+  const isPublicRoute = routePermissions.public.some(
+    (route) => route === path || matchRoute(path, route)
   );
-
-  if (isRouteAllowed(path, isAuthenticated)) {
+  if (isPublicRoute) {
     return NextResponse.next();
   }
 
-  const from = encodeURIComponent(path);
-  const loginUrl = new URL(`/login?from=${from}`, request.url);
+  // Avoid redirecting if already on login page
+  if (path === "/login") {
+    return NextResponse.next();
+  }
 
-  loginUrl.searchParams.append("_ts", Date.now().toString());
+  // Check authentication status by validating the access token
+  const accessToken = request.headers.get("x-access-token");
+  let isAuthenticated = false;
 
-  const response = NextResponse.redirect(loginUrl);
-  const currentRedirectCount = parseInt(
-    request.headers.get("x-redirect-count") || "0"
-  );
-  response.headers.set(
-    "x-redirect-count",
-    (currentRedirectCount + 1).toString()
-  );
+  if (accessToken) {
+    try {
+      await validateAccessToken(accessToken);
+      isAuthenticated = true;
+    } catch (error) {
+      console.error("Token validation failed in middleware:", error);
+      isAuthenticated = false;
+    }
+  }
 
-  return response;
+  if (!isAuthenticated) {
+    const from = encodeURIComponent(path);
+    const loginUrl = new URL(`/login?from=${from}`, request.url);
+    loginUrl.searchParams.append("_ts", Date.now().toString());
+    const response = NextResponse.redirect(loginUrl);
+    const currentRedirectCount = parseInt(
+      request.headers.get("x-redirect-count") || "0"
+    );
+    response.headers.set(
+      "x-redirect-count",
+      (currentRedirectCount + 1).toString()
+    );
+    return response;
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {

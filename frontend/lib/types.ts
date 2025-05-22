@@ -27,6 +27,7 @@ export interface AuthTokens {
 }
 
 export interface AuthResponse {
+  success: boolean;
   user: User;
   accessToken: string;
   refreshToken: string;
@@ -169,8 +170,6 @@ export const educationSchema = z.object({
 
 export type PersonalInfoValues = z.infer<typeof personalInfoSchema>;
 export type EducationValues = z.infer<typeof educationSchema>;
-
-// ------------------------------------------------------------------
 
 export interface ProfileFormValues {
   firstName: string;

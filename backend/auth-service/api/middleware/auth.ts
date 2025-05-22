@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import { verifyToken } from "../utils/token";
 import config from "../config";
 
 interface DecodedToken {
@@ -19,61 +19,106 @@ declare global {
   }
 }
 
-export const verifyToken = (
+/**
+ * Verify JWT token middleware
+ */
+export const verifyTokenMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // Get token from cookie
-  const token = req.cookies.accessToken;
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    res.status(401).json({ message: "Not authenticated" });
-    return;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({ success: false, message: "No token provided" });
   }
 
+  const token = authHeader.split(" ")[1];
+
   try {
-    const decoded = jwt.verify(token, config.jwt.secret) as DecodedToken;
-    req.user = decoded;
+    const decoded = verifyToken(token, config.jwt.secret);
+    req.user = decoded as DecodedToken;
     next();
   } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
-    return;
+    return res
+      .status(401)
+      .json({ success: false, message: "Invalid or expired token" });
   }
 };
 
+/**
+ * Check if user is admin
+ */
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
-  verifyToken(req, res, () => {
+  verifyTokenMiddleware(req, res, () => {
     if (req.user?.role !== "admin") {
-      res.status(403).json({ message: "Access denied. Admin role required." });
-      return;
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "Access denied. Admin role required.",
+        });
     }
     next();
   });
 };
 
+/**
+ * Check if user is recruiter
+ */
 export const isRecruiter = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  verifyToken(req, res, () => {
+  verifyTokenMiddleware(req, res, () => {
     if (req.user?.role !== "recruiter" && req.user?.role !== "admin") {
-      res
+      return res
         .status(403)
-        .json({ message: "Access denied. Recruiter role required." });
-      return;
+        .json({
+          success: false,
+          message: "Access denied. Recruiter role required.",
+        });
     }
     next();
   });
 };
 
+/**
+ * Check if user is regular user
+ */
 export const isUser = (req: Request, res: Response, next: NextFunction) => {
-  verifyToken(req, res, () => {
+  verifyTokenMiddleware(req, res, () => {
     if (req.user?.role !== "user" && req.user?.role !== "admin") {
-      res.status(403).json({ message: "Access denied. User role required." });
-      return;
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "Access denied. User role required.",
+        });
     }
     next();
   });
+};
+
+/**
+ * Verify service-to-service communication
+ */
+export const verifyServiceToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const serviceApiKey = req.headers["x-service-api-key"];
+
+  if (!serviceApiKey || serviceApiKey !== config.serviceApiKey) {
+    res
+      .status(401)
+      .json({ success: false, message: "Unauthorized service request" });
+    return;
+  }
+
+  next();
 };

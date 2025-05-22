@@ -1,33 +1,27 @@
 import type { Request, Response } from "express";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import User from "../models/user.model";
-import RefreshToken from "../models/refresh-token.model";
+import User, { IUser } from "../models/user.model";
 import PasswordReset from "../models/password-reset.model";
 import { validatePassword } from "../utils/password-validator";
 import { sendPasswordResetEmail } from "../utils/email-service";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  saveRefreshToken,
+  deleteRefreshToken,
+  findRefreshToken,
+  deleteAllUserRefreshTokens,
+  verifyToken,
+} from "../utils/token";
 import config from "../config";
 
-// Cookie configuration
-const cookieConfig = {
-  httpOnly: true,
-  // secure: config.env === "production",
-  // sameSite: config.env === "production" ? "none" : ("lax" as "none" | "lax"),
-  secure: config.cookie.secure,
-  sameSite: config.cookie.sameSite,
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  path: "/",
-  domain: config.cookie.domain || undefined,
-};
-// console.log("Cookie config:", cookieConfig);
-
-// Access token cookie config (shorter lifespan)
-const accessTokenCookieConfig = {
-  ...cookieConfig,
-  maxAge: 60 * 60 * 1000, // 1 hour
-};
-
+/**
+ * Register a new user
+ * @route POST /api/auth/register
+ * @access Public
+ */
 export const register = async (req: Request, res: Response) => {
   try {
     const { firstName, lastName, email, password, role, companyName } =
@@ -36,20 +30,22 @@ export const register = async (req: Request, res: Response) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(400).json({ message: "User already exists" });
+      res.status(400).json({ success: false, message: "User already exists" });
       return;
     }
 
     // Validate required fields based on role
     if (role === "user" && (!firstName || !lastName)) {
-      res
-        .status(400)
-        .json({ message: "First name and last name are required for users" });
+      res.status(400).json({
+        success: false,
+        message: "First name and last name are required for users",
+      });
       return;
     }
 
     if (role === "recruiter" && (!firstName || !lastName || !companyName)) {
       res.status(400).json({
+        success: false,
         message:
           "Company name, full name, and work email are required for recruiters",
       });
@@ -59,7 +55,9 @@ export const register = async (req: Request, res: Response) => {
     // Validate password
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
-      res.status(400).json({ message: passwordValidation.message });
+      res
+        .status(400)
+        .json({ success: false, message: passwordValidation.message });
       return;
     }
 
@@ -80,39 +78,25 @@ export const register = async (req: Request, res: Response) => {
     await user.save();
 
     // Generate tokens
-    const accessToken = jwt.sign(
-      {
-        userId: user._id,
-        role: user.role,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      },
-      config.jwt.secret,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const tokenPayload = {
+      userId: user._id,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
 
-    const refreshToken = jwt.sign(
-      { userId: user._id },
-      config.jwt.refreshSecret,
-      {
-        expiresIn: "7d",
-      }
-    );
+    const accessToken = generateAccessToken(tokenPayload);
+    const refreshToken = generateRefreshToken({ userId: user._id });
 
     // Save refresh token
-    await new RefreshToken({
-      token: refreshToken,
-      userId: user._id,
-    }).save();
+    await saveRefreshToken(refreshToken, String(user._id));
 
-    // Set cookies
-    res.cookie("accessToken", accessToken, accessTokenCookieConfig);
-    res.cookie("refreshToken", refreshToken, cookieConfig);
-
+    // Return tokens in response body (for localStorage)
     res.status(201).json({
+      success: true,
       message: "User registered successfully",
+      accessToken,
+      refreshToken,
       user: {
         id: user._id,
         email: user.email,
@@ -124,24 +108,39 @@ export const register = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Registration error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" && error instanceof Error
+          ? error.message
+          : undefined,
+    });
   }
 };
 
+/**
+ * Login user
+ * @route POST /api/auth/login
+ * @access Public
+ */
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
     // Check if user exists
-    const user = await User.findOne({ email });
+    const user = (await User.findOne({ email }).lean().exec()) as
+      | (IUser & { _id: mongoose.Types.ObjectId })
+      | null;
     if (!user) {
-      res.status(400).json({ message: "Invalid credentials" });
+      res.status(400).json({ success: false, message: "Invalid credentials" });
       return;
     }
 
     // Check if user is blocked
     if (user.isBlocked) {
       res.status(403).json({
+        success: false,
         message:
           "Your account has been blocked. Please contact support for assistance.",
         isBlocked: true,
@@ -153,43 +152,29 @@ export const login = async (req: Request, res: Response) => {
     // Validate password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.status(400).json({ message: "Invalid credentials" });
+      res.status(400).json({ success: false, message: "Invalid credentials" });
       return;
     }
 
     // Generate tokens
-    const accessToken = jwt.sign(
-      {
-        userId: user._id,
-        role: user.role,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      },
-      config.jwt.secret,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const tokenPayload = {
+      userId: user._id,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
 
-    const refreshToken = jwt.sign(
-      { userId: user._id },
-      config.jwt.refreshSecret,
-      {
-        expiresIn: "7d",
-      }
-    );
+    const accessToken = generateAccessToken(tokenPayload);
+    const refreshToken = generateRefreshToken({ userId: user._id });
 
     // Save refresh token
-    await new RefreshToken({
-      token: refreshToken,
-      userId: user._id,
-    }).save();
+    await saveRefreshToken(refreshToken, String(user._id));
 
-    // Set cookies
-    res.cookie("accessToken", accessToken, accessTokenCookieConfig);
-    res.cookie("refreshToken", refreshToken, cookieConfig);
-
+    // Return tokens in response body (for localStorage)
     res.status(200).json({
+      success: true,
+      accessToken,
+      refreshToken,
       user: {
         id: user._id,
         email: user.email,
@@ -201,184 +186,205 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" ? (error as Error).message : undefined,
+    });
   }
 };
 
+/**
+ * Refresh access token
+ * @route POST /api/auth/refresh-token
+ * @access Public
+ */
 export const refreshToken = async (req: Request, res: Response) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const { refreshToken } = req.body;
 
     if (!refreshToken) {
-      res.status(401).json({ message: "Refresh token is required" });
+      res
+        .status(401)
+        .json({ success: false, message: "Refresh token is required" });
       return;
     }
 
     // Verify token exists in database
-    const tokenDoc = await RefreshToken.findOne({ token: refreshToken });
+    const tokenDoc = await findRefreshToken(refreshToken);
     if (!tokenDoc) {
-      // Clear cookies and return error
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
-      res.status(401).json({ message: "Invalid refresh token" });
+      res
+        .status(401)
+        .json({ success: false, message: "Invalid refresh token" });
       return;
     }
 
     // Verify token
-    const decoded = jwt.verify(refreshToken, config.jwt.refreshSecret) as {
-      userId: string;
-    };
+    try {
+      const decoded = verifyToken(refreshToken, config.jwt.refreshSecret);
 
-    // Get user
-    const user = await User.findById(decoded.userId);
-    if (!user) {
-      // Clear cookies and return error
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
+      // Get user
+      const user = await User.findById(decoded.userId);
+      if (!user) {
+        await deleteRefreshToken(refreshToken);
+        res.status(404).json({ success: false, message: "User not found" });
+        return;
+      }
 
-    // Check if user is blocked
-    if (user.isBlocked) {
-      // Clear cookies and return error
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
-      res.status(403).json({
-        message:
-          "Your account has been blocked. Please contact support for assistance.",
-        isBlocked: true,
-        reason: user.blockReason,
-      });
-      return;
-    }
+      // Check if user is blocked
+      if (user.isBlocked) {
+        await deleteRefreshToken(refreshToken);
+        res.status(403).json({
+          success: false,
+          message:
+            "Your account has been blocked. Please contact support for assistance.",
+          isBlocked: true,
+          reason: user.blockReason,
+        });
+        return;
+      }
 
-    // Generate new access token
-    const accessToken = jwt.sign(
-      {
+      // Generate new access token
+      const tokenPayload = {
         userId: user._id,
         role: user.role,
         firstName: user.firstName,
         lastName: user.lastName,
-      },
-      config.jwt.secret,
-      {
-        expiresIn: "1h",
-      }
-    );
+      };
 
-    // Set new access token cookie
-    res.cookie("accessToken", accessToken, accessTokenCookieConfig);
+      const accessToken = generateAccessToken(tokenPayload);
 
-    res.status(200).json({
-      user: {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        companyName: user.companyName,
-      },
-    });
+      res.status(200).json({
+        success: true,
+        accessToken,
+        user: {
+          id: user._id,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          companyName: user.companyName,
+        },
+      });
+    } catch (error) {
+      // Token is invalid or expired
+      await deleteRefreshToken(refreshToken);
+      res
+        .status(401)
+        .json({ success: false, message: "Invalid or expired refresh token" });
+      return;
+    }
   } catch (error) {
     console.error("Refresh token error:", error);
-    // Clear cookies and return error
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
-    res.status(401).json({ message: "Invalid refresh token" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" ? (error as Error).message : undefined,
+    });
   }
 };
 
+/**
+ * Logout user
+ * @route POST /api/auth/logout
+ * @access Public
+ */
 export const logout = async (req: Request, res: Response) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const { refreshToken } = req.body;
 
     if (refreshToken) {
       // Remove refresh token from database
-      await RefreshToken.findOneAndDelete({ token: refreshToken });
+      await deleteRefreshToken(refreshToken);
     }
 
-    // Clear cookies
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
-
-    res.status(200).json({ message: "Logged out successfully" });
+    res.status(200).json({ success: true, message: "Logged out successfully" });
   } catch (error) {
     console.error("Logout error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" ? (error as Error).message : undefined,
+    });
   }
 };
 
+/**
+ * Validate access token
+ * @route POST /api/auth/validate-token
+ * @access Public
+ */
 export const validateToken = async (req: Request, res: Response) => {
   try {
-    const token = req.cookies.accessToken;
-
-    if (!token) {
+    // Token should be sent in the Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       res.status(401).json({ valid: false, message: "No token provided" });
       return;
     }
 
-    // Verify token
-    const decoded = jwt.verify(token, config.jwt.secret) as {
-      userId: string;
-      role: string;
-      firstName: string;
-      lastName: string;
-    };
+    const token = authHeader.split(" ")[1];
 
-    res.status(200).json({
-      valid: true,
-      userId: decoded.userId,
-      role: decoded.role,
-      firstName: decoded.firstName,
-      lastName: decoded.lastName,
-    });
+    // Verify token
+    try {
+      const decoded = verifyToken(token, config.jwt.secret);
+
+      res.status(200).json({
+        valid: true,
+        userId: decoded.userId,
+        role: decoded.role,
+        firstName: decoded.firstName,
+        lastName: decoded.lastName,
+      });
+    } catch (error) {
+      res
+        .status(401)
+        .json({ valid: false, message: "Invalid or expired token" });
+      return;
+    }
   } catch (error) {
     console.error("Token validation error:", error);
-    res.status(401).json({ valid: false, message: "Invalid token" });
+    res.status(500).json({
+      valid: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" ? (error as Error).message : undefined,
+    });
   }
 };
 
-// Add a /me endpoint to fetch user data based on the accessToken cookie
-export const getMe = async (req: Request, res: Response) => {
+/**
+ * Update user profile data in auth service
+ * @route PUT /api/auth/users/:userId/profile
+ * @access Private (Service)
+ */
+export const updateUserProfile = async (req: Request, res: Response) => {
   try {
-    const token = req.cookies.accessToken;
+    const { userId } = req.params;
+    const { firstName, lastName, email } = req.body;
 
-    if (!token) {
-      res.status(401).json({ message: "Not authenticated" });
-      return;
-    }
+    // Update user data
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        ...(firstName && { firstName }),
+        ...(lastName && { lastName }),
+        ...(email && { email }),
+      },
+      { new: true }
+    ).select("-password");
 
-    // Verify token
-    const decoded = jwt.verify(token, config.jwt.secret || "secret") as {
-      userId: string;
-      role: string;
-      firstName: string;
-      lastName: string;
-    };
-
-    // Get user
-    const user = await User.findById(decoded.userId).select("-password");
     if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-
-    // Check if user is blocked
-    if (user.isBlocked) {
-      // Clear cookies and return error
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
-      res.status(403).json({
-        message:
-          "Your account has been blocked. Please contact support for assistance.",
-        isBlocked: true,
-        reason: user.blockReason,
-      });
+      res.status(404).json({ success: false, message: "User not found" });
       return;
     }
 
     res.status(200).json({
+      success: true,
+      message: "User profile updated successfully",
       user: {
         id: user._id,
         email: user.email,
@@ -389,18 +395,27 @@ export const getMe = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error("Get me error:", error);
-    res.status(401).json({ message: "Not authenticated" });
+    console.error("Update user profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" ? (error as Error).message : undefined,
+    });
   }
 };
 
-// Forgot password - request reset link
+/**
+ * Request password reset
+ * @route POST /api/auth/forgot-password
+ * @access Public
+ */
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
 
     if (!email) {
-      res.status(400).json({ message: "Email is required" });
+      res.status(400).json({ success: false, message: "Email is required" });
       return;
     }
 
@@ -409,6 +424,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     if (!user) {
       // For security reasons, don't reveal if email exists or not
       res.status(200).json({
+        success: true,
         message:
           "If your email is registered, you will receive a password reset link shortly",
       });
@@ -426,66 +442,93 @@ export const forgotPassword = async (req: Request, res: Response) => {
     }).save();
 
     // Generate reset link
-    const resetLink = `${
-      config.clientUrl || "http://localhost:3000"
-    }/reset-password?token=${resetToken}&email=${email}`;
+    const resetLink = `${config.clientUrl}/reset-password?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await sendPasswordResetEmail(email, resetLink);
 
     res.status(200).json({
+      success: true,
       message:
         "If your email is registered, you will receive a password reset link shortly",
     });
   } catch (error) {
     console.error("Forgot password error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" ? (error as Error).message : undefined,
+    });
   }
 };
 
-// Reset password with token
+/**
+ * Reset password
+ * @route POST /api/auth/reset-password
+ * @access Public
+ */
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { token, email, newPassword } = req.body;
 
     if (!token || !email || !newPassword) {
-      res
-        .status(400)
-        .json({ message: "Token, email, and new password are required" });
+      res.status(400).json({
+        success: false,
+        message: "Token, email, and new password are required",
+      });
       return;
     }
 
     // Validate password
     const passwordValidation = validatePassword(newPassword);
     if (!passwordValidation.isValid) {
-      res.status(400).json({ message: passwordValidation.message });
+      res
+        .status(400)
+        .json({ success: false, message: passwordValidation.message });
       return;
     }
 
     // Find the reset token
     const resetRequest = await PasswordReset.findOne({ token, email });
     if (!resetRequest) {
-      res.status(400).json({ message: "Invalid or expired reset token" });
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired reset token" });
       return;
     }
 
     // Find the user
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ success: false, message: "User not found" });
       return;
     }
+
+    // Hash the new password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
+    // Update the user's password
     user.password = hashedPassword;
     await user.save();
-    await PasswordReset.findOneAndDelete({ token, email });
-    await RefreshToken.deleteMany({ userId: user._id });
 
-    res.status(200).json({ message: "Password reset successful" });
+    // Delete the reset token
+    await PasswordReset.findOneAndDelete({ token, email });
+
+    // Invalidate all active sessions
+    await deleteAllUserRefreshTokens(String(user._id));
+
+    res
+      .status(200)
+      .json({ success: true, message: "Password reset successful" });
   } catch (error) {
     console.error("Reset password error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error:
+        config.nodeEnv === "development" ? (error as Error).message : undefined,
+    });
   }
 };

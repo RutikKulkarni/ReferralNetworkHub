@@ -1,76 +1,43 @@
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config();
+// Load environment variables from .env file
+// dotenv.config({ path: path.join(__dirname, "../.env") })
 
-interface Config {
-  env: string;
-  port: number;
-  clientUrl: string;
-  mongodb: {
-    uri: string;
-  };
+const config = {
+  port: Number.parseInt(process.env.PORT || "3001", 10),
+  nodeEnv: process.env.NODE_ENV || "development",
+  mongoUri: process.env.MONGODB_URI || "mongodb://localhost:27017/auth-service",
   jwt: {
-    secret: string;
-    refreshSecret: string;
-    accessExpiresIn: string;
-    refreshExpiresIn: string;
-  };
-  cookie: {
-    domain: string;
-    secure: boolean;
-    sameSite: "none" | "lax" | "strict";
-  };
-  email: {
-    host: string;
-    port: number;
-    secure: boolean;
-    auth: {
-      user: string;
-      pass: string;
-    };
-    from: string;
-  };
-  services: {
-    userService: string;
-  };
-  internalApiKey: string;
-}
-
-const config: Config = {
-  env: process.env.NODE_ENV || "",
-  port: Number.parseInt(process.env.AUTH_SERVICE_PORT || "", 10),
-  clientUrl: process.env.CLIENT_URL || "",
-  mongodb: {
-    uri: process.env.MONGODB_URI || "",
-  },
-  jwt: {
-    secret: process.env.JWT_SECRET || "",
-    refreshSecret: process.env.JWT_REFRESH_SECRET || "",
-    accessExpiresIn: process.env.JWT_ACCESS_EXPIRY || "",
-    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRY || "",
-  },
-  cookie: {
-    domain: process.env.COOKIE_DOMAIN || "",
-    secure: process.env.COOKIE_SECURE === "",
-    sameSite: (process.env.COOKIE_SAME_SITE as "none" | "lax" | "strict") || "",
+    secret: process.env.JWT_SECRET || "jwt-secret-key",
+    refreshSecret: process.env.JWT_REFRESH_SECRET || "jwt-refresh-secret-key",
+    accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
   },
   email: {
-    host: process.env.EMAIL_HOST || "",
-    port: Number.parseInt(process.env.EMAIL_PORT || "", 10),
-    secure: process.env.EMAIL_SECURE === "",
-    auth: {
-      user: process.env.EMAIL_USER || "",
-      pass: process.env.EMAIL_PASSWORD || "",
-    },
-    from: process.env.EMAIL_FROM || "",
+    host: process.env.EMAIL_HOST || "smtp.example.com",
+    port: Number.parseInt(process.env.EMAIL_PORT || "587", 10),
+    secure: process.env.EMAIL_SECURE === "true",
+    user: process.env.EMAIL_USER || "user@example.com",
+    password: process.env.EMAIL_PASSWORD || "password",
+    from: process.env.EMAIL_FROM || "noreply@referralnetworkhub.com",
   },
+  clientUrl: process.env.CLIENT_URL || "http://localhost:3000",
+  serviceApiKey: process.env.SERVICE_API_KEY || "internal-service-api-key",
   services: {
-    userService: process.env.USER_SERVICE_URL || "",
+    user: process.env.USER_SERVICE_URL || "http://localhost:3002",
+    job: process.env.JOB_SERVICE_URL || "http://localhost:3004",
+    referral: process.env.REFERRAL_SERVICE_URL || "http://localhost:3005",
+    notification:
+      process.env.NOTIFICATION_SERVICE_URL || "http://localhost:3007",
+    chat: process.env.CHAT_SERVICE_URL || "http://localhost:3006",
+    recruiter: process.env.RECRUITER_SERVICE_URL || "http://localhost:3003",
+    admin: process.env.ADMIN_SERVICE_URL || "http://localhost:3008",
   },
-  internalApiKey: process.env.INTERNAL_API_KEY || "",
+  cors: {
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
+  },
 };
-
-// console.log("Config loaded:", { config });
 
 export default config;

@@ -1,38 +1,82 @@
 import axios from "axios";
 import { User, RegisterData } from "./types";
-import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_AUTH_API_URL;
 const AUTH_API = `${API_URL}/api/auth`;
 
 let isRefreshing = false;
-let refreshSubscribers: ((token: boolean) => void)[] = [];
+let refreshSubscribers: ((token: string | null) => void)[] = [];
+
+/**
+ * Get tokens from localStorage
+ */
+const getTokens = () => {
+  if (typeof window === "undefined")
+    return { accessToken: null, refreshToken: null };
+
+  return {
+    accessToken: localStorage.getItem("accessToken"),
+    refreshToken: localStorage.getItem("refreshToken"),
+  };
+};
+
+/**
+ * Set tokens in localStorage
+ */
+const setTokens = (accessToken: string | null, refreshToken: string | null) => {
+  if (typeof window === "undefined") return;
+
+  if (accessToken) {
+    localStorage.setItem("accessToken", accessToken);
+  } else {
+    localStorage.removeItem("accessToken");
+  }
+
+  if (refreshToken) {
+    localStorage.setItem("refreshToken", refreshToken);
+  } else {
+    localStorage.removeItem("refreshToken");
+  }
+};
 
 /**
  * Configure axios instance with auth interceptors
  */
 const authApi = axios.create({
   baseURL: AUTH_API,
-  withCredentials: true,
 });
 
+// Request interceptor to add bearer token
+authApi.interceptors.request.use(
+  (config) => {
+    const { accessToken } = getTokens();
+    if (accessToken && !config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor to handle token refresh
 authApi.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
       hasRefreshToken() &&
-      !originalRequest.url.includes("refresh-token") &&
-      !originalRequest.url.includes("me")
+      !originalRequest.url.includes("refresh-token")
     ) {
       originalRequest._retry = true;
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
-          refreshSubscribers.push((success) => {
-            if (success) {
+          refreshSubscribers.push((token) => {
+            if (token) {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
               resolve(authApi(originalRequest));
             } else {
               reject(error);
@@ -44,25 +88,33 @@ authApi.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await authApi.post(`/refresh-token`);
-        if (res.status === 200) {
-          setIsLoggedInCookie(true);
+        const { refreshToken } = getTokens();
+        const response = await authApi.post("/refresh-token", { refreshToken });
 
-          refreshSubscribers.forEach((callback) => callback(true));
+        if (response.data.success) {
+          const { accessToken: newAccessToken } = response.data;
+          setTokens(newAccessToken, refreshToken);
+
+          // Update localStorage flags
+          localStorage.setItem("isLoggedIn", "true");
+          if (response.data.user) {
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+          }
+
+          refreshSubscribers.forEach((callback) => callback(newAccessToken));
           refreshSubscribers = [];
+
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return authApi(originalRequest);
         }
       } catch (refreshError) {
-        refreshSubscribers.forEach((callback) => callback(false));
+        refreshSubscribers.forEach((callback) => callback(null));
         refreshSubscribers = [];
         clearAuthState();
+        throw refreshError;
       } finally {
         isRefreshing = false;
       }
-    }
-
-    if (originalRequest.url?.includes("me")) {
-      clearAuthState();
     }
 
     return Promise.reject(error);
@@ -70,58 +122,45 @@ authApi.interceptors.response.use(
 );
 
 /**
- * Helper to check if we likely have a refresh token
+ * Helper to check if we have a refresh token
  */
 function hasRefreshToken(): boolean {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("isLoggedIn") === "true";
+    const { refreshToken } = getTokens();
+    return !!refreshToken;
   }
   return false;
 }
 
 /**
- * Helper to clear auth state on failed refresh
+ * Helper to clear auth state
  */
 function clearAuthState(): void {
   if (typeof window !== "undefined") {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user");
-    Cookies.remove("isLoggedIn");
-  }
-}
-
-/**
- * Set isLoggedIn cookie that can be read by middleware
- */
-function setIsLoggedInCookie(isLoggedIn: boolean): void {
-  if (typeof window !== "undefined") {
-    const secure = window.location.protocol === "https:";
-    const sameSite = secure ? "none" : "lax";
-
-    if (isLoggedIn) {
-      Cookies.set("isLoggedIn", "true", {
-        path: "/",
-        secure: secure,
-        sameSite: sameSite as "none" | "lax" | "strict",
-        expires: 7,
-      });
-    } else {
-      Cookies.remove("isLoggedIn");
-    }
   }
 }
 
 /**
  * Register a new user
  */
-export const registerUser = async (userData: RegisterData): Promise<User> => {
+export const registerUser = async (
+  userData: RegisterData
+): Promise<{ user: User; accessToken: string; refreshToken: string }> => {
   try {
     const response = await authApi.post("/register", userData);
+    const { user, accessToken, refreshToken } = response.data;
+
     if (typeof window !== "undefined") {
+      setTokens(accessToken, refreshToken);
       localStorage.setItem("isLoggedIn", "true");
-      setIsLoggedInCookie(true);
+      localStorage.setItem("user", JSON.stringify(user));
     }
-    return response.data.user;
+
+    return { user, accessToken, refreshToken };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Registration failed");
   }
@@ -133,14 +172,18 @@ export const registerUser = async (userData: RegisterData): Promise<User> => {
 export const loginUser = async (
   email: string,
   password: string
-): Promise<User> => {
+): Promise<{ user: User; accessToken: string; refreshToken: string }> => {
   try {
     const response = await authApi.post("/login", { email, password });
+    const { user, accessToken, refreshToken } = response.data;
+
     if (typeof window !== "undefined") {
+      setTokens(accessToken, refreshToken);
       localStorage.setItem("isLoggedIn", "true");
-      setIsLoggedInCookie(true);
+      localStorage.setItem("user", JSON.stringify(user));
     }
-    return response.data.user;
+
+    return { user, accessToken, refreshToken };
   } catch (error: any) {
     if (error.response?.data?.isBlocked) {
       throw new Error(
@@ -158,40 +201,32 @@ export const loginUser = async (
  */
 export const logoutUser = async (): Promise<void> => {
   try {
-    await authApi.post("/logout");
+    const { refreshToken } = getTokens();
+    if (refreshToken) {
+      await authApi.post("/logout", { refreshToken });
+    }
   } catch (error) {
     console.error("Logout API error:", error);
   } finally {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("user");
-      setIsLoggedInCookie(false);
-    }
+    clearAuthState();
   }
 };
 
 /**
- * Get current authenticated user
+ * Validate current access token
  */
-export const getCurrentUser = async (): Promise<User> => {
+export const validateAccessToken = async (token: string): Promise<User> => {
   try {
-    const response = await authApi.get("/me", {
-      headers: {
-        "X-No-Retry-Auth": "true",
-      },
-    });
-    if (typeof window !== "undefined") {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      setIsLoggedInCookie(true);
-    }
-    return response.data.user;
+    const response = await authApi.post(
+      "/validate-token",
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
   } catch (error) {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("user");
-      setIsLoggedInCookie(false);
-    }
+    clearAuthState();
     throw error;
   }
 };

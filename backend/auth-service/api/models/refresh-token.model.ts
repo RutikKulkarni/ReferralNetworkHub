@@ -1,9 +1,9 @@
-import mongoose, { type Document, Schema } from "mongoose";
+import mongoose, { type Document, Schema } from "mongoose"
 
 export interface IRefreshToken extends Document {
-  token: string;
-  userId: mongoose.Types.ObjectId;
-  createdAt: Date;
+  token: string
+  userId: mongoose.Types.ObjectId
+  createdAt: Date
 }
 
 const RefreshTokenSchema = new Schema<IRefreshToken>(
@@ -19,16 +19,10 @@ const RefreshTokenSchema = new Schema<IRefreshToken>(
       required: true,
     },
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
 // Token expires after 7 days
-RefreshTokenSchema.index(
-  { createdAt: 1 },
-  { expireAfterSeconds: 7 * 24 * 60 * 60 }
-);
+RefreshTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7 * 24 * 60 * 60 })
 
-export default mongoose.model<IRefreshToken>(
-  "RefreshToken",
-  RefreshTokenSchema
-);
+export default mongoose.model<IRefreshToken>("RefreshToken", RefreshTokenSchema)

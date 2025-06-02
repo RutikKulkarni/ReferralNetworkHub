@@ -16,6 +16,9 @@ export const metadata = {
   title: "Referral Network Hub",
   description:
     "Connect with professionals and get referrals for your dream job",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

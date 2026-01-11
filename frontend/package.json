@@ -58,7 +58,7 @@
     "jwt-decode": "^4.0.0",
     "libphonenumber-js": "^1.12.8",
     "lucide-react": "^0.454.0",
-    "next": "15.2.4",
+    "next": "15.2.8",
     "next-themes": "latest",
     "react": "^19",
     "react-circle-flags": "^0.0.23",

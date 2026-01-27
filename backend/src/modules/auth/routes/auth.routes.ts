@@ -21,6 +21,10 @@ import {
   validateRefreshToken,
   validateOAuthCallback,
 } from "../middleware/validation.middleware";
+import {
+  authRateLimiter,
+  sensitiveRateLimiter,
+} from "../../../shared/middleware/rateLimiter.middleware";
 
 const router = Router();
 
@@ -31,14 +35,19 @@ const router = Router();
  * @desc    Register public user (Job Seeker or Referral Provider)
  * @access  Public
  */
-router.post("/register", validateRegistration, AuthController.registerPublic);
+router.post(
+  "/register",
+  authRateLimiter,
+  validateRegistration,
+  AuthController.registerPublic,
+);
 
 /**
  * @route   POST /api/auth/login
  * @desc    Login user
  * @access  Public
  */
-router.post("/login", validateLogin, AuthController.login);
+router.post("/login", authRateLimiter, validateLogin, AuthController.login);
 
 /**
  * @route   POST /api/auth/refresh-token

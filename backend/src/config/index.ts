@@ -8,10 +8,7 @@ import path from "path";
 
 // Load environment variables based on NODE_ENV
 // Priority: .env.local (local dev) > .env (production) > .env.example (template)
-const envFile =
-  process.env.NODE_ENV === "production"
-    ? ".env"
-    : ".env.local";
+const envFile = process.env.NODE_ENV === "production" ? ".env" : ".env.local";
 
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
@@ -75,6 +72,24 @@ interface Config {
       idle: number;
     };
   };
+  redis: {
+    host: string;
+    port: number;
+    password?: string;
+    db: number;
+    keyPrefix: string;
+    maxRetries: number;
+    retryDelay: number;
+    connectTimeout: number;
+  };
+  cache: {
+    ttl: {
+      short: number;
+      medium: number;
+      long: number;
+      day: number;
+    };
+  };
   jwt: {
     accessTokenSecret: string;
     refreshTokenSecret: string;
@@ -133,6 +148,26 @@ const config: Config = {
       min: parseInt(process.env.DB_POOL_MIN || "5", 10),
       acquire: parseInt(process.env.DB_POOL_ACQUIRE || "30000", 10),
       idle: parseInt(process.env.DB_POOL_IDLE || "10000", 10),
+    },
+  },
+
+  redis: {
+    host: process.env.REDIS_HOST || "localhost",
+    port: parseInt(process.env.REDIS_PORT || "6379", 10),
+    password: process.env.REDIS_PASSWORD || undefined,
+    db: parseInt(process.env.REDIS_DB || "0", 10),
+    keyPrefix: process.env.REDIS_KEY_PREFIX || "rnh:",
+    maxRetries: parseInt(process.env.REDIS_MAX_RETRIES || "3", 10),
+    retryDelay: parseInt(process.env.REDIS_RETRY_DELAY || "500", 10),
+    connectTimeout: parseInt(process.env.REDIS_CONNECT_TIMEOUT || "10000", 10),
+  },
+
+  cache: {
+    ttl: {
+      short: parseInt(process.env.CACHE_TTL_SHORT || "300", 10), // 5 minutes
+      medium: parseInt(process.env.CACHE_TTL_MEDIUM || "1800", 10), // 30 minutes
+      long: parseInt(process.env.CACHE_TTL_LONG || "3600", 10), // 1 hour
+      day: parseInt(process.env.CACHE_TTL_DAY || "86400", 10), // 24 hours
     },
   },
 

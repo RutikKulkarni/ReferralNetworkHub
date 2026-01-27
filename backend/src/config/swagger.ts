@@ -12,7 +12,7 @@ const swaggerDefinition = {
     title: "Referral Network Hub API",
     version,
     description:
-      "Comprehensive API documentation for Referral Network Hub - A multi-tenant platform for managing job referrals, recruitment, and employee networks.",
+      "Comprehensive API documentation for Referral Network Hub - A platform for managing job referrals, recruitment, and employee networks.",
     contact: {
       name: "API Support",
       email: "support@referralnetworkhub.com",

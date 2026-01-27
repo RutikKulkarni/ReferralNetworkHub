@@ -10,10 +10,12 @@ import swaggerUi from "swagger-ui-express";
 import config from "./config";
 import { swaggerSpec } from "./config/swagger";
 import sequelize, { testConnection, syncDatabase } from "./config/database";
+import { testRedisConnection } from "./config/redis";
 import { initAuthModels } from "./modules/auth/models";
 import { authRoutes } from "./modules/auth/routes";
 import { errorHandler } from "./modules/auth/middleware";
 import { ResponseUtil } from "./shared/utils";
+import { globalRateLimiter } from "./shared/middleware/rateLimiter.middleware";
 
 const app: Application = express();
 
@@ -35,6 +37,9 @@ app.use(express.json({ limit: config.upload.maxFileSize }));
 app.use(
   express.urlencoded({ extended: true, limit: config.upload.maxFileSize }),
 );
+
+// Rate limiting (global)
+app.use(globalRateLimiter);
 
 // Request logging in development
 if (config.env === "development") {
@@ -91,6 +96,9 @@ const startServer = async (): Promise<void> => {
 
     // Test database connection
     await testConnection();
+
+    // Test Redis connection
+    await testRedisConnection();
 
     // Initialize models
     initAuthModels(sequelize);

@@ -206,22 +206,23 @@ export const initUserSessionModel = (
       sequelize,
       tableName: "user_sessions",
       timestamps: true,
+      underscored: true,
       indexes: [
         {
           unique: true,
-          fields: ["sessionToken"],
+          fields: ["session_token"],
         },
         {
-          fields: ["userId"],
+          fields: ["user_id"],
         },
         {
           fields: ["status"],
         },
         {
-          fields: ["expiresAt"],
+          fields: ["expires_at"],
         },
         {
-          fields: ["userId", "status"],
+          fields: ["user_id", "status"],
         },
       ],
     },

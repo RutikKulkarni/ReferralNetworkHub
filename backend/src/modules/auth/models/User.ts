@@ -258,22 +258,23 @@ export const initUserModel = (sequelize: Sequelize): typeof User => {
       sequelize,
       tableName: "users",
       timestamps: true,
+      underscored: true,
       indexes: [
         {
           unique: true,
           fields: ["email"],
         },
         {
-          fields: ["userType"],
+          fields: ["user_type"],
         },
         {
-          fields: ["organizationId"],
+          fields: ["organization_id"],
         },
         {
-          fields: ["isActive", "isBlocked"],
+          fields: ["is_active", "is_blocked"],
         },
         {
-          fields: ["oauthProvider", "oauthProviderId"],
+          fields: ["oauth_provider", "oauth_provider_id"],
         },
       ],
     },

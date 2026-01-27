@@ -139,25 +139,26 @@ export const initPasswordResetModel = (
       sequelize,
       tableName: "password_resets",
       timestamps: true,
+      underscored: true,
       indexes: [
         {
           unique: true,
-          fields: ["resetToken"],
+          fields: ["token"],
         },
         {
-          fields: ["userId"],
+          fields: ["user_id"],
         },
         {
           fields: ["email"],
         },
         {
-          fields: ["expiresAt"],
+          fields: ["expires_at"],
         },
         {
-          fields: ["isUsed"],
+          fields: ["is_used"],
         },
         {
-          fields: ["userId", "isUsed"],
+          fields: ["user_id", "is_used"],
         },
       ],
     },

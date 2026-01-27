@@ -139,22 +139,23 @@ export const initRefreshTokenModel = (
       sequelize,
       tableName: "refresh_tokens",
       timestamps: true,
+      underscored: true,
       indexes: [
         {
           unique: true,
           fields: ["token"],
         },
         {
-          fields: ["userId"],
+          fields: ["user_id"],
         },
         {
-          fields: ["expiresAt"],
+          fields: ["expires_at"],
         },
         {
-          fields: ["isRevoked"],
+          fields: ["is_revoked"],
         },
         {
-          fields: ["userId", "isRevoked"],
+          fields: ["user_id", "is_revoked"],
         },
       ],
     },

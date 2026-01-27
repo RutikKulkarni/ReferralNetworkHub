@@ -4,9 +4,21 @@
  */
 
 import dotenv from "dotenv";
+import path from "path";
 
-// Load environment variables
-dotenv.config();
+// Load environment variables based on NODE_ENV
+// Priority: .env.local (local dev) > .env (production) > .env.example (template)
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env"
+    : ".env.local";
+
+dotenv.config({ path: path.resolve(process.cwd(), envFile) });
+
+// Fallback to .env if .env.local doesn't exist
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+}
 
 /**
  * Validate required environment variables

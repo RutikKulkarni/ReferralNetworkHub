@@ -146,13 +146,14 @@ export const initEmailVerificationModel = (
       sequelize,
       tableName: "email_verifications",
       timestamps: true,
+      underscored: true,
       indexes: [
         {
           unique: true,
-          fields: ["verificationToken"],
+          fields: ["token"],
         },
         {
-          fields: ["userId"],
+          fields: ["user_id"],
         },
         {
           fields: ["email"],
@@ -161,10 +162,10 @@ export const initEmailVerificationModel = (
           fields: ["status"],
         },
         {
-          fields: ["expiresAt"],
+          fields: ["expires_at"],
         },
         {
-          fields: ["userId", "status"],
+          fields: ["user_id", "status"],
         },
       ],
     },

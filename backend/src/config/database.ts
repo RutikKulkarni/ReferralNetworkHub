@@ -19,14 +19,13 @@ const sequelize = new Sequelize({
     acquire: config.database.pool.acquire,
     idle: config.database.pool.idle,
   },
-  logging: config.env === "development" ? console.log : false,
+  logging: false, // Disable SQL query logging for cleaner console output
   timezone: "+00:00", // UTC
   define: {
     underscored: true, // Use snake_case for column names
     timestamps: true, // Add createdAt and updatedAt
     freezeTableName: true, // Use singular table names
   },
-  benchmark: config.env === "development",
 });
 
 /**
@@ -34,10 +33,13 @@ const sequelize = new Sequelize({
  */
 export async function testConnection(): Promise<void> {
   try {
+    console.log("🔌 Connecting to database...");
     await sequelize.authenticate();
-    console.log("✅ Database connection established successfully");
+    console.log(
+      `✅ PostgreSQL connected: ${config.database.name}@${config.database.host}:${config.database.port}`,
+    );
   } catch (error) {
-    console.error("❌ Unable to connect to the database:", error);
+    console.error("❌ Database connection failed:", error);
     throw error;
   }
 }

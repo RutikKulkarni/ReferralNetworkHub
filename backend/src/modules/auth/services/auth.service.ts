@@ -20,7 +20,7 @@ import {
   INVITE_TYPES,
   EMAIL_VERIFICATION_STATUS,
   TOKEN_EXPIRY,
-  SESSION_LIMITS,
+  SESSION_CONFIG,
   ERROR_MESSAGES,
 } from "../../../constants";
 import {
@@ -454,7 +454,7 @@ export class AuthService {
         },
       });
 
-      if (activeSessions >= SESSION_LIMITS.maxActiveSessionsPerUser) {
+      if (activeSessions >= SESSION_CONFIG.MAX_ACTIVE_SESSIONS_PER_USER) {
         // Remove oldest session
         const oldestSession = await UserSession.findOne({
           where: {

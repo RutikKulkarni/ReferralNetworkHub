@@ -3,7 +3,7 @@
  * Starts the Express application
  */
 
-import "./app";
+import { startServer } from "./app";
 
-// This file is intentionally minimal
-// All server logic is in app.ts for better testability
+// Start the server
+startServer();

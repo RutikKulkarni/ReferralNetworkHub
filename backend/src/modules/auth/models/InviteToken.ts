@@ -230,6 +230,7 @@ export const initInviteTokenModel = (
       sequelize,
       tableName: "invite_tokens",
       timestamps: true,
+      underscored: true,
       indexes: [
         {
           unique: true,
@@ -242,16 +243,16 @@ export const initInviteTokenModel = (
           fields: ["status"],
         },
         {
-          fields: ["inviteType"],
+          fields: ["invite_type"],
         },
         {
-          fields: ["organizationId"],
+          fields: ["organization_id"],
         },
         {
-          fields: ["invitedBy"],
+          fields: ["invited_by"],
         },
         {
-          fields: ["expiresAt"],
+          fields: ["expires_at"],
         },
         {
           fields: ["email", "status"],

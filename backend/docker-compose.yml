@@ -1,45 +1,63 @@
 version: "3.8"
 
 services:
-  # MongoDB
-  mongo:
-    image: mongo:latest
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: rnh-postgres
+    restart: unless-stopped
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-  # Auth Service
-  auth-service:
-    build:
-      context: ./auth-service
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
+      - "5432:5432"
     environment:
-      - PORT=3001
-      - NODE_ENV=development
-      - MONGODB_URI=mongodb://mongo:27017/auth-service
-      - JWT_SECRET=your_jwt_secret
-      - JWT_REFRESH_SECRET=your_jwt_refresh_secret
-      - JWT_ACCESS_EXPIRY=3600
-      - JWT_REFRESH_EXPIRY=604800
-      - CLIENT_URL=http://localhost:3000
-      - COOKIE_DOMAIN=localhost
-      - COOKIE_SECURE=false
-      - COOKIE_SAME_SITE=lax
-      - EMAIL_HOST=smtp.example.com
-      - EMAIL_PORT=587
-      - EMAIL_SECURE=false
-      - EMAIL_USER=user@example.com
-      - EMAIL_PASSWORD=your_email_password
-      - EMAIL_FROM=noreply@referralnetworkhub.com
-      - PASSWORD_RESET_RATE_LIMIT=5
+      POSTGRES_DB: referral_network_hub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rnh-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API (Monolith)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rnh-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: referral_network_hub
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      CLIENT_URL: http://localhost:3000
+    env_file:
+      - .env
     depends_on:
-      - mongo
+      postgres:
+        condition: service_healthy
+    networks:
+      - rnh-network
+    volumes:
+      - ./src:/app/src
+      - /app/node_modules
 
 volumes:
-  mongo-data:
+  postgres_data:
+    driver: local
+
+networks:
+  rnh-network:
+    driver: bridge
 # # version: "3.8"
 
 # services:

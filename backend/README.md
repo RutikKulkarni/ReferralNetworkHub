@@ -9,8 +9,53 @@ Monolith backend API for the Referral Network Hub platform.
 - **TypeScript** - Type-safe development
 - **PostgreSQL** - Relational database
 - **Sequelize** - ORM
-- **JWT** - Authentication
+- **Redis** - Session management & caching
+- **JWT** - Authentication & authorization
 - **Nodemailer** - Email service
+- **Swagger** - API documentation
+
+## 🏛️ Multi-Tenant Architecture
+
+This backend is designed as a **multi-tenant platform** combining:
+
+- 🏛️ **HR Management System (HRMS)** - Complete employee lifecycle
+- 🤝 **Employee Referral Network** - Internal & cross-organization referrals
+- 📊 **Unified Recruiter Dashboard** - All applications in one view
+- 👥 **Multi-level Administration** - Platform, organization, and recruiter roles
+
+### User Hierarchy
+
+```
+PLATFORM_SUPER_ADMIN (System owner)
+  └─ PLATFORM_ADMIN (Operations)
+      └─ ORGANIZATION_ADMIN (HR & recruitment oversight)
+          ├─ ORG_RECRUITER (Hiring management)
+          └─ EMPLOYEE_REFERRER (Active employees)
+
+JOB_SEEKER (External candidates)
+REFERRAL_PROVIDER (Non-employee referrers)
+```
+
+### Implementation Status
+
+✅ **Completed**:
+
+- User authentication & authorization
+- Multi-user type support (7 types)
+- Session management with Redis
+- Role-based access control
+- Organization context handling
+- Invite system foundation
+
+⚠️ **In Progress** (See [IMPLEMENTATION_CHECKLIST.md](./MultiTenent%20Arch/IMPLEMENTATION_CHECKLIST.md)):
+
+- Database schema (organizations, jobs, referrals, applications)
+- Core business models & relationships
+- API endpoints for HR, jobs, applications, referrals
+- Tenant isolation middleware
+- Complete multi-tenant workflows
+
+📚 **Documentation**: See [MultiTenent Arch/](./MultiTenent%20Arch/) for complete architecture specs.
 
 ## 📁 Project Structure
 
@@ -18,15 +63,34 @@ Monolith backend API for the Referral Network Hub platform.
 backend/
 ├── src/
 │   ├── config/          # Configuration files
-│   ├── controllers/     # Route controllers
-│   ├── middleware/      # Custom middleware
-│   ├── models/          # Database models
-│   ├── routes/          # API routes
-│   ├── services/        # Business logic services
-│   ├── utils/           # Utility functions
-│   ├── types/           # TypeScript types
+│   │   ├── database.ts  # Database configuration
+│   │   ├── redis.ts     # Redis configuration
+│   │   └── swagger.ts   # Swagger/OpenAPI setup
+│   ├── constants/       # Application constants
+│   ├── database/        # Migrations & seeders
+│   ├── modules/         # Feature modules
+│   │   ├── auth/        # Authentication & authorization
+│   │   │   ├── controllers/
+│   │   │   ├── middleware/
+│   │   │   ├── models/
+│   │   │   ├── routes/
+│   │   │   ├── services/
+│   │   │   └── types/
+│   │   ├── jobs/        # Job management (planned)
+│   │   ├── organization/# Organization management (planned)
+│   │   ├── platform/    # Platform admin
+│   │   └── referrals/   # Referral system (planned)
+│   ├── shared/          # Shared resources
+│   │   ├── middleware/  # Global middleware
+│   │   ├── types/       # TypeScript types
+│   │   └── utils/       # Utility functions
 │   ├── app.ts           # Express app setup
 │   └── server.ts        # Server entry point
+├── MultiTenent Arch/   # Architecture documentation
+│   ├── MULTI_TENANT_ARCHITECTURE.md
+│   ├── IMPLEMENTATION_CHECKLIST.md
+│   ├── QUICK_REFERENCE.md
+│   └── DOCS_INDEX.md
 ├── .env.example         # Environment variables template
 ├── .gitignore           # Git ignore rules
 ├── Dockerfile           # Docker configuration
@@ -106,16 +170,56 @@ backend/
 - `POST /login` - User login
 - `POST /refresh-token` - Refresh access token
 - `POST /logout` - User logout
+- `POST /logout-all` - Logout from all devices
 - `POST /validate-token` - Validate access token
+- `GET /sessions` - Get active sessions
+- `DELETE /sessions/:sessionId` - Revoke specific session
 - `POST /forgot-password` - Request password reset
 - `POST /reset-password` - Reset password
+- `POST /verify-email` - Verify email address
+- `POST /resend-verification` - Resend verification email
 
-### Admin (`/api/admin`)
+### Invitations (`/api/auth/invites`)
 
-- `GET /users` - Get all users (Admin)
-- `GET /users/blocked` - Get blocked users (Admin)
-- `PUT /users/:userId/block` - Block user (Admin)
-- `PUT /users/:userId/unblock` - Unblock user (Admin)
+- `POST /org-admin` - Invite organization admin (Super Admin)
+- `POST /recruiter` - Invite recruiter (Org Admin)
+- `POST /employee` - Invite employee (Org Admin/Recruiter)
+- `POST /accept/:token` - Accept invitation
+
+### Platform Admin (`/api/admin`)
+
+- `GET /users` - Get all users
+- `GET /users/blocked` - Get blocked users
+- `PATCH /users/:userId/block` - Block user
+- `PATCH /users/:userId/unblock` - Unblock user
+
+### ⚠️ Planned Endpoints (In Development)
+
+**Organizations** (`/api/organizations`):
+
+- Create, list, update organizations
+- Manage organization admins
+- Organization statistics
+
+**Jobs** (`/api/jobs`):
+
+- Post and manage job listings
+- Search jobs across organizations
+- Application management
+
+**Referrals** (`/api/referrals`):
+
+- Create referrals
+- Track referral status
+- Bonus management
+
+**HR Management** (`/api/hr`):
+
+- Employee onboarding/offboarding
+- Department management
+- Organization chart
+
+See [MULTI_TENANT_ARCHITECTURE.md](./MultiTenent%20Arch/MULTI_TENANT_ARCHITECTURE.md) for complete API specifications.
 
 ## 🔒 Environment Variables
 
@@ -128,6 +232,9 @@ backend/
 | `DB_NAME`                | Database name        | referral_network_hub  |
 | `DB_USER`                | Database user        | postgres              |
 | `DB_PASSWORD`            | Database password    | postgres              |
+| `REDIS_HOST`             | Redis host           | localhost             |
+| `REDIS_PORT`             | Redis port           | 6379                  |
+| `REDIS_PASSWORD`         | Redis password       | -                     |
 | `JWT_SECRET`             | JWT secret key       | -                     |
 | `JWT_REFRESH_SECRET`     | JWT refresh secret   | -                     |
 | `JWT_ACCESS_EXPIRES_IN`  | Access token expiry  | 1h                    |
@@ -138,6 +245,12 @@ backend/
 | `EMAIL_USER`             | SMTP username        | -                     |
 | `EMAIL_PASSWORD`         | SMTP password        | -                     |
 | `EMAIL_FROM`             | Sender email         | -                     |
+
+## 🔧 Development
+
+For detailed development instructions, see [DEVELOPMENT.md](./DEVELOPMENT.md).
+
+For architecture and implementation details, see [MultiTenent Arch/DOCS_INDEX.md](./MultiTenent%20Arch/DOCS_INDEX.md).
 
 ## 🧪 Testing
 

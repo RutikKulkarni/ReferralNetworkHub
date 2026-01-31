@@ -56,16 +56,28 @@ docker-compose up -d --build
 
 ## 🗄️ Database
 
-### Connect to MongoDB (Local)
+### Connect to PostgreSQL (Local)
 
 ```bash
-mongosh mongodb://localhost:27017/referral-network-hub
+psql -h localhost -p 5432 -U postgres -d referral_network_hub
 ```
 
-### Connect to MongoDB (Docker)
+### Connect to PostgreSQL (Docker)
 
 ```bash
-docker exec -it rnh-mongodb mongosh referral-network-hub
+docker exec -it rnh-postgres psql -U postgres -d referral_network_hub
+```
+
+### Run Migrations
+
+```bash
+npm run migrate
+```
+
+### Seed Database
+
+```bash
+npm run seed
 ```
 
 ## 📝 API Testing
@@ -86,7 +98,7 @@ curl -X POST http://localhost:5000/api/auth/register \
     "password": "Test@123",
     "firstName": "John",
     "lastName": "Doe",
-    "role": "user"
+    "userType": "JOB_SEEKER"
   }'
 ```
 
@@ -107,7 +119,11 @@ See [.env.example](.env.example) for all available configuration options.
 
 ### Required Variables
 
-- `MONGODB_URI` - MongoDB connection string
+- `DB_HOST` - PostgreSQL host (default: localhost)
+- `DB_PORT` - PostgreSQL port (default: 5432)
+- `DB_NAME` - Database name (default: referral_network_hub)
+- `DB_USER` - Database user (default: postgres)
+- `DB_PASSWORD` - Database password
 - `JWT_SECRET` - Secret key for JWT tokens
 - `JWT_REFRESH_SECRET` - Secret key for refresh tokens
 
@@ -122,15 +138,20 @@ See [.env.example](.env.example) for all available configuration options.
 
 ```
 src/
-├── config/          # App configuration
-├── controllers/     # Request handlers
-├── middleware/      # Custom middleware
-├── models/          # Database models
-├── routes/          # API routes
-├── services/        # Business logic
-├── utils/           # Helper functions
-├── types/           # TypeScript types
-├── app.ts           # Express app
+├── config/          # App configuration (database, redis, swagger)
+├── constants/       # Application constants
+├── database/        # Database migrations and seeders
+├── modules/         # Feature modules
+│   ├── auth/        # Authentication module
+│   ├── jobs/        # Jobs module
+│   ├── organization/# Organization module
+│   ├── platform/    # Platform admin module
+│   └── referrals/   # Referrals module
+├── shared/          # Shared resources
+│   ├── middleware/  # Custom middleware
+│   ├── types/       # TypeScript types
+│   └── utils/       # Utility functions
+├── app.ts           # Express app setup
 └── server.ts        # Server entry point
 ```
 
@@ -147,11 +168,12 @@ taskkill /PID <PID> /F
 lsof -ti:5000 | xargs kill -9
 ```
 
-### MongoDB Connection Issues
+### PostgreSQL Connection Issues
 
-- Ensure MongoDB is running
-- Check MONGODB_URI in .env
-- Verify network connectivity
+- Ensure PostgreSQL is running
+- Check DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD in .env
+- Verify database exists: `psql -U postgres -c "CREATE DATABASE referral_network_hub;"`
+- Check PostgreSQL logs for connection errors
 
 ### Module Not Found
 

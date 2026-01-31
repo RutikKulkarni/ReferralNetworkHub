@@ -4,7 +4,7 @@
  */
 
 import rateLimit from "express-rate-limit";
-import RedisStore from "rate-limit-redis";
+import RedisStore, { type RedisReply } from "rate-limit-redis";
 import redisClient from "../../config/redis";
 
 /**
@@ -19,8 +19,8 @@ export const globalRateLimiter = rateLimit({
   standardHeaders: true, // Return rate limit info in RateLimit-* headers
   legacyHeaders: false, // Disable X-RateLimit-* headers
   store: new RedisStore({
-    sendCommand: async (...args: any[]) =>
-      redisClient.call(args[0], ...args.slice(1)) as any,
+    sendCommand: async (...args: string[]) =>
+      redisClient.call(args[0], ...args.slice(1)) as Promise<RedisReply>,
     prefix: "rl:global:",
   }),
 });
@@ -40,8 +40,8 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
   skipSuccessfulRequests: true, // Don't count successful login/signup
   store: new RedisStore({
-    sendCommand: async (...args: any[]) =>
-      redisClient.call(args[0], ...args.slice(1)) as any,
+    sendCommand: async (...args: string[]) =>
+      redisClient.call(args[0], ...args.slice(1)) as Promise<RedisReply>,
     prefix: "rl:auth:",
   }),
 });
@@ -58,8 +58,8 @@ export const apiRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   store: new RedisStore({
-    sendCommand: async (...args: any[]) =>
-      redisClient.call(args[0], ...args.slice(1)) as any,
+    sendCommand: async (...args: string[]) =>
+      redisClient.call(args[0], ...args.slice(1)) as Promise<RedisReply>,
     prefix: "rl:api:",
   }),
 });
@@ -77,8 +77,8 @@ export const sensitiveRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   store: new RedisStore({
-    sendCommand: async (...args: any[]) =>
-      redisClient.call(args[0], ...args.slice(1)) as any,
+    sendCommand: async (...args: string[]) =>
+      redisClient.call(args[0], ...args.slice(1)) as Promise<RedisReply>,
     prefix: "rl:sensitive:",
   }),
 });
@@ -95,8 +95,8 @@ export const profileUpdateRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   store: new RedisStore({
-    sendCommand: async (...args: any[]) =>
-      redisClient.call(args[0], ...args.slice(1)) as any,
+    sendCommand: async (...args: string[]) =>
+      redisClient.call(args[0], ...args.slice(1)) as Promise<RedisReply>,
     prefix: "rl:profile:",
   }),
 });

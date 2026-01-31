@@ -25,7 +25,7 @@ class CacheService {
    */
   async set(
     key: string,
-    value: any,
+    value: unknown,
     ttl: number = config.cache.ttl.medium,
   ): Promise<void> {
     try {
@@ -38,7 +38,7 @@ class CacheService {
   /**
    * Set value without TTL (permanent until explicitly deleted)
    */
-  async setPermanent(key: string, value: any): Promise<void> {
+  async setPermanent(key: string, value: unknown): Promise<void> {
     try {
       await redisClient.set(key, JSON.stringify(value));
     } catch (error) {
@@ -234,7 +234,7 @@ class CacheService {
   /**
    * Get Redis info
    */
-  async getInfo(): Promise<any> {
+  async getInfo(): Promise<string | null> {
     try {
       const info = await redisClient.info();
       return info;

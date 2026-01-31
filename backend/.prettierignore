@@ -1,0 +1,22 @@
+# Ignore build output
+dist/
+build/
+coverage/
+
+# Ignore dependencies
+node_modules/
+
+# Ignore environment files
+.env
+.env.*
+!.env.example
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore generated files
+*.tsbuildinfo
+
+# Ignore docs
+docs/swagger/

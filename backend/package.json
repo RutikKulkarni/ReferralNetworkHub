@@ -15,7 +15,9 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "seed": "ts-node src/database/seeders/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test:redis": "ts-node src/scripts/test-redis.ts"
+    "test:redis": "ts-node src/scripts/test-redis.ts",
+    "prepare": "cd .. && husky backend/.husky",
+    "pre-commit": "npm run lint && npm run typecheck"
   },
   "keywords": [
     "referral",
@@ -65,7 +67,9 @@
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
     "eslint": "^9.18.0",
+    "husky": "^9.1.7",
     "nodemon": "^3.1.9",
+    "prettier": "^3.8.1",
     "rimraf": "^6.0.1",
     "sequelize-cli": "^6.6.2",
     "ts-node": "^10.9.2",

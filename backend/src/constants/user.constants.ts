@@ -35,4 +35,5 @@ export const ORG_ADMIN_ROLES = {
   VIEWER: "viewer", // Read-only access
 } as const;
 
-export type OrgAdminRole = (typeof ORG_ADMIN_ROLES)[keyof typeof ORG_ADMIN_ROLES];
+export type OrgAdminRole =
+  (typeof ORG_ADMIN_ROLES)[keyof typeof ORG_ADMIN_ROLES];

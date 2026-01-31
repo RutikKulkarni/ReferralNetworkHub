@@ -444,7 +444,11 @@ export class AuthService {
     let sessionId: string | undefined;
 
     // Create session if user requires session tracking
-    if ((SESSION_TRACKED_USER_TYPES as readonly UserType[]).includes(user.userType as UserType)) {
+    if (
+      (SESSION_TRACKED_USER_TYPES as readonly UserType[]).includes(
+        user.userType as UserType,
+      )
+    ) {
       // Check session limit
       const activeSessions = await UserSession.count({
         where: {

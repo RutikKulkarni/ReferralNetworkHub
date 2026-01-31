@@ -94,4 +94,5 @@ export const SUCCESS_MESSAGES = {
   USER_DELETED: "User deleted successfully",
 } as const;
 
-export type SuccessMessage = (typeof SUCCESS_MESSAGES)[keyof typeof SUCCESS_MESSAGES];
+export type SuccessMessage =
+  (typeof SUCCESS_MESSAGES)[keyof typeof SUCCESS_MESSAGES];

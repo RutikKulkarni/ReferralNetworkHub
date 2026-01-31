@@ -14,18 +14,48 @@ interface SuperAdminSeedData {
   lastName: string;
 }
 
-const SUPER_ADMINS: SuperAdminSeedData[] = [
-  {
-    email: "superadmin@referralnetworkhub.com",
-    password: "SuperAdmin@2026!",
-    firstName: "Super",
-    lastName: "Admin",
-  },
-];
+/**
+ * Load super admin credentials from environment variables
+ * This prevents hardcoding sensitive credentials in source code
+ */
+const getSuperAdminsFromEnv = (): SuperAdminSeedData[] => {
+  const email = process.env.SUPER_ADMIN_EMAIL;
+  const password = process.env.SUPER_ADMIN_PASSWORD;
+  const firstName = process.env.SUPER_ADMIN_FIRST_NAME || "Super";
+  const lastName = process.env.SUPER_ADMIN_LAST_NAME || "Admin";
+
+  if (!email || !password) {
+    console.warn(
+      "⚠️  Super admin credentials not found in environment variables.",
+    );
+    console.warn(
+      "   Set SUPER_ADMIN_EMAIL and SUPER_ADMIN_PASSWORD to seed super admins.",
+    );
+    return [];
+  }
+
+  return [
+    {
+      email,
+      password,
+      firstName,
+      lastName,
+    },
+  ];
+};
 
 export const seedSuperAdmins = async (): Promise<void> => {
   try {
     console.log("Seeding platform super admins...");
+
+    const SUPER_ADMINS = getSuperAdminsFromEnv();
+
+    if (SUPER_ADMINS.length === 0) {
+      console.log(
+        "⚠️  No super admin credentials configured. Skipping seeding.",
+      );
+      return;
+    }
 
     for (const adminData of SUPER_ADMINS) {
       // Check if admin already exists

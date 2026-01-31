@@ -246,7 +246,41 @@ See [MULTI_TENANT_ARCHITECTURE.md](./MultiTenent%20Arch/MULTI_TENANT_ARCHITECTUR
 | `EMAIL_PASSWORD`         | SMTP password        | -                     |
 | `EMAIL_FROM`             | Sender email         | -                     |
 
-## 🔧 Development
+## � Security
+
+**⚠️ IMPORTANT: Never commit sensitive credentials to the repository!**
+
+### Environment Variables & Secrets
+
+All sensitive configuration must be stored in environment variables:
+
+```bash
+# Copy example and configure
+cp .env.example .env
+
+# Set secure credentials (NEVER commit .env)
+SUPER_ADMIN_EMAIL=your-email@company.com
+SUPER_ADMIN_PASSWORD=YourVerySecurePassword123!
+JWT_ACCESS_TOKEN_SECRET=$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
+JWT_REFRESH_TOKEN_SECRET=$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
+```
+
+### Security Best Practices
+
+- ✅ Use strong, unique passwords (16+ characters)
+- ✅ Rotate JWT secrets regularly
+- ✅ Change seeded admin password immediately after setup
+- ✅ Enable 2FA for admin accounts (future feature)
+- ✅ Review [SECURITY.md](./SECURITY.md) for complete guidelines
+
+### Git Guardian & Secret Scanning
+
+This repository uses Git Guardian to prevent credential leaks. If you accidentally commit secrets:
+
+1. **Immediately** rotate all exposed credentials
+2. See [SECURITY.md](./SECURITY.md) for incident response procedures
+
+## �🔧 Development
 
 For detailed development instructions, see [DEVELOPMENT.md](./DEVELOPMENT.md).
 

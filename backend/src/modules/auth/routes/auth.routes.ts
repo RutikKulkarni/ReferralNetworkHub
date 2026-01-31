@@ -21,10 +21,7 @@ import {
   validateRefreshToken,
   validateOAuthCallback,
 } from "../middleware/validation.middleware";
-import {
-  authRateLimiter,
-  sensitiveRateLimiter,
-} from "../../../shared/middleware/rateLimiter.middleware";
+import { authRateLimiter } from "../../../shared/middleware/rateLimiter.middleware";
 
 const router = Router();
 

@@ -43,7 +43,7 @@ export class ResponseUtil {
 
     if (errors) {
       response.error = {
-        code: 'VALIDATION_ERROR',
+        code: "VALIDATION_ERROR",
         details: errors,
       };
     }

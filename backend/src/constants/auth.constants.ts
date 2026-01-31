@@ -32,7 +32,8 @@ export const SESSION_STATUS = {
   REVOKED: "REVOKED",
 } as const;
 
-export type SessionStatus = (typeof SESSION_STATUS)[keyof typeof SESSION_STATUS];
+export type SessionStatus =
+  (typeof SESSION_STATUS)[keyof typeof SESSION_STATUS];
 
 // ==================== EMAIL VERIFICATION STATUS ====================
 
@@ -42,7 +43,7 @@ export const EMAIL_VERIFICATION_STATUS = {
   EXPIRED: "EXPIRED",
 } as const;
 
-export type EmailVerificationStatus = 
+export type EmailVerificationStatus =
   (typeof EMAIL_VERIFICATION_STATUS)[keyof typeof EMAIL_VERIFICATION_STATUS];
 
 // ==================== TOKEN EXPIRY ====================
@@ -73,4 +74,5 @@ export const OAUTH_PROVIDERS = {
   LINKEDIN: "LINKEDIN",
 } as const;
 
-export type OAuthProvider = (typeof OAUTH_PROVIDERS)[keyof typeof OAUTH_PROVIDERS];
+export type OAuthProvider =
+  (typeof OAUTH_PROVIDERS)[keyof typeof OAUTH_PROVIDERS];

@@ -1,0 +1,135 @@
+name: Backend CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+  push:
+    branches:
+      - main
+      - master
+      - develop
+    paths:
+      - 'backend/**'
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./backend
+        run: npm run lint
+
+      - name: Run Type Check
+        working-directory: ./backend
+        run: npm run typecheck
+
+      - name: Check build
+        working-directory: ./backend
+        run: npm run build
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Run npm audit
+        working-directory: ./backend
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Check for console logs
+        working-directory: ./backend
+        run: |
+          if grep -r "console\.\(log\|debug\|info\|warn\|error\)" src/ --exclude-dir=node_modules --exclude-dir=dist; then
+            echo "Warning: Console statements found in code. Consider using a proper logger."
+            exit 0
+          else
+            echo "No console statements found."
+          fi
+
+      - name: Check for TODO comments
+        working-directory: ./backend
+        run: |
+          TODO_COUNT=$(grep -r "TODO\|FIXME\|XXX" src/ --exclude-dir=node_modules --exclude-dir=dist | wc -l || echo "0")
+          echo "Found $TODO_COUNT TODO/FIXME comments"
+          if [ "$TODO_COUNT" -gt 50 ]; then
+            echo "Warning: High number of TODO comments ($TODO_COUNT). Consider addressing them."
+          fi
+
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, security-audit, code-quality]
+    if: always()
+    
+    steps:
+      - name: Check CI Results
+        run: |
+          echo "Backend CI Pipeline Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Lint & Type Check: ${{ needs.lint-and-typecheck.result }}"
+          echo "Security Audit: ${{ needs.security-audit.result }}"
+          echo "Code Quality: ${{ needs.code-quality.result }}"
+          
+          if [ "${{ needs.lint-and-typecheck.result }}" != "success" ]; then
+            echo "CI Failed: Fix lint and type errors before merging"
+            exit 1
+          fi
+          
+          echo "All checks passed! Ready to merge."

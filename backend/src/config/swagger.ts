@@ -175,11 +175,18 @@ const swaggerDefinition = {
 
 const options: swaggerJSDoc.Options = {
   swaggerDefinition,
-  apis: [
-    "./src/modules/*/routes/*.ts",
-    "./src/modules/*/controllers/*.ts",
-    "./src/docs/swagger/*.yaml",
-  ],
+  apis:
+    process.env.NODE_ENV === "production"
+      ? [
+          "./dist/modules/*/routes/*.js",
+          "./dist/modules/*/controllers/*.js",
+          "./dist/docs/swagger/*.yaml",
+        ]
+      : [
+          "./src/modules/*/routes/*.ts",
+          "./src/modules/*/controllers/*.ts",
+          "./src/docs/swagger/*.yaml",
+        ],
 };
 
 export const swaggerSpec = swaggerJSDoc(options);

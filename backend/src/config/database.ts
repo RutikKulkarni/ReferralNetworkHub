@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import config from "./index";
+import { initModels } from "../database/models";
 
 const sequelize = new Sequelize({
   dialect: "postgres",
@@ -22,6 +23,9 @@ const sequelize = new Sequelize({
     freezeTableName: true, // Use singular table names
   },
 });
+
+// Initialize all models
+export const models = initModels(sequelize);
 
 export async function testConnection(): Promise<void> {
   try {
@@ -60,4 +64,5 @@ export async function closeConnection(): Promise<void> {
   }
 }
 
+export { sequelize, models as DatabaseModels };
 export default sequelize;

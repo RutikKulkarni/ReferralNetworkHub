@@ -14,6 +14,16 @@ import { UserAttributes } from "../../../shared/types";
 import { USER_TYPES, EMAIL_VERIFICATION_STATUS } from "../../../constants";
 import { UserSession } from "./UserSession";
 import { RefreshToken } from "./RefreshToken";
+import type {
+  Organization,
+  OrganizationAdmin,
+  Recruiter,
+  Employee,
+  UserProfile,
+  Job,
+  Referral,
+  Application,
+} from "../../../database/models";
 
 export class User
   extends Model<
@@ -67,6 +77,20 @@ export class User
   // Associations
   public readonly sessions?: UserSession[];
   public readonly refreshTokens?: RefreshToken[];
+  public readonly profile?: UserProfile;
+  public readonly adminOrganizations?: OrganizationAdmin[];
+  public readonly recruiterProfile?: Recruiter;
+  public readonly employments?: Employee[];
+  public readonly applications?: Application[];
+  public readonly referralsGiven?: Referral[];
+  public readonly referralsReceived?: Referral[];
+  public readonly postedJobs?: Job[];
+  public readonly reviewedReferrals?: Referral[];
+  public readonly reviewedApplications?: Application[];
+  public readonly updatedApplications?: Application[];
+  public readonly createdOrgAdmins?: OrganizationAdmin[];
+  public readonly createdRecruiters?: Recruiter[];
+  public readonly organization?: Organization;
 
   public getSessions!: HasManyGetAssociationsMixin<UserSession>;
   public addSession!: HasManyAddAssociationMixin<UserSession, string>;
@@ -83,6 +107,20 @@ export class User
   public static associations: {
     sessions: Association<User, UserSession>;
     refreshTokens: Association<User, RefreshToken>;
+    profile: Association<User, UserProfile>;
+    adminOrganizations: Association<User, OrganizationAdmin>;
+    recruiterProfile: Association<User, Recruiter>;
+    employments: Association<User, Employee>;
+    applications: Association<User, Application>;
+    referralsGiven: Association<User, Referral>;
+    referralsReceived: Association<User, Referral>;
+    postedJobs: Association<User, Job>;
+    reviewedReferrals: Association<User, Referral>;
+    reviewedApplications: Association<User, Application>;
+    updatedApplications: Association<User, Application>;
+    createdOrgAdmins: Association<User, OrganizationAdmin>;
+    createdRecruiters: Association<User, Recruiter>;
+    organization: Association<User, Organization>;
   };
 
   /**

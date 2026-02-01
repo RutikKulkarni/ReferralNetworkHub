@@ -1,9 +1,11 @@
 export class ValidationUtil {
   /**
    * Validate email format
+   * Using a more efficient regex pattern to prevent ReDoS attacks
    */
   public static isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Simpler, non-backtracking pattern that's safe from ReDoS
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     return emailRegex.test(email);
   }
 

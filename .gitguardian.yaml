@@ -1,0 +1,11 @@
+# GitGuardian Configuration
+version: v1
+
+# Paths to ignore
+paths-ignore:
+  - backend/IMPLEMENTATION_SUMMARY.md # File deleted, was example documentation
+
+# Specific incidents to ignore (historical commits with deleted files)
+matches-ignore:
+  - name: Ignore deleted IMPLEMENTATION_SUMMARY.md
+    match: backend/IMPLEMENTATION_SUMMARY.md

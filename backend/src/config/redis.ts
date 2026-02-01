@@ -9,6 +9,8 @@ const redisClient = new Redis({
   keyPrefix: config.redis.keyPrefix,
   maxRetriesPerRequest: config.redis.maxRetries,
   connectTimeout: config.redis.connectTimeout,
+  // Enable TLS for Upstash in production (required)
+  tls: config.env === 'production' ? {} : undefined,
   retryStrategy(times) {
     const delay = Math.min(times * config.redis.retryDelay, 2000);
     return delay;

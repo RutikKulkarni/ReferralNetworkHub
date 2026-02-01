@@ -15,6 +15,12 @@ const sequelize = new Sequelize({
     acquire: config.database.pool.acquire,
     idle: config.database.pool.idle,
   },
+  dialectOptions: {
+    ssl: config.env === 'production' ? {
+      require: true,
+      rejectUnauthorized: false, // Neon uses self-signed certificates
+    } : false,
+  },
   logging: false, // Disable SQL query logging for cleaner console output
   timezone: "+00:00", // UTC
   define: {

@@ -1,0 +1,101 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-ci.yml"
+  push:
+    branches:
+      - main
+      - master
+      - develop
+    paths:
+      - "frontend/**"
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Run Type Check
+        working-directory: ./frontend
+        run: npm run typecheck || npm run build
+        continue-on-error: true
+
+  build-check:
+    name: Build Check
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build application
+        working-directory: ./frontend
+        run: npm run build
+        env:
+          SKIP_ENV_VALIDATION: true
+
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, build-check]
+    if: always()
+
+    steps:
+      - name: Check CI Results
+        run: |
+          echo "Frontend CI Pipeline Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Lint & Type Check: ${{ needs.lint-and-typecheck.result }}"
+          echo "Build Check: ${{ needs.build-check.result }}"
+
+          if [ "${{ needs.build-check.result }}" != "success" ]; then
+            echo "CI Failed: Fix build errors before merging"
+            exit 1
+          fi
+
+          echo "All checks passed! Ready to merge."

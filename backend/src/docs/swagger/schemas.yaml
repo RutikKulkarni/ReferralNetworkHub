@@ -1,0 +1,276 @@
+# ==========================================
+# SWAGGER SCHEMAS
+# ==========================================
+# Common reusable schemas for API documentation
+# ==========================================
+
+components:
+  schemas:
+    # ==========================================
+    # USER SCHEMAS
+    # ==========================================
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User email address
+        firstName:
+          type: string
+          description: User first name
+        lastName:
+          type: string
+          description: User last name
+        userType:
+          type: string
+          enum:
+            - PLATFORM_SUPER_ADMIN
+            - PLATFORM_ADMIN
+            - ORGANIZATION_ADMIN
+            - ORG_RECRUITER
+            - EMPLOYEE_REFERRER
+            - JOB_SEEKER
+            - REFERRAL_PROVIDER
+          description: Type of user
+        isActive:
+          type: boolean
+          description: Whether user account is active
+        isBlocked:
+          type: boolean
+          description: Whether user is blocked
+        emailVerified:
+          type: boolean
+          description: Whether email is verified
+        createdAt:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+
+    UserRegistration:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+        - userType
+      properties:
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: SecurePassword123!
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        userType:
+          type: string
+          enum: [JOB_SEEKER, REFERRAL_PROVIDER]
+          example: JOB_SEEKER
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          example: SecurePassword123!
+
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+          example: Login successful
+        data:
+          type: object
+          properties:
+            user:
+              $ref: "#/components/schemas/User"
+            accessToken:
+              type: string
+              description: JWT access token
+            expiresIn:
+              type: number
+              description: Token expiry time in seconds
+              example: 3600
+
+    # ==========================================
+    # SESSION SCHEMAS
+    # ==========================================
+    UserSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        deviceName:
+          type: string
+          example: Chrome on Windows
+        ipAddress:
+          type: string
+          example: 192.168.1.1
+        userAgent:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, EXPIRED, LOGGED_OUT, REVOKED]
+        lastActivityAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+
+    # ==========================================
+    # INVITE SCHEMAS
+    # ==========================================
+    InviteToken:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        inviteType:
+          type: string
+          enum: [PLATFORM_ADMIN, ORG_ADMIN, ORG_RECRUITER, EMPLOYEE]
+        status:
+          type: string
+          enum: [PENDING, ACCEPTED, EXPIRED, REVOKED]
+        invitedBy:
+          type: string
+          format: uuid
+        organizationId:
+          type: string
+          format: uuid
+        expiresAt:
+          type: string
+          format: date-time
+
+    SendInviteRequest:
+      type: object
+      required:
+        - email
+        - inviteType
+      properties:
+        email:
+          type: string
+          format: email
+          example: newuser@example.com
+        inviteType:
+          type: string
+          enum: [PLATFORM_ADMIN, ORG_ADMIN, ORG_RECRUITER, EMPLOYEE]
+          example: ORG_RECRUITER
+        organizationId:
+          type: string
+          format: uuid
+          description: Required for organization-level invites
+
+    AcceptInviteRequest:
+      type: object
+      required:
+        - token
+        - password
+        - firstName
+        - lastName
+      properties:
+        token:
+          type: string
+          example: invite_token_here
+        password:
+          type: string
+          format: password
+          minLength: 8
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    # ==========================================
+    # ORGANIZATION SCHEMAS
+    # ==========================================
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        domain:
+          type: string
+        isActive:
+          type: boolean
+        isBlocked:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    # ==========================================
+    # ERROR SCHEMAS
+    # ==========================================
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: An error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+    # ==========================================
+    # SUCCESS SCHEMAS
+    # ==========================================
+    SuccessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+        data:
+          type: object

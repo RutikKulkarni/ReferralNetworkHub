@@ -1,35 +1,44 @@
-# Contribution Count
+# Contribution Tracking
 
-Thank you to all the contributors who have helped make ReferralNetworkHub better! 
+Thank you to all contributors helping build **ReferralNetworkHub** Platform better!
 
-[![The total number of contributors to this project is](https://img.shields.io/github/contributors/RutikKulkarni/ReferralNetworkHub)](https://github.com/RutikKulkarni/ReferralNetworkHub/graphs/contributors)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Contributors](https://img.shields.io/github/contributors/RutikKulkarni/ReferralNetworkHub)](https://github.com/RutikKulkarni/ReferralNetworkHub/graphs/contributors)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![Stars](https://img.shields.io/github/stars/RutikKulkarni/ReferralNetworkHub?style=social)](https://github.com/RutikKulkarni/ReferralNetworkHub)
 [<img align="right" width="50" src="https://www.svgrepo.com/show/331368/discord-v2.svg">](https://discord.gg/UjqwhdD9CG)
 
-## Contributors
+---
 
-### Name: Rutik Kulkarni 
-- Email: rutikkulkarni2001@gmail.com
-- LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/rutikkulkarni)
-- GitHub: [GitHub profile](https://github.com/RutikKulkarni)
-- Portfolio Link: [Portfolio](https://rutik-kulkarni.vercel.app/)
+## 📊 Project Stats
 
-### Name: Abu Qamar Shaikh
-- Email: shaikhqamar7379@gmail.com
-- LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/abu-qamar-shaikh-a6a72a274/)
-- GitHub: [GitHub profile](https://github.com/AbuQamar7379)
-- Portfolio Link: [Portfolio](https://abuqamar-portfolio.netlify.app/)
+### Backend Implementation Status
 
+| Component                 | Status      | Files           | Completion |
+| ------------------------- | ----------- | --------------- | ---------- |
+| **Authentication System** | ✅ Complete | 15+ files       | 100%       |
+| **User Management**       | ✅ Complete | 8 files         | 100%       |
+| **Session Management**    | ✅ Complete | 5 files         | 100%       |
+| **Invite System**         | ✅ Complete | 4 files         | 100%       |
+| **Email Services**        | ✅ Complete | 3 files         | 100%       |
+| **Security (RBAC)**       | ✅ Complete | 6 files         | 100%       |
+| **API Documentation**     | ✅ Complete | Swagger/OpenAPI | 100%       |
+| **Database Models**       | 🟡 Partial  | 6/14 models     | 43%        |
+| **Organization Module**   | 🔴 Planned  | 0 files         | 0%         |
+| **Jobs Module**           | 🔴 Planned  | 0 files         | 0%         |
+| **Referrals Module**      | 🔴 Planned  | 0 files         | 0%         |
+| **Applications Module**   | 🔴 Planned  | 0 files         | 0%         |
+| **HR Management**         | 🔴 Planned  | 0 files         | 0%         |
 
- ### Name: Somesh pundir 
-- Email: pundirsomesh@gmail.com
-- LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/somesh-pundir-329551209/)
-- GitHub: [GitHub profile](https://github.com/SomeshPundir)
-- Portfolio Link: [Portfolio](https://portfolio-weld-nine-27.vercel.app/)
+**Total Backend Files**: 45+ TypeScript files  
+**Overall Backend Progress**: ~25%
 
+### Frontend Implementation Status
 
-### Name: Kartik Sapkal
-- Email: kartiksapkal5799@gmail.com
-- LinkedIn: [LinkedIn Profile](https://www.linkedin.com/in/kartiksapkal/)
-- GitHub: [GitHub profile](https://github.com/KARTIK5799)
-- Portfolio Link: [Portfolio](https://kartiksapkaldev.vercel.app/)
+| Component                     | Status     | Completion    |
+| ----------------------------- | ---------- | ------------- |
+| **UI Components (shadcn/ui)** | 🟡 Partial | To be updated |
+| **Authentication Pages**      | 🟡 Partial | To be updated |
+| **Dashboard Layouts**         | 🔴 Planned | To be updated |
+| **Role-based Routing**        | 🔴 Planned | To be updated |
+
+**Frontend Progress**: To be updated after FE review

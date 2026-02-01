@@ -1,71 +1,140 @@
-version: "3.8"
-
 services:
-  # MongoDB
-  mongo:
-    image: mongo:latest
+  # PostgreSQL Database
+  postgres:
+    image: postgres:17-alpine
+    container_name: rnh-postgres
+    restart: unless-stopped
     ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-  # Auth Service
-  auth-service:
-    build:
-      context: ./auth-service
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
+      - "5432:5432"
     environment:
-      - PORT=3001
-      - NODE_ENV=development
-      - MONGODB_URI=mongodb://mongo:27017/auth-service
-      - JWT_SECRET=your_jwt_secret
-      - JWT_REFRESH_SECRET=your_jwt_refresh_secret
-      - JWT_ACCESS_EXPIRY=3600
-      - JWT_REFRESH_EXPIRY=604800
-      - CLIENT_URL=http://localhost:3000
-      - COOKIE_DOMAIN=localhost
-      - COOKIE_SECURE=false
-      - COOKIE_SAME_SITE=lax
-      - EMAIL_HOST=smtp.example.com
-      - EMAIL_PORT=587
-      - EMAIL_SECURE=false
-      - EMAIL_USER=user@example.com
-      - EMAIL_PASSWORD=your_email_password
-      - EMAIL_FROM=noreply@referralnetworkhub.com
-      - PASSWORD_RESET_RATE_LIMIT=5
+      POSTGRES_DB: referral_network_hub
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rnh-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: rnh-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - rnh-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API (Monolith)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rnh-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      # Server
+      NODE_ENV: production
+      PORT: 5000
+
+      # Database
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: referral_network_hub
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_POOL_MAX: 20
+      DB_POOL_MIN: 5
+      DB_POOL_ACQUIRE: 30000
+      DB_POOL_IDLE: 10000
+
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
+      REDIS_KEY_PREFIX: "rnh:"
+      REDIS_MAX_RETRIES: 3
+      REDIS_RETRY_DELAY: 500
+      REDIS_CONNECT_TIMEOUT: 10000
+
+      # Cache TTL
+      CACHE_TTL_SHORT: 300
+      CACHE_TTL_MEDIUM: 1800
+      CACHE_TTL_LONG: 3600
+      CACHE_TTL_DAY: 86400
+
+      # JWT (Override with your secrets in production!)
+      JWT_ACCESS_TOKEN_SECRET: ${JWT_ACCESS_TOKEN_SECRET:-your_jwt_access_secret_change_in_production}
+      JWT_REFRESH_TOKEN_SECRET: ${JWT_REFRESH_TOKEN_SECRET:-your_jwt_refresh_secret_change_in_production}
+      JWT_ACCESS_TOKEN_EXPIRY: 1h
+      JWT_REFRESH_TOKEN_EXPIRY: 7d
+      JWT_ISSUER: ReferralNetworkHub
+      JWT_AUDIENCE: ReferralNetworkHub-API
+
+      # Session
+      SESSION_EXPIRY_SECONDS: 3600
+      MAX_ACTIVE_SESSIONS_PER_USER: 5
+
+      # Invite
+      INVITE_EXPIRY_HOURS: 48
+      ORG_ADMIN_INVITE_EXPIRY_HOURS: 72
+
+      # CORS
+      CORS_ORIGIN: http://localhost:3000
+      CORS_CREDENTIALS: true
+
+      # Rate Limiting
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 100
+
+      # File Upload
+      MAX_FILE_SIZE: 10485760
+
     depends_on:
-      - mongo
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - rnh-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:5000/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
-  mongo-data:
-# # version: "3.8"
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
 
-# services:
-#   # MongoDB
-#   mongo:
-#     image: mongo:latest
-#     ports:
-#       - "27017:27017"
-#     volumes:
-#       - mongo-data:/data/db
-
-#   # Auth Service
-#   auth-service:
-#     build:
-#       context: ./auth-service
-#       dockerfile: Dockerfile
-#     environment:
-#       - PORT=3001
-#       - MONGODB_URI=mongodb://mongo:27017/auth-service
-#       - JWT_SECRET=your_jwt_secret
-#       - JWT_REFRESH_SECRET=your_refresh_secret
-#     volumes:
-#       - ./auth-service:/app
-#       # - ./tsconfig.json:/app/tsconfig.json
-#     depends_on:
-#       - mongo
-
-# volumes:
-#   mongo-data:
+networks:
+  rnh-network:
+    driver: bridge

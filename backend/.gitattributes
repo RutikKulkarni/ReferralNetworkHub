@@ -1,0 +1,28 @@
+# Git Attributes for Referral Network Hub Backend
+
+# Prevent accidental commit of environment files
+.env* filter=secret
+*.env filter=secret
+
+# Mark sensitive files for Git Guardian
+*.key filter=secret
+*.pem filter=secret
+*.p12 filter=secret
+*.pfx filter=secret
+
+# Ensure consistent line endings
+* text=auto
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

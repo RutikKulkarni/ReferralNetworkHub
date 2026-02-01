@@ -10,7 +10,7 @@ class CacheService {
       const data = await redisClient.get(key);
       return data ? JSON.parse(data) : null;
     } catch (error) {
-      console.error(`Cache get error for key "${key}":`, error);
+      console.error('Cache get error for key "%s":', key, error);
       return null;
     }
   }
@@ -26,7 +26,7 @@ class CacheService {
     try {
       await redisClient.setex(key, ttl, JSON.stringify(value));
     } catch (error) {
-      console.error(`Cache set error for key "${key}":`, error);
+      console.error('Cache set error for key "%s":', key, error);
     }
   }
 
@@ -37,7 +37,7 @@ class CacheService {
     try {
       await redisClient.set(key, JSON.stringify(value));
     } catch (error) {
-      console.error(`Cache set permanent error for key "${key}":`, error);
+      console.error('Cache set permanent error for key "%s":', key, error);
     }
   }
 
@@ -48,7 +48,7 @@ class CacheService {
     try {
       await redisClient.del(key);
     } catch (error) {
-      console.error(`Cache delete error for key "${key}":`, error);
+      console.error('Cache delete error for key "%s":', key, error);
     }
   }
 

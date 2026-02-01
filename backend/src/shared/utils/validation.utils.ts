@@ -1,10 +1,48 @@
 export class ValidationUtil {
   /**
    * Validate email format
+   * Using a safe regex pattern that prevents ReDoS attacks
+   * Pattern uses atomic groups-like approach with anchors to prevent backtracking
    */
   public static isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    // Basic validation: must contain exactly one @ and at least one dot after @
+    if (!email || typeof email !== "string") {
+      return false;
+    }
+
+    const atIndex = email.indexOf("@");
+    if (atIndex === -1 || atIndex !== email.lastIndexOf("@")) {
+      return false; // Must have exactly one @
+    }
+
+    const localPart = email.substring(0, atIndex);
+    const domainPart = email.substring(atIndex + 1);
+
+    // Validate local part (before @)
+    if (localPart.length === 0 || localPart.length > 64) {
+      return false;
+    }
+
+    // Validate domain part (after @)
+    if (domainPart.length === 0 || domainPart.length > 255) {
+      return false;
+    }
+
+    const dotIndex = domainPart.indexOf(".");
+    if (
+      dotIndex === -1 ||
+      dotIndex === 0 ||
+      dotIndex === domainPart.length - 1
+    ) {
+      return false; // Domain must contain dot, not at start or end
+    }
+
+    // Check for whitespace
+    if (/\s/.test(email)) {
+      return false;
+    }
+
+    return true;
   }
 
   /**

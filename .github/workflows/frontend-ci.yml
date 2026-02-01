@@ -7,25 +7,25 @@ on:
       - master
       - develop
     paths:
-      - 'frontend/**'
-      - '.github/workflows/frontend-ci.yml'
+      - "frontend/**"
+      - ".github/workflows/frontend-ci.yml"
   push:
     branches:
       - main
       - master
       - develop
     paths:
-      - 'frontend/**'
+      - "frontend/**"
 
 jobs:
   lint-and-typecheck:
     name: Lint & Type Check
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [20.x]
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -36,44 +36,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Run ESLint
         working-directory: ./frontend
-        run: pnpm lint
+        run: npm run lint
         continue-on-error: true
 
       - name: Run Type Check
         working-directory: ./frontend
-        run: pnpm run typecheck || pnpm run build
+        run: npm run typecheck || npm run build
         continue-on-error: true
 
   build-check:
     name: Build Check
     runs-on: ubuntu-latest
     needs: [lint-and-typecheck]
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -82,19 +66,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build application
         working-directory: ./frontend
-        run: pnpm build
+        run: npm run build
         env:
           SKIP_ENV_VALIDATION: true
 
@@ -103,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint-and-typecheck, build-check]
     if: always()
-    
+
     steps:
       - name: Check CI Results
         run: |
@@ -111,10 +92,10 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Lint & Type Check: ${{ needs.lint-and-typecheck.result }}"
           echo "Build Check: ${{ needs.build-check.result }}"
-          
+
           if [ "${{ needs.build-check.result }}" != "success" ]; then
             echo "CI Failed: Fix build errors before merging"
             exit 1
           fi
-          
+
           echo "All checks passed! Ready to merge."

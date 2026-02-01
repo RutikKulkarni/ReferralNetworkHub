@@ -1,8 +1,3 @@
-/**
- * Invite Service
- * Handles invitation token creation, validation, and acceptance
- */
-
 import crypto from "crypto";
 import { InviteToken, User } from "../models";
 import {

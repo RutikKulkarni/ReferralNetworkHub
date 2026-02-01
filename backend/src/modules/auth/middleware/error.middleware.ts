@@ -1,8 +1,3 @@
-/**
- * Error Handler Middleware
- * Global error handling for auth module
- */
-
 import { Request, Response, NextFunction } from "express";
 import { ResponseUtil } from "../../../shared/utils";
 import { ERROR_MESSAGES } from "../../../constants";

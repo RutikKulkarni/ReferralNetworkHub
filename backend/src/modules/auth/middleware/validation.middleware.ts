@@ -1,8 +1,3 @@
-/**
- * Validation Middleware
- * Request validation for auth endpoints
- */
-
 import { Request, Response, NextFunction } from "express";
 import { ValidationUtil, ResponseUtil } from "../../../shared/utils";
 import { USER_TYPES, ERROR_MESSAGES } from "../../../constants";

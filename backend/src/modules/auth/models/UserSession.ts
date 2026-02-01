@@ -1,8 +1,3 @@
-/**
- * User Session Model
- * Tracks active user sessions for session management
- */
-
 import {
   Model,
   DataTypes,
@@ -63,49 +58,31 @@ export class UserSession
     user: Association<UserSession, User>;
   };
 
-  /**
-   * Check if session is expired
-   */
   public isExpired(): boolean {
     return (
       new Date() > this.expiresAt || this.status === SESSION_STATUS.EXPIRED
     );
   }
 
-  /**
-   * Check if session is active
-   */
   public isActive(): boolean {
     return this.status === SESSION_STATUS.ACTIVE && !this.isExpired();
   }
 
-  /**
-   * Update last activity
-   */
   public async updateActivity(): Promise<void> {
     this.lastActivityAt = new Date();
     await this.save();
   }
 
-  /**
-   * Expire session
-   */
   public async expire(): Promise<void> {
     this.status = SESSION_STATUS.EXPIRED;
     await this.save();
   }
 
-  /**
-   * Revoke session
-   */
   public async revoke(): Promise<void> {
     this.status = SESSION_STATUS.REVOKED;
     await this.save();
   }
 
-  /**
-   * Logout session
-   */
   public async logout(): Promise<void> {
     this.status = SESSION_STATUS.LOGGED_OUT;
     await this.save();

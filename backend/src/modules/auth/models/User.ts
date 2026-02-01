@@ -1,8 +1,3 @@
-/**
- * User Model
- * Represents all user types in the system
- */
-
 import {
   Model,
   DataTypes,
@@ -119,24 +114,15 @@ export class User
     return { allowed: true };
   }
 
-  /**
-   * Check if user requires session tracking
-   */
   public requiresSessionTracking(): boolean {
     return this.userType !== USER_TYPES.PLATFORM_SUPER_ADMIN;
   }
 
-  /**
-   * Increment token version (invalidates all existing tokens)
-   */
   public async invalidateAllTokens(): Promise<void> {
     this.tokenVersion += 1;
     await this.save();
   }
 
-  /**
-   * Convert to safe JSON (removes sensitive data)
-   */
   public toSafeJSON(): Omit<UserAttributes, "password"> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _password, ...safeUser } =

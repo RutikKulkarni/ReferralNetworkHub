@@ -1,8 +1,3 @@
-/**
- * Authentication & Authorization Constants
- * Session, tokens, invites, and OAuth-related constants
- */
-
 // ==================== INVITE TYPES ====================
 
 export const INVITE_TYPES = {

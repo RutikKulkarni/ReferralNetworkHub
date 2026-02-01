@@ -1,8 +1,3 @@
-/**
- * Cache Middleware
- * Automatic response caching for GET requests
- */
-
 import { Request, Response, NextFunction } from "express";
 import cacheService from "../utils/cache.service";
 import config from "../../config";

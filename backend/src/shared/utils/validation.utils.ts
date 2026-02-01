@@ -1,8 +1,3 @@
-/**
- * Validation Utility Functions
- * Common validation helpers for email, phone, domain, etc.
- */
-
 export class ValidationUtil {
   /**
    * Validate email format

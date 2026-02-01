@@ -1,7 +1,3 @@
-/**
- * Shared TypeScript Type Definitions
- */
-
 import {
   USER_TYPES,
   SESSION_STATUS,

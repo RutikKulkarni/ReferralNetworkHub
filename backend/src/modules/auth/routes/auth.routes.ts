@@ -1,8 +1,3 @@
-/**
- * Authentication Routes
- * Defines all authentication endpoints
- */
-
 import { Router } from "express";
 import { AuthController, InviteController } from "../controllers";
 import {
@@ -27,11 +22,6 @@ const router = Router();
 
 // ==================== PUBLIC ROUTES ====================
 
-/**
- * @route   POST /api/auth/register
- * @desc    Register public user (Job Seeker or Referral Provider)
- * @access  Public
- */
 router.post(
   "/register",
   authRateLimiter,

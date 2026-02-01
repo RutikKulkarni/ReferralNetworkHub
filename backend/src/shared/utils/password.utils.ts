@@ -1,8 +1,3 @@
-/**
- * Password Utility Functions
- * Handles password hashing, comparison, and validation
- */
-
 import bcrypt from "bcrypt";
 
 const SALT_ROUNDS = 12;

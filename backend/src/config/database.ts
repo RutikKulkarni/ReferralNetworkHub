@@ -1,8 +1,3 @@
-/**
- * Database Configuration
- * Sequelize ORM setup with PostgreSQL
- */
-
 import { Sequelize } from "sequelize";
 import config from "./index";
 
@@ -28,25 +23,19 @@ const sequelize = new Sequelize({
   },
 });
 
-/**
- * Test database connection
- */
 export async function testConnection(): Promise<void> {
   try {
-    console.log("🔌 Connecting to database...");
+    console.log("Connecting to database...");
     await sequelize.authenticate();
     console.log(
-      `✅ PostgreSQL connected: ${config.database.name}@${config.database.host}:${config.database.port}`,
+      `PostgreSQL connected: ${config.database.name}@${config.database.host}:${config.database.port}`,
     );
   } catch (error) {
-    console.error("❌ Database connection failed:", error);
+    console.error("Database connection failed:", error);
     throw error;
   }
 }
 
-/**
- * Sync database (create tables)
- */
 export async function syncDatabase(force = false): Promise<void> {
   try {
     if (force && config.env === "production") {
@@ -54,22 +43,19 @@ export async function syncDatabase(force = false): Promise<void> {
     }
 
     await sequelize.sync({ force, alter: config.env === "development" });
-    console.log("✅ Database synchronized successfully");
+    console.log("Database synchronized successfully");
   } catch (error) {
-    console.error("❌ Database synchronization failed:", error);
+    console.error("Database synchronization failed:", error);
     throw error;
   }
 }
 
-/**
- * Close database connection
- */
 export async function closeConnection(): Promise<void> {
   try {
     await sequelize.close();
-    console.log("✅ Database connection closed");
+    console.log("Database connection closed");
   } catch (error) {
-    console.error("❌ Error closing database connection:", error);
+    console.error("Error closing database connection:", error);
     throw error;
   }
 }

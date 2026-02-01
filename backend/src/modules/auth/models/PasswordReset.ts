@@ -1,8 +1,3 @@
-/**
- * Password Reset Model
- * Manages password reset tokens
- */
-
 import {
   Model,
   DataTypes,

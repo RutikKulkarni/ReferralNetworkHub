@@ -1,8 +1,3 @@
-/**
- * User-related Constants
- * User types, roles, and user management constants
- */
-
 // ==================== USER TYPES ====================
 
 export const USER_TYPES = {

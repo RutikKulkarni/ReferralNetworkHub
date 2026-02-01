@@ -1,8 +1,3 @@
-/**
- * Application Entry Point
- * Initializes Express app with all configurations and middleware
- */
-
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -92,7 +87,7 @@ app.use(errorHandler);
 
 const startServer = async (): Promise<void> => {
   try {
-    console.log("\n🚀 Starting Referral Network Hub Backend...\n");
+    console.log("\n Starting Referral Network Hub Backend...\n");
 
     // Test database connection
     await testConnection();
@@ -102,12 +97,12 @@ const startServer = async (): Promise<void> => {
 
     // Initialize models
     initAuthModels(sequelize);
-    console.log("✅ Models initialized");
+    console.log(" Models initialized");
 
     // Sync database (only in development)
     if (config.env === "development") {
       await syncDatabase(false);
-      console.log("✅ Database synchronized");
+      console.log(" Database synchronized");
     }
 
     console.log(""); // Empty line for separation
@@ -116,16 +111,16 @@ const startServer = async (): Promise<void> => {
     const PORT = config.port;
     app.listen(PORT, () => {
       console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      console.log("🎉 SERVER STARTED SUCCESSFULLY");
+      console.log(" SERVER STARTED SUCCESSFULLY");
       console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      console.log(`📍 Port:        ${PORT}`);
-      console.log(`🌍 Environment: ${config.env}`);
-      console.log(`🔗 API URL:     http://localhost:${PORT}/api`);
-      console.log(`📚 API Docs:    http://localhost:${PORT}/api-docs`);
+      console.log(` Port:        ${PORT}`);
+      console.log(` Environment: ${config.env}`);
+      console.log(` API URL:     http://localhost:${PORT}/api`);
+      console.log(` API Docs:    http://localhost:${PORT}/api-docs`);
       console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
     });
   } catch (error) {
-    console.error("\n❌ FAILED TO START SERVER:");
+    console.error("\n FAILED TO START SERVER:");
     console.error(error);
     process.exit(1);
   }

@@ -1,8 +1,3 @@
-/**
- * Device Detection Utility Functions
- * Parses User-Agent strings and detects device, browser, and OS information
- */
-
 import { Request } from "express";
 import { DeviceInfo, BrowserType, OSType, DeviceType } from "../types";
 import { BROWSER_TYPES, OS_TYPES, DEVICE_TYPES } from "../../constants";

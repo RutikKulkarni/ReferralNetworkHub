@@ -1,8 +1,3 @@
-/**
- * Authentication Middleware
- * Verifies JWT tokens and manages user authentication
- */
-
 import { Request, Response, NextFunction } from "express";
 import { JWTUtil, ResponseUtil } from "../../../shared/utils";
 import { User, UserSession } from "../models";
@@ -15,9 +10,6 @@ import {
   DeviceType,
 } from "../../../shared/types";
 
-/**
- * Verify JWT token and attach user to request
- */
 export const verifyToken = async (
   req: Request,
   res: Response,

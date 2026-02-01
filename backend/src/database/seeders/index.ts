@@ -1,8 +1,3 @@
-/**
- * Database Seeder Script
- * Runs all database seeders
- */
-
 import {
   testConnection,
   syncDatabase,

@@ -1,8 +1,3 @@
-/**
- * Auth Models Index
- * Initializes and exports all auth models with associations
- */
-
 import { Sequelize } from "sequelize";
 import { initUserModel, User } from "./User";
 import { initUserSessionModel, UserSession } from "./UserSession";

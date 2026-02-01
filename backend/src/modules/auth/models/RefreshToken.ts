@@ -1,8 +1,3 @@
-/**
- * Refresh Token Model
- * Manages JWT refresh tokens for token rotation
- */
-
 import {
   Model,
   DataTypes,

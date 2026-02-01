@@ -1,8 +1,3 @@
-/**
- * Response Utility Functions
- * Standardized API response helpers
- */
-
 import { Response } from "express";
 import { ApiResponse } from "../types";
 import { HTTP_STATUS } from "../../constants";

@@ -1,8 +1,3 @@
-/**
- * JWT Utility Functions
- * Handles JWT token generation, verification, and decoding
- */
-
 import jwt, { SignOptions } from "jsonwebtoken";
 import config from "../../config";
 import { JWTPayload, RefreshTokenPayload, UserType } from "../types";

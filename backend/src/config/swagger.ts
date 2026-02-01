@@ -1,8 +1,3 @@
-/**
- * Swagger Configuration
- * OpenAPI 3.0 specification for Referral Network Hub API
- */
-
 import swaggerJSDoc from "swagger-jsdoc";
 import { version } from "../../package.json";
 

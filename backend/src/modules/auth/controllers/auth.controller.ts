@@ -15,44 +15,6 @@ import {
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../../constants";
 
 export class AuthController {
-  /**
-   * @swagger
-   * /api/auth/register:
-   *   post:
-   *     tags: [Authentication]
-   *     summary: Register a new public user
-   *     description: Register as a Job Seeker or Referral Provider without an invite
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             $ref: '#/components/schemas/UserRegistration'
-   *     responses:
-   *       201:
-   *         description: User registered successfully
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: success
-   *                 message:
-   *                   type: string
-   *                   example: User registered successfully
-   *                 data:
-   *                   $ref: '#/components/schemas/LoginResponse'
-   *       400:
-   *         $ref: '#/components/responses/ValidationError'
-   *       409:
-   *         description: Email already exists
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Error'
-   */
   public async registerPublic(
     req: Request,
     res: Response,
@@ -77,31 +39,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * @swagger
-   * /api/auth/invite/accept:
-   *   post:
-   *     tags: [Authentication]
-   *     summary: Accept an invite and register
-   *     description: Register a new user using an invite token
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             $ref: '#/components/schemas/AcceptInviteRequest'
-   *     responses:
-   *       201:
-   *         description: Invite accepted and user registered
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/LoginResponse'
-   *       400:
-   *         $ref: '#/components/responses/ValidationError'
-   *       404:
-   *         description: Invalid or expired invite token
-   */
   public async acceptInvite(
     req: Request,
     res: Response,
@@ -126,9 +63,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * Validate invite token
-   */
   public async validateInvite(
     req: Request,
     res: Response,
@@ -150,38 +84,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * @swagger
-   * /api/auth/login:
-   *   post:
-   *     tags: [Authentication]
-   *     summary: User login
-   *     description: Authenticate user and receive access token
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             $ref: '#/components/schemas/UserLogin'
-   *     responses:
-   *       200:
-   *         description: Login successful
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/LoginResponse'
-   *         headers:
-   *           Set-Cookie:
-   *             description: Refresh token cookie
-   *             schema:
-   *               type: string
-   *       401:
-   *         description: Invalid credentials
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Error'
-   */
   public async login(
     req: Request,
     res: Response,
@@ -202,9 +104,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * OAuth callback (Google)
-   */
   public async oauthCallback(
     req: Request,
     res: Response,
@@ -225,46 +124,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * @swagger
-   * /api/auth/refresh:
-   *   post:
-   *     tags: [Authentication]
-   *     summary: Refresh access token
-   *     description: Get a new access token using a refresh token
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             required:
-   *               - refreshToken
-   *             properties:
-   *               refreshToken:
-   *                 type: string
-   *                 description: Valid refresh token
-   *     responses:
-   *       200:
-   *         description: Token refreshed successfully
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: success
-   *                 data:
-   *                   type: object
-   *                   properties:
-   *                     accessToken:
-   *                       type: string
-   *                     expiresIn:
-   *                       type: number
-   *       401:
-   *         description: Invalid or expired refresh token
-   */
   public async refreshToken(
     req: Request,
     res: Response,
@@ -299,25 +158,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * @swagger
-   * /api/auth/logout:
-   *   post:
-   *     tags: [Authentication]
-   *     summary: Logout user
-   *     description: Logout user and invalidate current session
-   *     security:
-   *       - bearerAuth: []
-   *     responses:
-   *       200:
-   *         description: Logout successful
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/SuccessResponse'
-   *       401:
-   *         $ref: '#/components/responses/UnauthorizedError'
-   */
   public async logout(
     req: Request,
     res: Response,
@@ -342,31 +182,6 @@ export class AuthController {
     }
   }
 
-  /**
-   * @swagger
-   * /api/auth/me:
-   *   get:
-   *     tags: [Authentication]
-   *     summary: Get current authenticated user
-   *     description: Retrieve current user information
-   *     security:
-   *       - bearerAuth: []
-   *     responses:
-   *       200:
-   *         description: User information retrieved
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 status:
-   *                   type: string
-   *                   example: success
-   *                 data:
-   *                   $ref: '#/components/schemas/User'
-   *       401:
-   *         $ref: '#/components/responses/UnauthorizedError'
-   */
   public async getCurrentUser(
     req: Request,
     res: Response,

@@ -1,8 +1,3 @@
-/**
- * Activity & Audit Log Constants
- * All activity types for tracking user and system actions
- */
-
 // ==================== ACTIVITY TYPES ====================
 
 export const ACTIVITY_TYPES = {

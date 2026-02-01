@@ -1,25 +1,14 @@
-/**
- * Environment Configuration
- * Centralized configuration management with validation
- */
-
 import dotenv from "dotenv";
 import path from "path";
 
-// Load environment variables based on NODE_ENV
-// Priority: .env.local (local dev) > .env (production) > .env.example (template)
 const envFile = process.env.NODE_ENV === "production" ? ".env" : ".env.local";
 
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
-// Fallback to .env if .env.local doesn't exist
 if (process.env.NODE_ENV !== "production") {
   dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 }
 
-/**
- * Validate required environment variables
- */
 function validateEnv(): void {
   const required = [
     "NODE_ENV",
@@ -41,14 +30,13 @@ function validateEnv(): void {
     );
   }
 
-  // Warn about default JWT secrets in production
   if (
     process.env.NODE_ENV === "production" &&
     (process.env.JWT_ACCESS_TOKEN_SECRET?.includes("your_") ||
       process.env.JWT_REFRESH_TOKEN_SECRET?.includes("your_"))
   ) {
     console.warn(
-      "⚠️  WARNING: Using default JWT secrets in production! Please change them.",
+      "WARNING: Using default JWT secrets in production! Please change them.",
     );
   }
 }

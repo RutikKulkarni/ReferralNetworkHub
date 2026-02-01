@@ -1,8 +1,3 @@
-/**
- * HTTP Status Codes
- * Standard HTTP status codes used throughout the application
- */
-
 // ==================== HTTP STATUS CODES ====================
 
 export const HTTP_STATUS = {

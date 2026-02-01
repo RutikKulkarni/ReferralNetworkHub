@@ -1,11 +1,3 @@
-/**
- * Application Constants - Barrel Export
- * Centralized exports for all application constants
- *
- * This file re-exports all constants from their respective modules
- * for convenient importing throughout the application.
- */
-
 // User-related constants
 export * from "./user.constants";
 

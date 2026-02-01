@@ -1,8 +1,3 @@
-/**
- * Rate Limiter Middleware with Redis
- * Prevents abuse by limiting request rates
- */
-
 import rateLimit from "express-rate-limit";
 import RedisStore, { type RedisReply } from "rate-limit-redis";
 import redisClient from "../../config/redis";

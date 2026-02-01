@@ -1,8 +1,3 @@
-/**
- * Platform Super Admin Seeder
- * Seeds initial super admin users
- */
-
 import { User } from "../../modules/auth/models";
 import { PasswordUtil } from "../../shared/utils";
 import { USER_TYPES } from "../../constants";
@@ -14,10 +9,6 @@ interface SuperAdminSeedData {
   lastName: string;
 }
 
-/**
- * Load super admin credentials from environment variables
- * This prevents hardcoding sensitive credentials in source code
- */
 const getSuperAdminsFromEnv = (): SuperAdminSeedData[] => {
   const email = process.env.SUPER_ADMIN_EMAIL;
   const password = process.env.SUPER_ADMIN_PASSWORD;
@@ -26,10 +17,10 @@ const getSuperAdminsFromEnv = (): SuperAdminSeedData[] => {
 
   if (!email || !password) {
     console.warn(
-      "⚠️  Super admin credentials not found in environment variables.",
+      "Super admin credentials not found in environment variables.",
     );
     console.warn(
-      "   Set SUPER_ADMIN_EMAIL and SUPER_ADMIN_PASSWORD to seed super admins.",
+      "Set SUPER_ADMIN_EMAIL and SUPER_ADMIN_PASSWORD to seed super admins.",
     );
     return [];
   }
@@ -52,7 +43,7 @@ export const seedSuperAdmins = async (): Promise<void> => {
 
     if (SUPER_ADMINS.length === 0) {
       console.log(
-        "⚠️  No super admin credentials configured. Skipping seeding.",
+        "No super admin credentials configured. Skipping seeding.",
       );
       return;
     }
@@ -64,7 +55,7 @@ export const seedSuperAdmins = async (): Promise<void> => {
       });
 
       if (existingAdmin) {
-        console.log(`✓ Super admin already exists: ${adminData.email}`);
+        console.log(`Super admin already exists: ${adminData.email}`);
         continue;
       }
 
@@ -86,12 +77,12 @@ export const seedSuperAdmins = async (): Promise<void> => {
         tokenVersion: 0,
       });
 
-      console.log(`✓ Super admin created: ${adminData.email}`);
+      console.log(`Super admin created: ${adminData.email}`);
     }
 
-    console.log("✓ Platform super admin seeding complete");
+    console.log("Platform super admin seeding complete");
   } catch (error) {
-    console.error("✗ Error seeding super admins:", error);
+    console.error("Error seeding super admins:", error);
     throw error;
   }
 };

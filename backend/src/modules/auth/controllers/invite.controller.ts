@@ -1,17 +1,9 @@
-/**
- * Invite Controller
- * Handles invitation-related HTTP requests
- */
-
 import { Request, Response, NextFunction } from "express";
 import { InviteService } from "../services";
 import { ResponseUtil } from "../../../shared/utils";
 import { SUCCESS_MESSAGES } from "../../../constants";
 
 export class InviteController {
-  /**
-   * Create platform admin invite (super admin only)
-   */
   public async createPlatformAdminInvite(
     req: Request,
     res: Response,
@@ -35,9 +27,6 @@ export class InviteController {
     }
   }
 
-  /**
-   * Create organization admin invite (super admin or platform admin)
-   */
   public async createOrgAdminInvite(
     req: Request,
     res: Response,
@@ -61,10 +50,6 @@ export class InviteController {
       next(error);
     }
   }
-
-  /**
-   * Create recruiter invite (org admin only)
-   */
   public async createRecruiterInvite(
     req: Request,
     res: Response,
@@ -90,9 +75,6 @@ export class InviteController {
     }
   }
 
-  /**
-   * Create employee invite (org admin or recruiter)
-   */
   public async createEmployeeInvite(
     req: Request,
     res: Response,
@@ -119,9 +101,6 @@ export class InviteController {
     }
   }
 
-  /**
-   * Get organization invites
-   */
   public async getOrganizationInvites(
     req: Request,
     res: Response,
@@ -142,9 +121,6 @@ export class InviteController {
     }
   }
 
-  /**
-   * Get invites sent by user
-   */
   public async getMyInvites(
     req: Request,
     res: Response,

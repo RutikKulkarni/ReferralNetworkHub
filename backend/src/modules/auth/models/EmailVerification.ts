@@ -1,8 +1,3 @@
-/**
- * Email Verification Model
- * Manages email verification tokens
- */
-
 import {
   Model,
   DataTypes,

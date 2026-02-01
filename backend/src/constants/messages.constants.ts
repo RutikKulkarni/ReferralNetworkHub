@@ -1,8 +1,3 @@
-/**
- * Application Messages
- * Error and success messages used throughout the application
- */
-
 // ==================== ERROR MESSAGES ====================
 
 export const ERROR_MESSAGES = {

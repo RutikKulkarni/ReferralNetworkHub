@@ -1,8 +1,3 @@
-/**
- * Cache Service
- * Centralized caching operations using Redis
- */
-
 import redisClient from "../../config/redis";
 import config from "../../config";
 

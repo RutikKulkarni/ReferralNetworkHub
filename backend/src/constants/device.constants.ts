@@ -1,8 +1,3 @@
-/**
- * Device & Browser Detection Constants
- * Constants for tracking user devices, browsers, and operating systems
- */
-
 // ==================== DEVICE TYPES ====================
 
 export const DEVICE_TYPES = {

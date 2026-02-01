@@ -1,8 +1,3 @@
-/**
- * Invite Token Model
- * Manages invitation tokens for user registration
- */
-
 import {
   Model,
   DataTypes,

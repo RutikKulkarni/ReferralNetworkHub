@@ -1,8 +1,3 @@
-/**
- * Utility Functions Index
- * Exports all utility modules
- */
-
 export * from "./jwt.utils";
 export * from "./password.utils";
 export * from "./device.utils";

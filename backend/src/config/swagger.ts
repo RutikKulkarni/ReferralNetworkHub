@@ -1,5 +1,6 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import { version } from "../../package.json";
+import path from "path";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -177,20 +178,23 @@ const swaggerDefinition = {
   },
 };
 
+// Use absolute paths that work in both dev and production
+const isDev = process.env.NODE_ENV !== "production";
+const baseDir = isDev ? path.join(__dirname, "..") : path.join(__dirname, "..");
+
 const options: swaggerJSDoc.Options = {
   swaggerDefinition,
-  apis:
-    process.env.NODE_ENV === "production"
-      ? [
-          "./dist/modules/*/routes/*.js",
-          "./dist/modules/*/controllers/*.js",
-          "./dist/docs/swagger/*.yaml",
-        ]
-      : [
-          "./src/modules/*/routes/*.ts",
-          "./src/modules/*/controllers/*.ts",
-          "./src/docs/swagger/*.yaml",
-        ],
+  apis: isDev
+    ? [
+        path.join(baseDir, "modules/*/routes/*.ts"),
+        path.join(baseDir, "modules/*/controllers/*.ts"),
+        path.join(baseDir, "docs/swagger/*.yaml"),
+      ]
+    : [
+        path.join(baseDir, "modules/*/routes/*.js"),
+        path.join(baseDir, "modules/*/controllers/*.js"),
+        path.join(baseDir, "docs/swagger/*.yaml"),
+      ],
 };
 
 export const swaggerSpec = swaggerJSDoc(options);

@@ -11,22 +11,22 @@ import { Organization } from "./Organization";
 
 export interface EmployeeAttributes {
   id: string;
-  userId: string;
-  organizationId: string;
-  jobTitle: string;
+  user_id: string;
+  organization_id: string;
+  job_title: string;
   department: string | null;
-  employeeId: string | null;
-  managerId: string | null;
-  joinedDate: Date;
-  isCurrentlyEmployed: boolean;
-  leftDate: Date | null;
-  offboardReason: string | null;
-  canProvideReferrals: boolean;
-  referralCount: number;
-  performanceRating: number | null;
+  employee_id: string | null;
+  manager_id: string | null;
+  joined_date: Date;
+  is_currently_employed: boolean;
+  left_date: Date | null;
+  offboard_reason: string | null;
+  can_provide_referrals: boolean;
+  referral_count: number;
+  performance_rating: number | null;
   notes: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export class Employee
@@ -36,39 +36,39 @@ export class Employee
       EmployeeAttributes,
       | "id"
       | "department"
-      | "employeeId"
-      | "managerId"
-      | "isCurrentlyEmployed"
-      | "leftDate"
-      | "offboardReason"
-      | "canProvideReferrals"
-      | "referralCount"
-      | "performanceRating"
+      | "employee_id"
+      | "manager_id"
+      | "is_currently_employed"
+      | "left_date"
+      | "offboard_reason"
+      | "can_provide_referrals"
+      | "referral_count"
+      | "performance_rating"
       | "notes"
-      | "createdAt"
-      | "updatedAt"
+      | "created_at"
+      | "updated_at"
     >
   >
   implements EmployeeAttributes
 {
   public id!: string;
-  public userId!: string;
-  public organizationId!: string;
-  public jobTitle!: string;
+  public user_id!: string;
+  public organization_id!: string;
+  public job_title!: string;
   public department!: string | null;
-  public employeeId!: string | null;
-  public managerId!: string | null;
-  public joinedDate!: Date;
-  public isCurrentlyEmployed!: boolean;
-  public leftDate!: Date | null;
-  public offboardReason!: string | null;
-  public canProvideReferrals!: boolean;
-  public referralCount!: number;
-  public performanceRating!: number | null;
+  public employee_id!: string | null;
+  public manager_id!: string | null;
+  public joined_date!: Date;
+  public is_currently_employed!: boolean;
+  public left_date!: Date | null;
+  public offboard_reason!: string | null;
+  public can_provide_referrals!: boolean;
+  public referral_count!: number;
+  public performance_rating!: number | null;
   public notes!: string | null;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   // Associations
   public readonly user?: User;
@@ -89,10 +89,10 @@ export class Employee
    * Offboard employee
    */
   public async offboard(reason: string, leftDate?: Date): Promise<void> {
-    this.isCurrentlyEmployed = false;
-    this.leftDate = leftDate || new Date();
-    this.offboardReason = reason;
-    this.canProvideReferrals = false;
+    this.is_currently_employed = false;
+    this.left_date = leftDate || new Date();
+    this.offboard_reason = reason;
+    this.can_provide_referrals = false;
     await this.save();
   }
 
@@ -105,7 +105,7 @@ export class Employee
   ): Promise<void> {
     this.department = newDepartment;
     if (newJobTitle) {
-      this.jobTitle = newJobTitle;
+      this.job_title = newJobTitle;
     }
     await this.save();
   }
@@ -114,7 +114,7 @@ export class Employee
    * Assign manager
    */
   public async assignManager(managerId: string): Promise<void> {
-    this.managerId = managerId;
+    this.manager_id = managerId;
     await this.save();
   }
 
@@ -125,7 +125,7 @@ export class Employee
     if (rating < 1 || rating > 5) {
       throw new Error("Performance rating must be between 1 and 5");
     }
-    this.performanceRating = rating;
+    this.performance_rating = rating;
     await this.save();
   }
 
@@ -133,7 +133,7 @@ export class Employee
    * Increment referral count
    */
   public async incrementReferrals(): Promise<void> {
-    this.referralCount += 1;
+    this.referral_count += 1;
     await this.save();
   }
 
@@ -141,7 +141,7 @@ export class Employee
    * Check if employee can provide referrals
    */
   public canRefer(): boolean {
-    return this.isCurrentlyEmployed && this.canProvideReferrals;
+    return this.is_currently_employed && this.can_provide_referrals;
   }
 }
 
@@ -153,7 +153,7 @@ export const initEmployeeModel = (sequelize: Sequelize): typeof Employee => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      userId: {
+      user_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -163,7 +163,7 @@ export const initEmployeeModel = (sequelize: Sequelize): typeof Employee => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      organizationId: {
+      organization_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -173,7 +173,7 @@ export const initEmployeeModel = (sequelize: Sequelize): typeof Employee => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      jobTitle: {
+      job_title: {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
@@ -181,12 +181,12 @@ export const initEmployeeModel = (sequelize: Sequelize): typeof Employee => {
         type: DataTypes.STRING(100),
         allowNull: true,
       },
-      employeeId: {
+      employee_id: {
         type: DataTypes.STRING(50),
         allowNull: true,
         comment: "Company-specific employee identifier",
       },
-      managerId: {
+      manager_id: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -195,34 +195,34 @@ export const initEmployeeModel = (sequelize: Sequelize): typeof Employee => {
         },
         onDelete: "SET NULL",
       },
-      joinedDate: {
+      joined_date: {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      isCurrentlyEmployed: {
+      is_currently_employed: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
       },
-      leftDate: {
+      left_date: {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
-      offboardReason: {
+      offboard_reason: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      canProvideReferrals: {
+      can_provide_referrals: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
       },
-      referralCount: {
+      referral_count: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },
-      performanceRating: {
+      performance_rating: {
         type: DataTypes.DECIMAL(2, 1),
         allowNull: true,
         validate: {
@@ -236,11 +236,11 @@ export const initEmployeeModel = (sequelize: Sequelize): typeof Employee => {
         allowNull: true,
         comment: "Internal notes about the employee",
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -252,49 +252,49 @@ export const initEmployeeModel = (sequelize: Sequelize): typeof Employee => {
       indexes: [
         {
           unique: true,
-          fields: ["userId", "organizationId"],
+          fields: ["user_id", "organization_id"],
           name: "unique_user_organization_employee",
         },
         {
-          fields: ["userId"],
+          fields: ["user_id"],
         },
         {
-          fields: ["organizationId"],
+          fields: ["organization_id"],
         },
         {
-          fields: ["isCurrentlyEmployed"],
+          fields: ["is_currently_employed"],
         },
         {
           fields: ["department"],
         },
         {
-          fields: ["managerId"],
+          fields: ["manager_id"],
         },
         {
-          fields: ["employeeId"],
+          fields: ["employee_id"],
         },
       ],
       scopes: {
         active: {
           where: {
-            isCurrentlyEmployed: true,
+            is_currently_employed: true,
           },
         },
         byDepartment: (department: string) => ({
           where: {
             department,
-            isCurrentlyEmployed: true,
+            is_currently_employed: true,
           },
         }),
         canRefer: {
           where: {
-            isCurrentlyEmployed: true,
-            canProvideReferrals: true,
+            is_currently_employed: true,
+            can_provide_referrals: true,
           },
         },
-        byOrganization: (organizationId: string) => ({
+        byOrganization: (organization_id: string) => ({
           where: {
-            organizationId,
+            organization_id,
           },
         }),
       },

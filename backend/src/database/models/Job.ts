@@ -12,30 +12,30 @@ import { Organization } from "./Organization";
 
 export interface JobAttributes {
   id: string;
-  organizationId: string;
-  postedBy: string;
+  organization_id: string;
+  posted_by: string;
   title: string;
   description: string;
   requirements: Record<string, unknown> | null;
   location: string | null;
-  jobType: "full_time" | "part_time" | "contract" | "internship";
-  experienceLevel: "entry" | "mid" | "senior" | "lead";
-  salaryRangeMin: number | null;
-  salaryRangeMax: number | null;
+  job_type: "full_time" | "part_time" | "contract" | "internship";
+  experience_level: "entry" | "mid" | "senior" | "lead";
+  salary_range_min: number | null;
+  salary_range_max: number | null;
   currency: string;
-  skillsRequired: string[] | null;
+  skills_required: string[] | null;
   benefits: string[] | null;
-  isActive: boolean;
-  isReferralEligible: boolean;
-  referralBonus: number | null;
-  applicationDeadline: Date | null;
-  postedDate: Date;
-  closedDate: Date | null;
-  closedReason: string | null;
-  viewCount: number;
-  applicationCount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  is_active: boolean;
+  is_referral_eligible: boolean;
+  referral_bonus: number | null;
+  application_deadline: Date | null;
+  posted_date: Date;
+  closed_date: Date | null;
+  closed_reason: string | null;
+  view_count: number;
+  application_count: number;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export class Job
@@ -46,52 +46,52 @@ export class Job
       | "id"
       | "requirements"
       | "location"
-      | "salaryRangeMin"
-      | "salaryRangeMax"
+      | "salary_range_min"
+      | "salary_range_max"
       | "currency"
-      | "skillsRequired"
+      | "skills_required"
       | "benefits"
-      | "isActive"
-      | "isReferralEligible"
-      | "referralBonus"
-      | "applicationDeadline"
-      | "postedDate"
-      | "closedDate"
-      | "closedReason"
-      | "viewCount"
-      | "applicationCount"
-      | "createdAt"
-      | "updatedAt"
+      | "is_active"
+      | "is_referral_eligible"
+      | "referral_bonus"
+      | "application_deadline"
+      | "posted_date"
+      | "closed_date"
+      | "closed_reason"
+      | "view_count"
+      | "application_count"
+      | "created_at"
+      | "updated_at"
     >
   >
   implements JobAttributes
 {
   public id!: string;
-  public organizationId!: string;
-  public postedBy!: string;
+  public organization_id!: string;
+  public posted_by!: string;
   public title!: string;
   public description!: string;
   public requirements!: Record<string, unknown> | null;
   public location!: string | null;
-  public jobType!: "full_time" | "part_time" | "contract" | "internship";
-  public experienceLevel!: "entry" | "mid" | "senior" | "lead";
-  public salaryRangeMin!: number | null;
-  public salaryRangeMax!: number | null;
+  public job_type!: "full_time" | "part_time" | "contract" | "internship";
+  public experience_level!: "entry" | "mid" | "senior" | "lead";
+  public salary_range_min!: number | null;
+  public salary_range_max!: number | null;
   public currency!: string;
-  public skillsRequired!: string[] | null;
+  public skills_required!: string[] | null;
   public benefits!: string[] | null;
-  public isActive!: boolean;
-  public isReferralEligible!: boolean;
-  public referralBonus!: number | null;
-  public applicationDeadline!: Date | null;
-  public postedDate!: Date;
-  public closedDate!: Date | null;
-  public closedReason!: string | null;
-  public viewCount!: number;
-  public applicationCount!: number;
+  public is_active!: boolean;
+  public is_referral_eligible!: boolean;
+  public referral_bonus!: number | null;
+  public application_deadline!: Date | null;
+  public posted_date!: Date;
+  public closed_date!: Date | null;
+  public closed_reason!: string | null;
+  public view_count!: number;
+  public application_count!: number;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   // Associations
   public readonly organization?: Organization;
@@ -113,9 +113,9 @@ export class Job
    * Close job posting
    */
   public async close(reason: string): Promise<void> {
-    this.isActive = false;
-    this.closedDate = new Date();
-    this.closedReason = reason;
+    this.is_active = false;
+    this.closed_date = new Date();
+    this.closed_reason = reason;
     await this.save();
   }
 
@@ -123,9 +123,9 @@ export class Job
    * Reopen job posting
    */
   public async reopen(): Promise<void> {
-    this.isActive = true;
-    this.closedDate = null;
-    this.closedReason = null;
+    this.is_active = true;
+    this.closed_date = null;
+    this.closed_reason = null;
     await this.save();
   }
 
@@ -133,7 +133,7 @@ export class Job
    * Increment view count
    */
   public async incrementViews(): Promise<void> {
-    this.viewCount += 1;
+    this.view_count += 1;
     await this.save();
   }
 
@@ -141,7 +141,7 @@ export class Job
    * Increment application count
    */
   public async incrementApplications(): Promise<void> {
-    this.applicationCount += 1;
+    this.application_count += 1;
     await this.save();
   }
 
@@ -149,8 +149,8 @@ export class Job
    * Check if job is accepting applications
    */
   public isAcceptingApplications(): boolean {
-    if (!this.isActive) return false;
-    if (this.applicationDeadline && this.applicationDeadline < new Date()) {
+    if (!this.is_active) return false;
+    if (this.application_deadline && this.application_deadline < new Date()) {
       return false;
     }
     return true;
@@ -160,7 +160,7 @@ export class Job
    * Check if job is eligible for referrals
    */
   public canReceiveReferrals(): boolean {
-    return this.isActive && this.isReferralEligible;
+    return this.is_active && this.is_referral_eligible;
   }
 }
 
@@ -172,7 +172,7 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      organizationId: {
+      organization_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -182,7 +182,7 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      postedBy: {
+      posted_by: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -212,7 +212,7 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
-      jobType: {
+      job_type: {
         type: DataTypes.ENUM(
           "full_time",
           "part_time",
@@ -222,16 +222,16 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
         allowNull: false,
         defaultValue: "full_time",
       },
-      experienceLevel: {
+      experience_level: {
         type: DataTypes.ENUM("entry", "mid", "senior", "lead"),
         allowNull: false,
         defaultValue: "mid",
       },
-      salaryRangeMin: {
+      salary_range_min: {
         type: DataTypes.DECIMAL(15, 2),
         allowNull: true,
       },
-      salaryRangeMax: {
+      salary_range_max: {
         type: DataTypes.DECIMAL(15, 2),
         allowNull: true,
       },
@@ -240,7 +240,7 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
         defaultValue: "USD",
         allowNull: false,
       },
-      skillsRequired: {
+      skills_required: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         defaultValue: [],
@@ -250,53 +250,53 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
         allowNull: true,
         defaultValue: [],
       },
-      isActive: {
+      is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
       },
-      isReferralEligible: {
+      is_referral_eligible: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
       },
-      referralBonus: {
+      referral_bonus: {
         type: DataTypes.DECIMAL(15, 2),
         allowNull: true,
         comment: "Bonus amount for successful referrals",
       },
-      applicationDeadline: {
+      application_deadline: {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
-      postedDate: {
+      posted_date: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         allowNull: false,
       },
-      closedDate: {
+      closed_date: {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      closedReason: {
+      closed_reason: {
         type: DataTypes.STRING(500),
         allowNull: true,
       },
-      viewCount: {
+      view_count: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },
-      applicationCount: {
+      application_count: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -307,22 +307,22 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
       timestamps: true,
       indexes: [
         {
-          fields: ["organizationId"],
+          fields: ["organization_id"],
         },
         {
-          fields: ["postedBy"],
+          fields: ["posted_by"],
         },
         {
-          fields: ["isActive"],
+          fields: ["is_active"],
         },
         {
-          fields: ["postedDate"],
+          fields: ["posted_date"],
         },
         {
-          fields: ["jobType"],
+          fields: ["job_type"],
         },
         {
-          fields: ["experienceLevel"],
+          fields: ["experience_level"],
         },
         {
           fields: ["location"],
@@ -331,29 +331,29 @@ export const initJobModel = (sequelize: Sequelize): typeof Job => {
       scopes: {
         active: {
           where: {
-            isActive: true,
+            is_active: true,
           },
         },
         referralEligible: {
           where: {
-            isActive: true,
-            isReferralEligible: true,
+            is_active: true,
+            is_referral_eligible: true,
           },
         },
-        byOrganization: (organizationId: string) => ({
+        byOrganization: (organization_id: string) => ({
           where: {
-            organizationId,
+            organization_id,
           },
         }),
-        byRecruiter: (postedBy: string) => ({
+        byRecruiter: (posted_by: string) => ({
           where: {
-            postedBy,
+            posted_by,
           },
         }),
-        byJobType: (jobType: string) => ({
+        byJobType: (job_type: string) => ({
           where: {
-            jobType,
-            isActive: true,
+            job_type,
+            is_active: true,
           },
         }),
       },

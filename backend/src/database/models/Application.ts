@@ -14,11 +14,11 @@ import { Referral } from "./Referral";
 
 export interface ApplicationAttributes {
   id: string;
-  jobId: string;
-  applicantId: string;
-  referralId: string | null;
-  organizationId: string;
-  applicationStatus:
+  job_id: string;
+  applicant_id: string;
+  referral_id: string | null;
+  organization_id: string;
+  application_status:
     | "submitted"
     | "screening"
     | "interview"
@@ -26,17 +26,17 @@ export interface ApplicationAttributes {
     | "hired"
     | "rejected"
     | "withdrawn";
-  resumeUrl: string | null;
-  coverLetter: string | null;
-  appliedDate: Date;
-  reviewedBy: string | null;
-  lastUpdatedBy: string | null;
-  rejectionReason: string | null;
-  offerDetails: Record<string, unknown> | null;
-  hiredDate: Date | null;
+  resume_url: string | null;
+  cover_letter: string | null;
+  applied_date: Date;
+  reviewed_by: string | null;
+  last_updated_by: string | null;
+  rejection_reason: string | null;
+  offer_details: Record<string, unknown> | null;
+  hired_date: Date | null;
   notes: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export class Application
@@ -45,29 +45,29 @@ export class Application
     Optional<
       ApplicationAttributes,
       | "id"
-      | "referralId"
-      | "applicationStatus"
-      | "resumeUrl"
-      | "coverLetter"
-      | "appliedDate"
-      | "reviewedBy"
-      | "lastUpdatedBy"
-      | "rejectionReason"
-      | "offerDetails"
-      | "hiredDate"
+      | "referral_id"
+      | "application_status"
+      | "resume_url"
+      | "cover_letter"
+      | "applied_date"
+      | "reviewed_by"
+      | "last_updated_by"
+      | "rejection_reason"
+      | "offer_details"
+      | "hired_date"
       | "notes"
-      | "createdAt"
-      | "updatedAt"
+      | "created_at"
+      | "updated_at"
     >
   >
   implements ApplicationAttributes
 {
   public id!: string;
-  public jobId!: string;
-  public applicantId!: string;
-  public referralId!: string | null;
-  public organizationId!: string;
-  public applicationStatus!:
+  public job_id!: string;
+  public applicant_id!: string;
+  public referral_id!: string | null;
+  public organization_id!: string;
+  public application_status!:
     | "submitted"
     | "screening"
     | "interview"
@@ -75,18 +75,18 @@ export class Application
     | "hired"
     | "rejected"
     | "withdrawn";
-  public resumeUrl!: string | null;
-  public coverLetter!: string | null;
-  public appliedDate!: Date;
-  public reviewedBy!: string | null;
-  public lastUpdatedBy!: string | null;
-  public rejectionReason!: string | null;
-  public offerDetails!: Record<string, unknown> | null;
-  public hiredDate!: Date | null;
+  public resume_url!: string | null;
+  public cover_letter!: string | null;
+  public applied_date!: Date;
+  public reviewed_by!: string | null;
+  public last_updated_by!: string | null;
+  public rejection_reason!: string | null;
+  public offer_details!: Record<string, unknown> | null;
+  public hired_date!: Date | null;
   public notes!: string | null;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   // Associations
   public readonly job?: Job;
@@ -113,9 +113,9 @@ export class Application
    * Move application to screening stage
    */
   public async moveToScreening(reviewerId: string): Promise<void> {
-    this.applicationStatus = "screening";
-    this.reviewedBy = reviewerId;
-    this.lastUpdatedBy = reviewerId;
+    this.application_status = "screening";
+    this.reviewed_by = reviewerId;
+    this.last_updated_by = reviewerId;
     await this.save();
   }
 
@@ -123,9 +123,9 @@ export class Application
    * Move application to interview stage
    */
   public async moveToInterview(updatedBy: string): Promise<void> {
-    if (this.applicationStatus === "screening") {
-      this.applicationStatus = "interview";
-      this.lastUpdatedBy = updatedBy;
+    if (this.application_status === "screening") {
+      this.application_status = "interview";
+      this.last_updated_by = updatedBy;
       await this.save();
     }
   }
@@ -137,10 +137,10 @@ export class Application
     updatedBy: string,
     offerDetails: Record<string, unknown>,
   ): Promise<void> {
-    if (this.applicationStatus === "interview") {
-      this.applicationStatus = "offer";
-      this.offerDetails = offerDetails;
-      this.lastUpdatedBy = updatedBy;
+    if (this.application_status === "interview") {
+      this.application_status = "offer";
+      this.offer_details = offerDetails;
+      this.last_updated_by = updatedBy;
       await this.save();
     }
   }
@@ -149,10 +149,10 @@ export class Application
    * Mark candidate as hired
    */
   public async markHired(updatedBy: string): Promise<void> {
-    if (this.applicationStatus === "offer") {
-      this.applicationStatus = "hired";
-      this.hiredDate = new Date();
-      this.lastUpdatedBy = updatedBy;
+    if (this.application_status === "offer") {
+      this.application_status = "hired";
+      this.hired_date = new Date();
+      this.last_updated_by = updatedBy;
       await this.save();
     }
   }
@@ -161,9 +161,9 @@ export class Application
    * Reject application
    */
   public async reject(updatedBy: string, reason: string): Promise<void> {
-    this.applicationStatus = "rejected";
-    this.rejectionReason = reason;
-    this.lastUpdatedBy = updatedBy;
+    this.application_status = "rejected";
+    this.rejection_reason = reason;
+    this.last_updated_by = updatedBy;
     await this.save();
   }
 
@@ -172,10 +172,10 @@ export class Application
    */
   public async withdraw(): Promise<void> {
     if (
-      this.applicationStatus !== "hired" &&
-      this.applicationStatus !== "rejected"
+      this.application_status !== "hired" &&
+      this.application_status !== "rejected"
     ) {
-      this.applicationStatus = "withdrawn";
+      this.application_status = "withdrawn";
       await this.save();
     }
   }
@@ -184,19 +184,19 @@ export class Application
    * Check if application was referred
    */
   public isReferred(): boolean {
-    return !!this.referralId;
+    return !!this.referral_id;
   }
 
   /**
    * Check if application is in active pipeline
    */
   public isInPipeline(): boolean {
-    const terminalStatuses: ApplicationAttributes["applicationStatus"][] = [
+    const terminalStatuses: ApplicationAttributes["application_status"][] = [
       "rejected",
       "withdrawn",
       "hired",
     ];
-    return !terminalStatuses.includes(this.applicationStatus);
+    return !terminalStatuses.includes(this.application_status);
   }
 
   /**
@@ -204,7 +204,7 @@ export class Application
    */
   public async addNotes(notes: string, updatedBy: string): Promise<void> {
     this.notes = this.notes ? `${this.notes}\n\n${notes}` : notes;
-    this.lastUpdatedBy = updatedBy;
+    this.last_updated_by = updatedBy;
     await this.save();
   }
 }
@@ -219,7 +219,7 @@ export const initApplicationModel = (
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      jobId: {
+      job_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -229,7 +229,7 @@ export const initApplicationModel = (
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      applicantId: {
+      applicant_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -238,7 +238,7 @@ export const initApplicationModel = (
         },
         onDelete: "RESTRICT",
       },
-      referralId: {
+      referral_id: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -248,7 +248,7 @@ export const initApplicationModel = (
         onDelete: "SET NULL",
         comment: "Associated referral if application came through referral",
       },
-      organizationId: {
+      organization_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -258,7 +258,7 @@ export const initApplicationModel = (
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      applicationStatus: {
+      application_status: {
         type: DataTypes.ENUM(
           "submitted",
           "screening",
@@ -271,20 +271,20 @@ export const initApplicationModel = (
         allowNull: false,
         defaultValue: "submitted",
       },
-      resumeUrl: {
+      resume_url: {
         type: DataTypes.STRING(500),
         allowNull: true,
       },
-      coverLetter: {
+      cover_letter: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      appliedDate: {
+      applied_date: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         allowNull: false,
       },
-      reviewedBy: {
+      reviewed_by: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -294,7 +294,7 @@ export const initApplicationModel = (
         onDelete: "SET NULL",
         comment: "Recruiter or org admin who first reviewed",
       },
-      lastUpdatedBy: {
+      last_updated_by: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -304,16 +304,16 @@ export const initApplicationModel = (
         onDelete: "SET NULL",
         comment: "Last person who updated application status",
       },
-      rejectionReason: {
+      rejection_reason: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      offerDetails: {
+      offer_details: {
         type: DataTypes.JSONB,
         allowNull: true,
         comment: "Offer details including salary, benefits, start date",
       },
-      hiredDate: {
+      hired_date: {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
@@ -322,11 +322,11 @@ export const initApplicationModel = (
         allowNull: true,
         comment: "Internal notes about the application",
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -338,65 +338,65 @@ export const initApplicationModel = (
       indexes: [
         {
           unique: true,
-          fields: ["jobId", "applicantId"],
+          fields: ["job_id", "applicant_id"],
           name: "unique_job_applicant_application",
         },
         {
-          fields: ["jobId"],
+          fields: ["job_id"],
         },
         {
-          fields: ["applicantId"],
+          fields: ["applicant_id"],
         },
         {
-          fields: ["referralId"],
+          fields: ["referral_id"],
         },
         {
-          fields: ["organizationId"],
+          fields: ["organization_id"],
         },
         {
-          fields: ["applicationStatus"],
+          fields: ["application_status"],
         },
         {
-          fields: ["appliedDate"],
+          fields: ["applied_date"],
         },
         {
-          fields: ["reviewedBy"],
+          fields: ["reviewed_by"],
         },
       ],
       scopes: {
         submitted: {
           where: {
-            applicationStatus: "submitted",
+            application_status: "submitted",
           },
         },
         screening: {
           where: {
-            applicationStatus: "screening",
+            application_status: "screening",
           },
         },
         interview: {
           where: {
-            applicationStatus: "interview",
+            application_status: "interview",
           },
         },
         offered: {
           where: {
-            applicationStatus: "offer",
+            application_status: "offer",
           },
         },
         hired: {
           where: {
-            applicationStatus: "hired",
+            application_status: "hired",
           },
         },
         rejected: {
           where: {
-            applicationStatus: "rejected",
+            application_status: "rejected",
           },
         },
         inPipeline: {
           where: {
-            applicationStatus: [
+            application_status: [
               "submitted",
               "screening",
               "interview",
@@ -406,24 +406,24 @@ export const initApplicationModel = (
         },
         referred: {
           where: {
-            referralId: {
+            referral_id: {
               [Op.ne]: null,
             },
           },
         },
-        byJob: (jobId: string) => ({
+        byJob: (job_id: string) => ({
           where: {
-            jobId,
+            job_id,
           },
         }),
-        byApplicant: (applicantId: string) => ({
+        byApplicant: (applicant_id: string) => ({
           where: {
-            applicantId,
+            applicant_id,
           },
         }),
-        byOrganization: (organizationId: string) => ({
+        byOrganization: (organization_id: string) => ({
           where: {
-            organizationId,
+            organization_id,
           },
         }),
       },

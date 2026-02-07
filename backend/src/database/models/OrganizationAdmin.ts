@@ -11,13 +11,13 @@ import { Organization } from "./Organization";
 
 export interface OrganizationAdminAttributes {
   id: string;
-  userId: string;
-  organizationId: string;
+  user_id: string;
+  organization_id: string;
   role: "owner" | "admin" | "viewer";
   permissions: Record<string, boolean> | null;
-  createdBy: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  created_by: string | null;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export class OrganizationAdmin
@@ -25,20 +25,20 @@ export class OrganizationAdmin
     OrganizationAdminAttributes,
     Optional<
       OrganizationAdminAttributes,
-      "id" | "role" | "permissions" | "createdBy" | "createdAt" | "updatedAt"
+      "id" | "role" | "permissions" | "created_by" | "created_at" | "updated_at"
     >
   >
   implements OrganizationAdminAttributes
 {
   public id!: string;
-  public userId!: string;
-  public organizationId!: string;
+  public user_id!: string;
+  public organization_id!: string;
   public role!: "owner" | "admin" | "viewer";
   public permissions!: Record<string, boolean> | null;
-  public createdBy!: string | null;
+  public created_by!: string | null;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   // Associations
   public readonly user?: User;
@@ -90,7 +90,7 @@ export const initOrganizationAdminModel = (
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      userId: {
+      user_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -100,7 +100,7 @@ export const initOrganizationAdminModel = (
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      organizationId: {
+      organization_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -120,7 +120,7 @@ export const initOrganizationAdminModel = (
         allowNull: true,
         comment: "Granular permissions for custom access control",
       },
-      createdBy: {
+      created_by: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -129,11 +129,11 @@ export const initOrganizationAdminModel = (
         },
         onDelete: "SET NULL",
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -145,14 +145,16 @@ export const initOrganizationAdminModel = (
       indexes: [
         {
           unique: true,
-          fields: ["userId", "organizationId"],
-          name: "unique_user_organization_admin",
+          fields: ["user_id", "organization_id"],
+          name: "organization_admins_user_org_unique",
         },
         {
-          fields: ["userId"],
+          fields: ["user_id"],
+          name: "organization_admins_user_id_idx",
         },
         {
-          fields: ["organizationId"],
+          fields: ["organization_id"],
+          name: "organization_admins_organization_id_idx",
         },
         {
           fields: ["role"],

@@ -1,0 +1,273 @@
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, firstName, lastName]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+      responses:
+        "201":
+          description: User registered successfully
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "409":
+          description: User already exists
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+        "401":
+          description: Invalid credentials
+
+  /api/auth/refresh-token:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      responses:
+        "200":
+          description: Token refreshed
+        "401":
+          description: Invalid refresh token
+
+  /api/auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logout successful
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /api/auth/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /api/auth/invite/validate/{token}:
+    get:
+      tags:
+        - Invites
+      summary: Validate invite token
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Token is valid
+        "400":
+          description: Invalid token
+
+  /api/auth/invite/accept:
+    post:
+      tags:
+        - Invites
+      summary: Accept invite and register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password, firstName, lastName]
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+      responses:
+        "201":
+          description: User created
+        "400":
+          description: Invalid token
+
+  /api/auth/invite/platform-admin:
+    post:
+      tags:
+        - Invites
+      summary: Create platform admin invite
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+      responses:
+        "201":
+          description: Invite created
+        "403":
+          $ref: "#/components/responses/ForbiddenError"
+
+  /api/auth/invite/org-admin:
+    post:
+      tags:
+        - Invites
+      summary: Create org admin invite
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, organizationId]
+              properties:
+                email:
+                  type: string
+                organizationId:
+                  type: string
+      responses:
+        "201":
+          description: Invite created
+
+  /api/auth/invite/recruiter:
+    post:
+      tags:
+        - Invites
+      summary: Create recruiter invite
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, organizationId]
+              properties:
+                email:
+                  type: string
+                organizationId:
+                  type: string
+      responses:
+        "201":
+          description: Invite created
+
+  /api/auth/invite/employee:
+    post:
+      tags:
+        - Invites
+      summary: Create employee invite
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, organizationId]
+              properties:
+                email:
+                  type: string
+                organizationId:
+                  type: string
+      responses:
+        "201":
+          description: Invite created
+
+  /api/auth/invite/my-invites:
+    get:
+      tags:
+        - Invites
+      summary: Get my sent invites
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of invites
+
+  /api/auth/invite/organization/{organizationId}:
+    get:
+      tags:
+        - Invites
+      summary: Get organization invites
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Organization invites
+
+  /api/auth/invite/revoke/{inviteId}:
+    post:
+      tags:
+        - Invites
+      summary: Revoke invite
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: inviteId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Invite revoked

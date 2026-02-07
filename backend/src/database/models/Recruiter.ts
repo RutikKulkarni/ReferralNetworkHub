@@ -11,17 +11,17 @@ import { Organization } from "./Organization";
 
 export interface RecruiterAttributes {
   id: string;
-  userId: string;
-  organizationId: string;
+  user_id: string;
+  organization_id: string;
   jobTitle: string | null;
   department: string | null;
   canPostJobs: boolean;
   canManageReferrals: boolean;
   hiredDate: Date | null;
-  isActive: boolean;
-  createdBy: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  is_active: boolean;
+  created_by: string | null;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export class Recruiter
@@ -35,27 +35,27 @@ export class Recruiter
       | "canPostJobs"
       | "canManageReferrals"
       | "hiredDate"
-      | "isActive"
-      | "createdBy"
-      | "createdAt"
-      | "updatedAt"
+      | "is_active"
+      | "created_by"
+      | "created_at"
+      | "updated_at"
     >
   >
   implements RecruiterAttributes
 {
   public id!: string;
-  public userId!: string;
-  public organizationId!: string;
+  public user_id!: string;
+  public organization_id!: string;
   public jobTitle!: string | null;
   public department!: string | null;
   public canPostJobs!: boolean;
   public canManageReferrals!: boolean;
   public hiredDate!: Date | null;
-  public isActive!: boolean;
-  public createdBy!: string | null;
+  public is_active!: boolean;
+  public created_by!: string | null;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   // Associations
   public readonly user?: User;
@@ -76,14 +76,14 @@ export class Recruiter
    * Check if recruiter has permission to post jobs
    */
   public hasJobPostingPermission(): boolean {
-    return this.isActive && this.canPostJobs;
+    return this.is_active && this.canPostJobs;
   }
 
   /**
    * Check if recruiter has permission to manage referrals
    */
   public hasReferralManagementPermission(): boolean {
-    return this.isActive && this.canManageReferrals;
+    return this.is_active && this.canManageReferrals;
   }
 }
 
@@ -95,7 +95,7 @@ export const initRecruiterModel = (sequelize: Sequelize): typeof Recruiter => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      userId: {
+      user_id: {
         type: DataTypes.UUID,
         allowNull: false,
         unique: true,
@@ -106,7 +106,7 @@ export const initRecruiterModel = (sequelize: Sequelize): typeof Recruiter => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      organizationId: {
+      organization_id: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -138,12 +138,12 @@ export const initRecruiterModel = (sequelize: Sequelize): typeof Recruiter => {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
-      isActive: {
+      is_active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
       },
-      createdBy: {
+      created_by: {
         type: DataTypes.UUID,
         allowNull: true,
         references: {
@@ -152,11 +152,11 @@ export const initRecruiterModel = (sequelize: Sequelize): typeof Recruiter => {
         },
         onDelete: "SET NULL",
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -168,14 +168,15 @@ export const initRecruiterModel = (sequelize: Sequelize): typeof Recruiter => {
       indexes: [
         {
           unique: true,
-          fields: ["userId"],
-          name: "unique_recruiter_user",
+          fields: ["user_id"],
+          name: "recruiters_user_id_unique",
         },
         {
-          fields: ["organizationId"],
+          fields: ["organization_id"],
+          name: "recruiters_organization_id_idx",
         },
         {
-          fields: ["isActive"],
+          fields: ["is_active"],
         },
         {
           fields: ["department"],
@@ -184,18 +185,18 @@ export const initRecruiterModel = (sequelize: Sequelize): typeof Recruiter => {
       scopes: {
         active: {
           where: {
-            isActive: true,
+            is_active: true,
           },
         },
         canPostJobs: {
           where: {
-            isActive: true,
+            is_active: true,
             canPostJobs: true,
           },
         },
-        byOrganization: (organizationId: string) => ({
+        byOrganization: (organization_id: string) => ({
           where: {
-            organizationId,
+            organization_id,
           },
         }),
       },

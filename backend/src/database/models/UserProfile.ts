@@ -11,26 +11,26 @@ import { User } from "../../modules/auth/models/User";
 
 export interface UserProfileAttributes {
   id: string;
-  userId: string;
-  profileType: "job_seeker" | "referral_provider" | "employee";
+  user_id: string;
+  profile_type: "job_seeker" | "referral_provider" | "employee";
   bio: string | null;
   skills: string[] | null;
-  experienceYears: number | null;
-  currentLocation: string | null;
-  preferredLocations: string[] | null;
-  linkedinUrl: string | null;
-  githubUrl: string | null;
-  portfolioUrl: string | null;
-  resumeUrl: string | null;
+  experience_years: number | null;
+  current_location: string | null;
+  preferred_locations: string[] | null;
+  linkedin_url: string | null;
+  github_url: string | null;
+  portfolio_url: string | null;
+  resume_url: string | null;
   education: Record<string, unknown>[] | null;
-  workExperience: Record<string, unknown>[] | null;
+  work_experience: Record<string, unknown>[] | null;
   certifications: Record<string, unknown>[] | null;
-  canReceiveReferrals: boolean;
-  canProvideReferrals: boolean;
-  referralsGiven: number;
-  referralsReceived: number;
-  createdAt: Date;
-  updatedAt: Date;
+  can_receive_referrals: boolean;
+  can_provide_referrals: boolean;
+  referrals_given: number;
+  referrals_received: number;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export class UserProfile
@@ -41,48 +41,48 @@ export class UserProfile
       | "id"
       | "bio"
       | "skills"
-      | "experienceYears"
-      | "currentLocation"
-      | "preferredLocations"
-      | "linkedinUrl"
-      | "githubUrl"
-      | "portfolioUrl"
-      | "resumeUrl"
+      | "experience_years"
+      | "current_location"
+      | "preferred_locations"
+      | "linkedin_url"
+      | "github_url"
+      | "portfolio_url"
+      | "resume_url"
       | "education"
-      | "workExperience"
+      | "work_experience"
       | "certifications"
-      | "canReceiveReferrals"
-      | "canProvideReferrals"
-      | "referralsGiven"
-      | "referralsReceived"
-      | "createdAt"
-      | "updatedAt"
+      | "can_receive_referrals"
+      | "can_provide_referrals"
+      | "referrals_given"
+      | "referrals_received"
+      | "created_at"
+      | "updated_at"
     >
   >
   implements UserProfileAttributes
 {
   public id!: string;
-  public userId!: string;
-  public profileType!: "job_seeker" | "referral_provider" | "employee";
+  public user_id!: string;
+  public profile_type!: "job_seeker" | "referral_provider" | "employee";
   public bio!: string | null;
   public skills!: string[] | null;
-  public experienceYears!: number | null;
-  public currentLocation!: string | null;
-  public preferredLocations!: string[] | null;
-  public linkedinUrl!: string | null;
-  public githubUrl!: string | null;
-  public portfolioUrl!: string | null;
-  public resumeUrl!: string | null;
+  public experience_years!: number | null;
+  public current_location!: string | null;
+  public preferred_locations!: string[] | null;
+  public linkedin_url!: string | null;
+  public github_url!: string | null;
+  public portfolio_url!: string | null;
+  public resume_url!: string | null;
   public education!: Record<string, unknown>[] | null;
-  public workExperience!: Record<string, unknown>[] | null;
+  public work_experience!: Record<string, unknown>[] | null;
   public certifications!: Record<string, unknown>[] | null;
-  public canReceiveReferrals!: boolean;
-  public canProvideReferrals!: boolean;
-  public referralsGiven!: number;
-  public referralsReceived!: number;
+  public can_receive_referrals!: boolean;
+  public can_provide_referrals!: boolean;
+  public referrals_given!: number;
+  public referrals_received!: number;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   // Associations
   public readonly user?: User;
@@ -101,10 +101,10 @@ export class UserProfile
     const fields = [
       this.bio,
       this.skills?.length,
-      this.experienceYears,
-      this.currentLocation,
-      this.resumeUrl,
-      this.workExperience?.length,
+      this.experience_years,
+      this.current_location,
+      this.resume_url,
+      this.work_experience?.length,
     ];
 
     fields.forEach((field) => {
@@ -119,10 +119,10 @@ export class UserProfile
    */
   public isApplicationReady(): boolean {
     return (
-      !!this.resumeUrl &&
+      !!this.resume_url &&
       !!this.skills &&
       this.skills.length > 0 &&
-      this.experienceYears !== null
+      this.experience_years !== null
     );
   }
 
@@ -130,7 +130,7 @@ export class UserProfile
    * Increment referrals given
    */
   public async incrementReferralsGiven(): Promise<void> {
-    this.referralsGiven += 1;
+    this.referrals_given += 1;
     await this.save();
   }
 
@@ -138,7 +138,7 @@ export class UserProfile
    * Increment referrals received
    */
   public async incrementReferralsReceived(): Promise<void> {
-    this.referralsReceived += 1;
+    this.referrals_received += 1;
     await this.save();
   }
 }
@@ -153,7 +153,7 @@ export const initUserProfileModel = (
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      userId: {
+      user_id: {
         type: DataTypes.UUID,
         allowNull: false,
         unique: true,
@@ -164,7 +164,7 @@ export const initUserProfileModel = (
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      profileType: {
+      profile_type: {
         type: DataTypes.ENUM("job_seeker", "referral_provider", "employee"),
         allowNull: false,
         defaultValue: "job_seeker",
@@ -178,7 +178,7 @@ export const initUserProfileModel = (
         allowNull: true,
         defaultValue: [],
       },
-      experienceYears: {
+      experience_years: {
         type: DataTypes.INTEGER,
         allowNull: true,
         validate: {
@@ -186,37 +186,37 @@ export const initUserProfileModel = (
           max: 70,
         },
       },
-      currentLocation: {
+      current_location: {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
-      preferredLocations: {
+      preferred_locations: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         defaultValue: [],
       },
-      linkedinUrl: {
+      linkedin_url: {
         type: DataTypes.STRING(500),
         allowNull: true,
         validate: {
           isUrl: true,
         },
       },
-      githubUrl: {
+      github_url: {
         type: DataTypes.STRING(500),
         allowNull: true,
         validate: {
           isUrl: true,
         },
       },
-      portfolioUrl: {
+      portfolio_url: {
         type: DataTypes.STRING(500),
         allowNull: true,
         validate: {
           isUrl: true,
         },
       },
-      resumeUrl: {
+      resume_url: {
         type: DataTypes.STRING(500),
         allowNull: true,
       },
@@ -226,7 +226,7 @@ export const initUserProfileModel = (
         defaultValue: [],
         comment: "Array of education objects with degree, institution, year",
       },
-      workExperience: {
+      work_experience: {
         type: DataTypes.JSONB,
         allowNull: true,
         defaultValue: [],
@@ -239,31 +239,31 @@ export const initUserProfileModel = (
         defaultValue: [],
         comment: "Array of certification objects with name, issuer, date",
       },
-      canReceiveReferrals: {
+      can_receive_referrals: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
       },
-      canProvideReferrals: {
+      can_provide_referrals: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
         allowNull: false,
       },
-      referralsGiven: {
+      referrals_given: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },
-      referralsReceived: {
+      referrals_received: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -275,32 +275,32 @@ export const initUserProfileModel = (
       indexes: [
         {
           unique: true,
-          fields: ["userId"],
+          fields: ["user_id"],
         },
         {
-          fields: ["profileType"],
+          fields: ["profile_type"],
         },
         {
-          fields: ["currentLocation"],
+          fields: ["current_location"],
         },
         {
-          fields: ["experienceYears"],
+          fields: ["experience_years"],
         },
       ],
       scopes: {
         jobSeekers: {
           where: {
-            profileType: "job_seeker",
+            profile_type: "job_seeker",
           },
         },
         canReceiveReferrals: {
           where: {
-            canReceiveReferrals: true,
+            can_receive_referrals: true,
           },
         },
         applicationReady: {
           where: {
-            resumeUrl: {
+            resume_url: {
               [Op.ne]: null,
             },
           },

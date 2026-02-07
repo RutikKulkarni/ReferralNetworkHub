@@ -1,3 +1,8 @@
+/**
+ * Authentication Routes
+ * Defines all authentication endpoints
+ */
+
 import { Router } from "express";
 import { AuthController, InviteController } from "../controllers";
 import {
@@ -16,12 +21,20 @@ import {
   validateRefreshToken,
   validateOAuthCallback,
 } from "../middleware/validation.middleware";
-import { authRateLimiter } from "../../../shared/middleware/rateLimiter.middleware";
+import {
+  authRateLimiter,
+  // sensitiveRateLimiter,
+} from "../../../shared/middleware/rateLimiter.middleware";
 
 const router = Router();
 
 // ==================== PUBLIC ROUTES ====================
 
+/**
+ * @route   POST /api/auth/register
+ * @desc    Register public user (Job Seeker or Referral Provider)
+ * @access  Public
+ */
 router.post(
   "/register",
   authRateLimiter,

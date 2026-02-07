@@ -23,6 +23,10 @@ const swaggerDefinition = {
       description: "Development server",
     },
     {
+      url: "https://referralnetworkhub.onrender.com/",
+      description: "Backend server deployed on Render",
+    },
+    {
       url: "https://api.referralnetworkhub.com",
       description: "Production server",
     },

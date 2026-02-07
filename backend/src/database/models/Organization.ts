@@ -217,13 +217,13 @@ export const initOrganizationModel = (
           fields: ["name"],
         },
         {
-          fields: ["isActive"],
+          fields: ["is_active"],
         },
         {
-          fields: ["isVerified"],
+          fields: ["is_verified"],
         },
         {
-          fields: ["createdAt"],
+          fields: ["created_at"],
         },
       ],
       scopes: {

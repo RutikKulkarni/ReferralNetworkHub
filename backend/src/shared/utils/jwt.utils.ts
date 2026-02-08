@@ -111,6 +111,7 @@ export class JWTUtil {
     sessionId: string | undefined,
     tokenVersion: number,
     organizationId?: string,
+    permissions?: string[],
   ): { accessToken: string; refreshToken: string; expiresIn: number } {
     const accessTokenPayload: JWTPayload = {
       userId,
@@ -119,6 +120,7 @@ export class JWTUtil {
       sessionId,
       tokenVersion,
       organizationId,
+      permissions,
     };
 
     const refreshTokenPayload: RefreshTokenPayload = {

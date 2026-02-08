@@ -51,6 +51,14 @@ jobs:
         working-directory: ./backend
         run: npm run typecheck
 
+      - name: Run tests
+        working-directory: ./backend
+        run: npm test
+
+      - name: Run tests with coverage
+        working-directory: ./backend
+        run: npm run test:coverage
+
       - name: Check build
         working-directory: ./backend
         run: npm run build

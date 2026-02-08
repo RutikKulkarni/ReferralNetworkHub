@@ -499,7 +499,7 @@ export class AuthService {
       sessionId = session.id;
     }
 
-    // Generate JWT tokens
+    // Generate JWT tokens with permissions
     const tokens = JWTUtil.generateTokenPair(
       user.id,
       user.userType as UserType,
@@ -507,6 +507,7 @@ export class AuthService {
       sessionId,
       user.tokenVersion,
       user.organizationId || undefined,
+      this.getUserPermissions(user.userType as UserType),
     );
 
     // Store refresh token
@@ -527,6 +528,62 @@ export class AuthService {
       refreshToken: tokens.refreshToken,
       sessionId,
     };
+  }
+
+  /**
+   * Get user permissions based on user type
+   */
+  private getUserPermissions(userType: UserType): string[] {
+    const permissions: string[] = [];
+
+    switch (userType) {
+      case USER_TYPES.PLATFORM_SUPER_ADMIN:
+        permissions.push("*"); // All permissions
+        break;
+
+      case USER_TYPES.PLATFORM_ADMIN:
+        permissions.push(
+          "manage:organizations",
+          "view:analytics",
+          "create:org_admins",
+          "block:users",
+        );
+        break;
+
+      case USER_TYPES.ORGANIZATION_ADMIN:
+        permissions.push(
+          "manage:org",
+          "manage:employees",
+          "manage:recruiters",
+          "view:applications",
+          "view:referrals",
+          "post:jobs",
+        );
+        break;
+
+      case USER_TYPES.ORG_RECRUITER:
+        permissions.push(
+          "post:jobs",
+          "manage:applications",
+          "manage:referrals",
+          "give:referrals",
+        );
+        break;
+
+      case USER_TYPES.EMPLOYEE_REFERRER:
+        permissions.push("give:referrals", "apply:jobs", "view:own_referrals");
+        break;
+
+      case USER_TYPES.JOB_SEEKER:
+        permissions.push("apply:jobs", "view:own_applications");
+        break;
+
+      case USER_TYPES.REFERRAL_PROVIDER:
+        permissions.push("give:referrals", "view:own_referrals");
+        break;
+    }
+
+    return permissions;
   }
 
   /**

@@ -38,10 +38,12 @@ export interface JWTPayload {
   userType: UserType;
   sessionId?: string;
   organizationId?: string;
+  permissions?: string[];
   tokenVersion: number;
   iat?: number;
   exp?: number;
 }
+
 
 export interface RefreshTokenPayload {
   userId: string;
@@ -106,6 +108,21 @@ export interface AuthenticatedUser {
   emailVerified: boolean;
   sessionId?: string;
   organizationId?: string;
+}
+
+// ==================== AUTH REQUEST ====================
+
+import { Request } from "express";
+
+export interface AuthRequest extends Request {
+  user: AuthenticatedUser;
+  sessionInfo?: {
+    id: string;
+    deviceInfo: DeviceInfo;
+    ipAddress: string;
+  };
+  tenant?: TenantContext;
+  userOrgRole?: UserOrgRole;
 }
 
 // ==================== API RESPONSE ====================
@@ -372,6 +389,24 @@ export interface OrganizationAdminAttributes {
   updatedAt: Date;
 }
 
+// ==================== TENANT CONTEXT ====================
+
+export interface TenantContext {
+  organizationId: string;
+  organization: {
+    id: string;
+    name: string;
+    isActive: boolean;
+    isVerified: boolean;
+  };
+}
+
+export type UserOrgRole =
+  | "platform_admin"
+  | "admin"
+  | "recruiter"
+  | "employee";
+
 // ==================== EXPRESS REQUEST EXTENSIONS ====================
 
 /* eslint-disable @typescript-eslint/no-namespace */
@@ -385,6 +420,8 @@ declare global {
         ipAddress: string;
       };
       organizationId?: string;
+      tenant?: TenantContext;
+      userOrgRole?: UserOrgRole;
     }
   }
 }

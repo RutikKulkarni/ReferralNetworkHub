@@ -1,8 +1,3 @@
-/**
- * Authentication Routes
- * Defines all authentication endpoints
- */
-
 import { Router } from "express";
 import { AuthController, InviteController } from "../controllers";
 import {

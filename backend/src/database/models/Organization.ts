@@ -88,8 +88,16 @@ export class Organization
   public countAdmins!: HasManyCountAssociationsMixin;
 
   public getRecruiters!: HasManyGetAssociationsMixin<unknown>;
+  public countRecruiters!: HasManyCountAssociationsMixin;
+
   public getEmployees!: HasManyGetAssociationsMixin<unknown>;
+  public countEmployees!: HasManyCountAssociationsMixin;
+
   public getJobs!: HasManyGetAssociationsMixin<unknown>;
+  public countJobs!: HasManyCountAssociationsMixin;
+
+  public countApplications!: HasManyCountAssociationsMixin;
+  public countReferrals!: HasManyCountAssociationsMixin;
 
   public static associations: {
     admins: Association<Organization, Model>;

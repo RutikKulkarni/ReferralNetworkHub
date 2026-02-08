@@ -1,5 +1,5 @@
-import { Response, NextFunction } from "express";
-import { AuthRequest } from "../types";
+import { Request, Response, NextFunction } from "express";
+import { AuthenticatedUser } from "../types";
 import { USER_TYPES } from "../../constants";
 import {
   OrganizationAdmin,
@@ -7,12 +7,24 @@ import {
   Employee,
 } from "../../database/models";
 
+// Type guard to ensure user is authenticated
+function isAuthenticated(req: Request): req is Request & { user: AuthenticatedUser } {
+  return !!req.user;
+}
+
 export const requireOrganizationAccess = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    if (!isAuthenticated(req)) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
     const user = req.user;
     const organizationId = req.tenant?.organizationId;
 
@@ -89,11 +101,18 @@ export const requireOrganizationAccess = async (
  * Ensures user is an admin of the organization in context
  */
 export const requireOrganizationAdmin = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    if (!isAuthenticated(req)) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
     const user = req.user;
     const organizationId = req.tenant?.organizationId;
 
@@ -141,11 +160,18 @@ export const requireOrganizationAdmin = async (
  * Ensures user is a recruiter or admin of the organization in context
  */
 export const requireRecruiterAccess = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    if (!isAuthenticated(req)) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
     const user = req.user;
     const organizationId = req.tenant?.organizationId;
 

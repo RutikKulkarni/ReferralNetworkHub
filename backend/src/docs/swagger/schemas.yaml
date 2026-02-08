@@ -227,17 +227,145 @@ components:
         id:
           type: string
           format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+          description: Unique organization identifier
         name:
           type: string
-        domain:
+          example: "Acme Corporation"
+          description: Organization name
+        description:
           type: string
+          example: "Leading provider of innovative solutions"
+          description: Organization description
+        website:
+          type: string
+          format: uri
+          example: "https://acme.com"
+          description: Organization website URL
+        industry:
+          type: string
+          example: "Technology"
+          description: Industry sector
+        size:
+          type: string
+          example: "100-500"
+          description: Company size range
+        location:
+          type: string
+          example: "San Francisco, CA"
+          description: Organization location
+        logo:
+          type: string
+          format: uri
+          example: "https://acme.com/logo.png"
+          description: Organization logo URL
         isActive:
           type: boolean
-        isBlocked:
+          example: true
+          description: Whether organization is active
+        isVerified:
           type: boolean
+          example: true
+          description: Whether organization is verified
+        verifiedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2024-01-15T10:30:00Z"
+          description: Verification timestamp
         createdAt:
           type: string
           format: date-time
+          example: "2024-01-01T00:00:00Z"
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+          description: Last update timestamp
+
+    CreateOrganizationRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: "Acme Corporation"
+        description:
+          type: string
+          maxLength: 500
+          example: "Leading provider of innovative solutions"
+        website:
+          type: string
+          format: uri
+          example: "https://acme.com"
+        industry:
+          type: string
+          example: "Technology"
+        size:
+          type: string
+          example: "100-500"
+        location:
+          type: string
+          example: "San Francisco, CA"
+        logo:
+          type: string
+          format: uri
+          example: "https://acme.com/logo.png"
+
+    UpdateOrganizationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        website:
+          type: string
+          format: uri
+        industry:
+          type: string
+        size:
+          type: string
+        location:
+          type: string
+        logo:
+          type: string
+          format: uri
+
+    OrganizationStats:
+      type: object
+      properties:
+        totalAdmins:
+          type: integer
+          example: 5
+          description: Total number of organization admins
+        totalRecruiters:
+          type: integer
+          example: 12
+          description: Total number of recruiters
+        totalEmployees:
+          type: integer
+          example: 150
+          description: Total number of employees
+        totalJobs:
+          type: integer
+          example: 25
+          description: Total number of jobs posted
+        totalApplications:
+          type: integer
+          example: 340
+          description: Total number of applications received
+        totalReferrals:
+          type: integer
+          example: 89
+          description: Total number of referrals made
 
     # ==========================================
     # ERROR SCHEMAS

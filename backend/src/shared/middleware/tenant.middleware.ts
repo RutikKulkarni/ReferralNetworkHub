@@ -1,13 +1,25 @@
-import { Response, NextFunction } from "express";
-import { AuthRequest } from "../types";
+import { Request, Response, NextFunction } from "express";
+import { AuthenticatedUser } from "../types";
 import { Organization } from "../../database/models";
 
+// Type guard to ensure user is authenticated
+function isAuthenticated(req: Request): req is Request & { user: AuthenticatedUser } {
+  return !!req.user;
+}
+
 export const extractTenantContext = async (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    if (!isAuthenticated(req)) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
     const user = req.user;
     let organizationId: string | null = null;
 
@@ -45,7 +57,12 @@ export const extractTenantContext = async (
       // Attach tenant context
       req.tenant = {
         organizationId: org.id,
-        organization: org,
+        organization: {
+          id: org.id,
+          name: org.name,
+          isActive: org.isActive,
+          isVerified: org.isVerified,
+        },
       };
     }
 
@@ -62,7 +79,7 @@ export const extractTenantContext = async (
  * Use this after extractTenantContext when organization is required
  */
 export const requireTenantContext = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {

@@ -40,6 +40,7 @@ describe("Tenant Isolation Middleware", () => {
 
     it("should extract organization from route params", async () => {
       mockRequest.params = { organizationId: "org-123" };
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
       (Organization.findOne as jest.Mock).mockResolvedValue(mockOrganization);
 
       await extractTenantContext(
@@ -63,6 +64,7 @@ describe("Tenant Isolation Middleware", () => {
 
     it("should extract organization from request body", async () => {
       mockRequest.body = { organizationId: "org-456" };
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
       (Organization.findOne as jest.Mock).mockResolvedValue(mockOrganization);
 
       await extractTenantContext(
@@ -109,6 +111,7 @@ describe("Tenant Isolation Middleware", () => {
     it("should prioritize route params over body", async () => {
       mockRequest.params = { organizationId: "org-params" };
       mockRequest.body = { organizationId: "org-body" };
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
       (Organization.findOne as jest.Mock).mockResolvedValue(mockOrganization);
 
       await extractTenantContext(
@@ -127,6 +130,7 @@ describe("Tenant Isolation Middleware", () => {
 
     it("should return 404 if organization not found", async () => {
       mockRequest.params = { organizationId: "invalid-org" };
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
       (Organization.findOne as jest.Mock).mockResolvedValue(null);
 
       await extractTenantContext(
@@ -145,6 +149,7 @@ describe("Tenant Isolation Middleware", () => {
 
     it("should return 404 if organization is inactive", async () => {
       mockRequest.params = { organizationId: "org-123" };
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
       (Organization.findOne as jest.Mock).mockResolvedValue(null);
 
       await extractTenantContext(
@@ -158,6 +163,8 @@ describe("Tenant Isolation Middleware", () => {
     });
 
     it("should continue without tenant if no organizationId provided", async () => {
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
+      
       await extractTenantContext(
         mockRequest as AuthRequest,
         mockResponse as Response,
@@ -171,6 +178,7 @@ describe("Tenant Isolation Middleware", () => {
 
     it("should handle array organizationId from params", async () => {
       mockRequest.params = { organizationId: ["org-123", "org-456"] };
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
       (Organization.findOne as jest.Mock).mockResolvedValue(mockOrganization);
 
       await extractTenantContext(
@@ -189,6 +197,7 @@ describe("Tenant Isolation Middleware", () => {
 
     it("should handle errors gracefully", async () => {
       mockRequest.params = { organizationId: "org-123" };
+      mockRequest.user = { id: "user-123", email: "test@example.com" } as any;
       const error = new Error("Database error");
       (Organization.findOne as jest.Mock).mockRejectedValue(error);
 

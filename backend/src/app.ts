@@ -12,6 +12,7 @@ import organizationRoutes from "./modules/organization/routes/organization.route
 import jobRoutes from "./modules/job/routes/job.routes";
 import applicationRoutes from "./modules/application/routes/application.routes";
 import referralRoutes from "./modules/referral/routes/referral.routes";
+import userRoutes from "./modules/user/routes/user.routes";
 import { errorHandler } from "./modules/auth/middleware";
 import { ResponseUtil } from "./shared/utils";
 import { globalRateLimiter } from "./shared/middleware/rateLimiter.middleware";
@@ -81,6 +82,7 @@ app.use("/api/organizations", organizationRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/referrals", referralRoutes);
+app.use("/api/users", userRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

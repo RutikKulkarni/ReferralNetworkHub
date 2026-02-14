@@ -712,6 +712,175 @@ components:
             rejected: 4
 
     # ==========================================
+    # REFERRAL SCHEMAS
+    # ==========================================
+    Referral:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        job_id:
+          type: string
+          format: uuid
+        referrer_id:
+          type: string
+          format: uuid
+        candidate_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        referral_type:
+          type: string
+          enum: [internal, external]
+        status:
+          type: string
+          enum: [pending, accepted, rejected, application_submitted, hired, bonus_paid]
+        referral_note:
+          type: string
+          nullable: true
+        recruiter_reviewed_by:
+          type: string
+          format: uuid
+          nullable: true
+        reviewed_at:
+          type: string
+          format: date-time
+          nullable: true
+        hired_date:
+          type: string
+          format: date
+          nullable: true
+        bonus_amount:
+          type: number
+          format: decimal
+          nullable: true
+        bonus_paid_date:
+          type: string
+          format: date
+          nullable: true
+        rejection_reason:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        job:
+          type: object
+          nullable: true
+        referrer:
+          type: object
+          nullable: true
+        candidate:
+          type: object
+          nullable: true
+        organization:
+          type: object
+          nullable: true
+
+    SubmitReferralRequest:
+      type: object
+      required:
+        - job_id
+        - candidate_id
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        candidate_id:
+          type: string
+          format: uuid
+          example: "660e8400-e29b-41d4-a716-446655440000"
+        referral_type:
+          type: string
+          enum: [internal, external]
+          default: external
+          example: external
+        referral_note:
+          type: string
+          maxLength: 1000
+          example: "Excellent candidate with strong technical skills"
+
+    UpdateReferralStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [pending, accepted, rejected, application_submitted, hired, bonus_paid]
+          example: accepted
+        notes:
+          type: string
+          maxLength: 500
+          example: "Approved for interview process"
+
+    RejectReferralRequest:
+      type: object
+      required:
+        - rejection_reason
+      properties:
+        rejection_reason:
+          type: string
+          minLength: 10
+          maxLength: 500
+          example: "Candidate does not meet the minimum qualifications for this position"
+
+    ProcessBonusRequest:
+      type: object
+      required:
+        - bonus_amount
+      properties:
+        bonus_amount:
+          type: number
+          format: decimal
+          minimum: 0
+          example: 1000.00
+        payment_date:
+          type: string
+          format: date
+          example: "2024-02-15"
+
+    ReferralStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 50
+        byStatus:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            pending: 10
+            accepted: 15
+            rejected: 5
+            application_submitted: 8
+            hired: 7
+            bonus_paid: 5
+        byType:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            internal: 20
+            external: 30
+        bonusPayable:
+          type: number
+          format: decimal
+          example: 5000.00
+        totalBonusPaid:
+          type: number
+          format: decimal
+          example: 15000.00
+
+    # ==========================================
     # ERROR SCHEMAS
     # ==========================================
     Error:

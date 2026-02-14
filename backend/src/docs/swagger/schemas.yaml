@@ -368,6 +368,350 @@ components:
           description: Total number of referrals made
 
     # ==========================================
+    # JOB SCHEMAS
+    # ==========================================
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        organization_id:
+          type: string
+          format: uuid
+        posted_by:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "Senior Software Engineer"
+        description:
+          type: string
+          example: "We are looking for an experienced software engineer..."
+        requirements:
+          type: object
+          nullable: true
+        location:
+          type: string
+          nullable: true
+          example: "San Francisco, CA"
+        job_type:
+          type: string
+          enum: [full_time, part_time, contract, internship]
+          example: full_time
+        experience_level:
+          type: string
+          enum: [entry, mid, senior, lead]
+          example: senior
+        salary_range_min:
+          type: number
+          nullable: true
+          example: 120000
+        salary_range_max:
+          type: number
+          nullable: true
+          example: 180000
+        currency:
+          type: string
+          example: "USD"
+        skills_required:
+          type: array
+          items:
+            type: string
+          example: ["JavaScript", "React", "Node.js"]
+        benefits:
+          type: array
+          items:
+            type: string
+          example: ["Health Insurance", "401k", "Remote Work"]
+        is_active:
+          type: boolean
+          example: true
+        is_referral_eligible:
+          type: boolean
+          example: true
+        referral_bonus:
+          type: number
+          nullable: true
+          example: 5000
+        application_deadline:
+          type: string
+          format: date
+          nullable: true
+        posted_date:
+          type: string
+          format: date-time
+        closed_date:
+          type: string
+          format: date-time
+          nullable: true
+        closed_reason:
+          type: string
+          nullable: true
+        view_count:
+          type: integer
+          example: 150
+        application_count:
+          type: integer
+          example: 25
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateJobRequest:
+      type: object
+      required:
+        - title
+        - description
+        - job_type
+        - experience_level
+      properties:
+        title:
+          type: string
+          minLength: 5
+          maxLength: 200
+          example: "Senior Software Engineer"
+        description:
+          type: string
+          minLength: 50
+          maxLength: 5000
+          example: "We are looking for an experienced software engineer to join our team..."
+        requirements:
+          type: object
+        location:
+          type: string
+          maxLength: 255
+          example: "San Francisco, CA"
+        job_type:
+          type: string
+          enum: [full_time, part_time, contract, internship]
+          example: full_time
+        experience_level:
+          type: string
+          enum: [entry, mid, senior, lead]
+          example: senior
+        salary_range_min:
+          type: number
+          minimum: 0
+          example: 120000
+        salary_range_max:
+          type: number
+          minimum: 0
+          example: 180000
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: "USD"
+        skills_required:
+          type: array
+          items:
+            type: string
+          example: ["JavaScript", "React", "Node.js"]
+        benefits:
+          type: array
+          items:
+            type: string
+          example: ["Health Insurance", "401k"]
+        is_referral_eligible:
+          type: boolean
+          example: true
+        referral_bonus:
+          type: number
+          minimum: 0
+          example: 5000
+        application_deadline:
+          type: string
+          format: date
+          example: "2024-12-31"
+
+    UpdateJobRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 5
+          maxLength: 200
+        description:
+          type: string
+          minLength: 50
+          maxLength: 5000
+        requirements:
+          type: object
+        location:
+          type: string
+          maxLength: 255
+        job_type:
+          type: string
+          enum: [full_time, part_time, contract, internship]
+        experience_level:
+          type: string
+          enum: [entry, mid, senior, lead]
+        salary_range_min:
+          type: number
+          minimum: 0
+        salary_range_max:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+        skills_required:
+          type: array
+          items:
+            type: string
+        benefits:
+          type: array
+          items:
+            type: string
+        is_referral_eligible:
+          type: boolean
+        referral_bonus:
+          type: number
+          minimum: 0
+        application_deadline:
+          type: string
+          format: date
+
+    JobStats:
+      type: object
+      properties:
+        viewCount:
+          type: integer
+          example: 150
+        applicationCount:
+          type: integer
+          example: 25
+        referralCount:
+          type: integer
+          example: 10
+
+    # ==========================================
+    # APPLICATION SCHEMAS
+    # ==========================================
+    Application:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        job_id:
+          type: string
+          format: uuid
+        applicant_id:
+          type: string
+          format: uuid
+        referral_id:
+          type: string
+          format: uuid
+          nullable: true
+        organization_id:
+          type: string
+          format: uuid
+        application_status:
+          type: string
+          enum: [submitted, screening, interview, offer, hired, rejected, withdrawn]
+          example: submitted
+        resume_url:
+          type: string
+          nullable: true
+          example: "https://example.com/resume.pdf"
+        cover_letter:
+          type: string
+          nullable: true
+        applied_date:
+          type: string
+          format: date-time
+        reviewed_by:
+          type: string
+          format: uuid
+          nullable: true
+        last_updated_by:
+          type: string
+          format: uuid
+          nullable: true
+        rejection_reason:
+          type: string
+          nullable: true
+        offer_details:
+          type: object
+          nullable: true
+        hired_date:
+          type: string
+          format: date-time
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    SubmitApplicationRequest:
+      type: object
+      required:
+        - job_id
+      properties:
+        job_id:
+          type: string
+          format: uuid
+        cover_letter:
+          type: string
+          maxLength: 2000
+          example: "I am excited to apply for this position..."
+        resume_url:
+          type: string
+          format: uri
+          example: "https://example.com/resume.pdf"
+        referral_id:
+          type: string
+          format: uuid
+
+    UpdateApplicationStatusRequest:
+      type: object
+      required:
+        - application_status
+      properties:
+        application_status:
+          type: string
+          enum: [submitted, screening, interview, offer, hired, rejected, withdrawn]
+          example: screening
+        notes:
+          type: string
+          maxLength: 1000
+        rejection_reason:
+          type: string
+          maxLength: 500
+        offer_details:
+          type: object
+
+    ApplicationStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 45
+        byStatus:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            submitted: 15
+            screening: 10
+            interview: 8
+            offer: 5
+            hired: 3
+            rejected: 4
+
+    # ==========================================
     # ERROR SCHEMAS
     # ==========================================
     Error:

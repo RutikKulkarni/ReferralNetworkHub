@@ -9,6 +9,8 @@ import { testRedisConnection } from "./config/redis";
 import { initAuthModels } from "./modules/auth/models";
 import { authRoutes } from "./modules/auth/routes";
 import organizationRoutes from "./modules/organization/routes/organization.routes";
+import jobRoutes from "./modules/job/routes/job.routes";
+import applicationRoutes from "./modules/application/routes/application.routes";
 import { errorHandler } from "./modules/auth/middleware";
 import { ResponseUtil } from "./shared/utils";
 import { globalRateLimiter } from "./shared/middleware/rateLimiter.middleware";
@@ -75,6 +77,8 @@ app.get("/health", (req: Request, res: Response) => {
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/organizations", organizationRoutes);
+app.use("/api/jobs", jobRoutes);
+app.use("/api/applications", applicationRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

@@ -8,6 +8,28 @@ function isAuthenticated(req: Request): req is Request & { user: AuthenticatedUs
   return !!req.user;
 }
 
+function sanitizeQueryParam(value: unknown): string | undefined {
+  if (typeof value === 'string' && value.trim().length > 0) {
+    // Remove any potentially dangerous characters
+    return value.trim().substring(0, 100); // Limit length
+  }
+  return undefined;
+}
+
+function parseNumericParam(value: unknown): number | undefined {
+  if (typeof value === 'string') {
+    const num = Number(value);
+    return !isNaN(num) && isFinite(num) ? num : undefined;
+  }
+  return undefined;
+}
+
+function parseBooleanParam(value: unknown): boolean | undefined {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return undefined;
+}
+
 /**
  * Create a new job posting
  */
@@ -72,20 +94,21 @@ export const listJobs = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
+    // Sanitize and validate query parameters
     const filters = {
-      is_active: req.query.is_active === "true" ? true : req.query.is_active === "false" ? false : undefined,
-      job_type: req.query.job_type as string,
-      experience_level: req.query.experience_level as string,
-      location: req.query.location as string,
-      is_referral_eligible: req.query.is_referral_eligible === "true" ? true : undefined,
-      salary_min: req.query.salary_min ? Number(req.query.salary_min) : undefined,
-      salary_max: req.query.salary_max ? Number(req.query.salary_max) : undefined,
-      search: req.query.search as string,
+      is_active: parseBooleanParam(req.query.is_active),
+      job_type: sanitizeQueryParam(req.query.job_type),
+      experience_level: sanitizeQueryParam(req.query.experience_level),
+      location: sanitizeQueryParam(req.query.location),
+      is_referral_eligible: parseBooleanParam(req.query.is_referral_eligible),
+      salary_min: parseNumericParam(req.query.salary_min),
+      salary_max: parseNumericParam(req.query.salary_max),
+      search: sanitizeQueryParam(req.query.search),
     };
 
     const pagination = {
-      page: req.query.page ? Number(req.query.page) : 1,
-      limit: req.query.limit ? Number(req.query.limit) : 20,
+      page: parseNumericParam(req.query.page) || 1,
+      limit: Math.min(parseNumericParam(req.query.limit) || 20, 100), // Cap at 100
     };
 
     // Get organization from tenant context (if authenticated)

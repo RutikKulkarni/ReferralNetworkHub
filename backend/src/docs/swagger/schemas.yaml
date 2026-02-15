@@ -588,11 +588,188 @@ components:
           type: integer
           example: 25
         referralCount:
+          format: password
+          example: SecurePassword123!
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: John
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Doe
+        isActive:
+          type: boolean
+          example: true
+        isBlocked:
+          type: boolean
+          example: false
+
+    UpdateUserProfileRequest:
+      type: object
+      properties:
+        bio:
+          type: string
+          maxLength: 1000
+          example: "Experienced software engineer with 5+ years in full-stack development"
+        skills:
+          type: array
+          items:
+            type: string
+          example: ["JavaScript", "TypeScript", "React", "Node.js"]
+        experience_years:
+          type: integer
+          minimum: 0
+          maximum: 70
+          example: 5
+        current_location:
+          type: string
+          maxLength: 255
+          example: "San Francisco, CA"
+        linkedin_url:
+          type: string
+          format: uri
+          example: "https://linkedin.com/in/johndoe"
+        github_url:
+          type: string
+          format: uri
+          example: "https://github.com/johndoe"
+        portfolio_url:
+          type: string
+          format: uri
+          example: "https://johndoe.dev"
+        current_company:
+          type: string
+          maxLength: 255
+          example: "Tech Corp"
+        current_position:
+          type: string
+          maxLength: 255
+          example: "Senior Software Engineer"
+
+    ChangeUserRoleRequest:
+      type: object
+      required:
+        - newRole
+      properties:
+        newRole:
+          type: string
+          enum: [PLATFORM_SUPER_ADMIN, PLATFORM_ADMIN, ORGANIZATION_ADMIN, ORG_RECRUITER, EMPLOYEE_REFERRER, JOB_SEEKER, REFERRAL_PROVIDER]
+          example: "ORG_RECRUITER"
+        organizationId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        profile_type:
+          type: string
+          enum: [job_seeker, referral_provider, employee]
+        bio:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        experience_years:
+          type: integer
+          nullable: true
+        current_location:
+          type: string
+          nullable: true
+        preferred_locations:
+          type: array
+          items:
+            type: string
+          nullable: true
+        linkedin_url:
+          type: string
+          nullable: true
+        github_url:
+          type: string
+          nullable: true
+        portfolio_url:
+          type: string
+          nullable: true
+        resume_url:
+          type: string
+          nullable: true
+        education:
+          type: array
+          items:
+            type: object
+          nullable: true
+        work_experience:
+          type: array
+          items:
+            type: object
+          nullable: true
+        certifications:
+          type: array
+          items:
+            type: object
+          nullable: true
+        can_receive_referrals:
+          type: boolean
+        can_provide_referrals:
+          type: boolean
+        referrals_given:
+          type: integer
+        referrals_received:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    UserStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 150
+        byType:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            JOB_SEEKER: 80
+            EMPLOYEE_REFERRER: 40
+            ORG_RECRUITER: 20
+            ORGANIZATION_ADMIN: 10
+        active:
+          type: integer
+          example: 140
+        inactive:
           type: integer
           example: 10
+        blocked:
+          type: integer
+          example: 2
+        emailVerified:
+          type: integer
+          example: 145
 
     # ==========================================
-    # APPLICATION SCHEMAS
+    # ORGANIZATION SCHEMAS
     # ==========================================
     Application:
       type: object

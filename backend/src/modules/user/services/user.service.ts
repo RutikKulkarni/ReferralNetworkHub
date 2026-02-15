@@ -161,7 +161,7 @@ export class UserService {
   async updateUser(
     userId: string,
     data: UpdateUserDTO,
-    requestingUserId: string,
+    _requestingUserId: string,
   ): Promise<User | null> {
     const user = await User.findByPk(userId);
 
@@ -185,7 +185,7 @@ export class UserService {
   /**
    * Deactivate a user
    */
-  async deactivateUser(userId: string, requestingUserId: string): Promise<User | null> {
+  async deactivateUser(userId: string, _requestingUserId: string): Promise<User | null> {
     const user = await User.findByPk(userId);
 
     if (!user) {
@@ -200,7 +200,7 @@ export class UserService {
   /**
    * Activate a user
    */
-  async activateUser(userId: string, requestingUserId: string): Promise<User | null> {
+  async activateUser(userId: string, _requestingUserId: string): Promise<User | null> {
     const user = await User.findByPk(userId);
 
     if (!user) {
@@ -229,7 +229,7 @@ export class UserService {
   async updateUserProfile(
     userId: string,
     data: UpdateUserProfileDTO,
-    requestingUserId: string,
+    _requestingUserId: string,
   ): Promise<UserProfile | null> {
     // Check if user exists
     const user = await User.findByPk(userId);
@@ -270,7 +270,7 @@ export class UserService {
   async changeUserRole(
     userId: string,
     data: ChangeUserRoleDTO,
-    requestingUserId: string,
+    _requestingUserId: string,
   ): Promise<User | null> {
     const user = await User.findByPk(userId);
 

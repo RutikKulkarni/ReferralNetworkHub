@@ -2,7 +2,6 @@ import { Router } from "express";
 import { requireAuth } from "../../auth/middleware/auth.middleware";
 import { requireSuperAdmin } from "../../../shared/middleware/permissions.middleware";
 import * as adminController from "../controllers/admin.controller";
-import * as adminValidator from "../validators/admin.validator";
 
 const router = Router();
 

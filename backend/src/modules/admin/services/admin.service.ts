@@ -315,7 +315,7 @@ export class AdminService {
       await sequelize.authenticate();
       dbConnected = true;
       dbResponseTime = Date.now() - startTime;
-    } catch (error) {
+    } catch {
       dbConnected = false;
     }
 

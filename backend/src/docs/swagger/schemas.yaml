@@ -588,11 +588,188 @@ components:
           type: integer
           example: 25
         referralCount:
+          format: password
+          example: SecurePassword123!
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: John
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Doe
+        isActive:
+          type: boolean
+          example: true
+        isBlocked:
+          type: boolean
+          example: false
+
+    UpdateUserProfileRequest:
+      type: object
+      properties:
+        bio:
+          type: string
+          maxLength: 1000
+          example: "Experienced software engineer with 5+ years in full-stack development"
+        skills:
+          type: array
+          items:
+            type: string
+          example: ["JavaScript", "TypeScript", "React", "Node.js"]
+        experience_years:
+          type: integer
+          minimum: 0
+          maximum: 70
+          example: 5
+        current_location:
+          type: string
+          maxLength: 255
+          example: "San Francisco, CA"
+        linkedin_url:
+          type: string
+          format: uri
+          example: "https://linkedin.com/in/johndoe"
+        github_url:
+          type: string
+          format: uri
+          example: "https://github.com/johndoe"
+        portfolio_url:
+          type: string
+          format: uri
+          example: "https://johndoe.dev"
+        current_company:
+          type: string
+          maxLength: 255
+          example: "Tech Corp"
+        current_position:
+          type: string
+          maxLength: 255
+          example: "Senior Software Engineer"
+
+    ChangeUserRoleRequest:
+      type: object
+      required:
+        - newRole
+      properties:
+        newRole:
+          type: string
+          enum: [PLATFORM_SUPER_ADMIN, PLATFORM_ADMIN, ORGANIZATION_ADMIN, ORG_RECRUITER, EMPLOYEE_REFERRER, JOB_SEEKER, REFERRAL_PROVIDER]
+          example: "ORG_RECRUITER"
+        organizationId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        profile_type:
+          type: string
+          enum: [job_seeker, referral_provider, employee]
+        bio:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        experience_years:
+          type: integer
+          nullable: true
+        current_location:
+          type: string
+          nullable: true
+        preferred_locations:
+          type: array
+          items:
+            type: string
+          nullable: true
+        linkedin_url:
+          type: string
+          nullable: true
+        github_url:
+          type: string
+          nullable: true
+        portfolio_url:
+          type: string
+          nullable: true
+        resume_url:
+          type: string
+          nullable: true
+        education:
+          type: array
+          items:
+            type: object
+          nullable: true
+        work_experience:
+          type: array
+          items:
+            type: object
+          nullable: true
+        certifications:
+          type: array
+          items:
+            type: object
+          nullable: true
+        can_receive_referrals:
+          type: boolean
+        can_provide_referrals:
+          type: boolean
+        referrals_given:
+          type: integer
+        referrals_received:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    UserStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 150
+        byType:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            JOB_SEEKER: 80
+            EMPLOYEE_REFERRER: 40
+            ORG_RECRUITER: 20
+            ORGANIZATION_ADMIN: 10
+        active:
+          type: integer
+          example: 140
+        inactive:
           type: integer
           example: 10
+        blocked:
+          type: integer
+          example: 2
+        emailVerified:
+          type: integer
+          example: 145
 
     # ==========================================
-    # APPLICATION SCHEMAS
+    # ORGANIZATION SCHEMAS
     # ==========================================
     Application:
       type: object
@@ -712,6 +889,175 @@ components:
             rejected: 4
 
     # ==========================================
+    # REFERRAL SCHEMAS
+    # ==========================================
+    Referral:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        job_id:
+          type: string
+          format: uuid
+        referrer_id:
+          type: string
+          format: uuid
+        candidate_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        referral_type:
+          type: string
+          enum: [internal, external]
+        status:
+          type: string
+          enum: [pending, accepted, rejected, application_submitted, hired, bonus_paid]
+        referral_note:
+          type: string
+          nullable: true
+        recruiter_reviewed_by:
+          type: string
+          format: uuid
+          nullable: true
+        reviewed_at:
+          type: string
+          format: date-time
+          nullable: true
+        hired_date:
+          type: string
+          format: date
+          nullable: true
+        bonus_amount:
+          type: number
+          format: decimal
+          nullable: true
+        bonus_paid_date:
+          type: string
+          format: date
+          nullable: true
+        rejection_reason:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        job:
+          type: object
+          nullable: true
+        referrer:
+          type: object
+          nullable: true
+        candidate:
+          type: object
+          nullable: true
+        organization:
+          type: object
+          nullable: true
+
+    SubmitReferralRequest:
+      type: object
+      required:
+        - job_id
+        - candidate_id
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        candidate_id:
+          type: string
+          format: uuid
+          example: "660e8400-e29b-41d4-a716-446655440000"
+        referral_type:
+          type: string
+          enum: [internal, external]
+          default: external
+          example: external
+        referral_note:
+          type: string
+          maxLength: 1000
+          example: "Excellent candidate with strong technical skills"
+
+    UpdateReferralStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [pending, accepted, rejected, application_submitted, hired, bonus_paid]
+          example: accepted
+        notes:
+          type: string
+          maxLength: 500
+          example: "Approved for interview process"
+
+    RejectReferralRequest:
+      type: object
+      required:
+        - rejection_reason
+      properties:
+        rejection_reason:
+          type: string
+          minLength: 10
+          maxLength: 500
+          example: "Candidate does not meet the minimum qualifications for this position"
+
+    ProcessBonusRequest:
+      type: object
+      required:
+        - bonus_amount
+      properties:
+        bonus_amount:
+          type: number
+          format: decimal
+          minimum: 0
+          example: 1000.00
+        payment_date:
+          type: string
+          format: date
+          example: "2024-02-15"
+
+    ReferralStats:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 50
+        byStatus:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            pending: 10
+            accepted: 15
+            rejected: 5
+            application_submitted: 8
+            hired: 7
+            bonus_paid: 5
+        byType:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            internal: 20
+            external: 30
+        bonusPayable:
+          type: number
+          format: decimal
+          example: 5000.00
+        totalBonusPaid:
+          type: number
+          format: decimal
+          example: 15000.00
+
+    # ==========================================
     # ERROR SCHEMAS
     # ==========================================
     Error:
@@ -746,3 +1092,223 @@ components:
           type: string
         data:
           type: object
+
+    # ==========================================
+    # PLATFORM ADMINISTRATION SCHEMAS
+    # ==========================================
+    PlatformDashboard:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+          description: Total number of users on the platform
+          example: 15420
+        totalOrganizations:
+          type: integer
+          description: Total number of organizations
+          example: 342
+        totalJobs:
+          type: integer
+          description: Total number of jobs posted
+          example: 1256
+        totalApplications:
+          type: integer
+          description: Total number of applications submitted
+          example: 8934
+        totalReferrals:
+          type: integer
+          description: Total number of referrals made
+          example: 3421
+        newUsersThisMonth:
+          type: integer
+          description: New users registered this month
+          example: 456
+        activeOrganizations:
+          type: integer
+          description: Number of active organizations
+          example: 298
+        platformGrowth:
+          type: object
+          properties:
+            usersGrowth:
+              type: number
+              format: float
+              description: Percentage growth in users
+              example: 12.5
+            organizationsGrowth:
+              type: number
+              format: float
+              description: Percentage growth in organizations
+              example: 8.3
+
+    PlatformAnalytics:
+      type: object
+      properties:
+        userGrowth:
+          type: array
+          description: Daily user growth data
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                example: "2024-01-15"
+              count:
+                type: integer
+                example: 42
+        organizationActivity:
+          type: array
+          description: Organization activity metrics
+          items:
+            type: object
+            properties:
+              organizationId:
+                type: string
+                format: uuid
+              name:
+                type: string
+                example: "Tech Corp"
+              activeJobs:
+                type: integer
+                example: 15
+              applications:
+                type: integer
+                example: 234
+        jobPostingTrends:
+          type: array
+          description: Daily job posting trends
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                example: "2024-01-15"
+              count:
+                type: integer
+                example: 8
+        conversionRates:
+          type: object
+          properties:
+            applicationToInterview:
+              type: number
+              format: float
+              description: Percentage of applications that reach interview stage
+              example: 23.5
+            referralToHire:
+              type: number
+              format: float
+              description: Percentage of referrals that result in hires
+              example: 15.2
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique audit log identifier
+        userId:
+          type: string
+          format: uuid
+          description: ID of user who performed the action
+        action:
+          type: string
+          description: Action performed
+          example: "user.block"
+        entityType:
+          type: string
+          description: Type of entity affected
+          example: "user"
+        entityId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of affected entity
+        changes:
+          type: object
+          nullable: true
+          description: JSON object containing the changes made
+        ipAddress:
+          type: string
+          nullable: true
+          description: IP address of the user
+          example: "192.168.1.1"
+        userAgent:
+          type: string
+          nullable: true
+          description: User agent string
+        user:
+          type: object
+          description: User who performed the action
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+            firstName:
+              type: string
+            lastName:
+              type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: When the action was performed
+
+    SystemHealth:
+      type: object
+      properties:
+        database:
+          type: object
+          properties:
+            connected:
+              type: boolean
+              description: Whether database is connected
+              example: true
+            responseTime:
+              type: integer
+              description: Database response time in milliseconds
+              example: 45
+        uptime:
+          type: number
+          description: Server uptime in seconds
+          example: 3600
+        memory:
+          type: object
+          properties:
+            used:
+              type: integer
+              description: Memory used in MB
+              example: 512
+            total:
+              type: integer
+              description: Total memory in MB
+              example: 2048
+            percentage:
+              type: number
+              format: float
+              description: Memory usage percentage
+              example: 25.0
+
+    PaginationInfo:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+          example: 150
+        pages:
+          type: integer
+          description: Total number of pages
+          example: 15
+        currentPage:
+          type: integer
+          description: Current page number
+          example: 1
+        limit:
+          type: integer
+          description: Items per page
+          example: 10

@@ -34,32 +34,36 @@ const swaggerDefinition = {
   ],
   tags: [
     {
-      name: "Authentication",
-      description: "User authentication and authorization endpoints",
+      name: "Applications",
+      description: "Job application management endpoints",
     },
     {
-      name: "Users",
-      description: "User management endpoints",
+      name: "Authentication",
+      description: "User authentication and authorization endpoints",
     },
     {
       name: "Invites",
       description: "Invitation management endpoints",
     },
     {
+      name: "Jobs",
+      description: "Job posting and management endpoints",
+    },
+    {
       name: "Organizations",
       description: "Organization management endpoints",
     },
     {
-      name: "Jobs",
-      description: "Job posting and management endpoints",
+      name: "Platform Administration",
+      description: "Platform administration endpoints for super admins",
     },
     {
       name: "Referrals",
       description: "Referral management endpoints",
     },
     {
-      name: "Platform Admin",
-      description: "Platform administration endpoints",
+      name: "Users",
+      description: "User management endpoints",
     },
   ],
   components: {

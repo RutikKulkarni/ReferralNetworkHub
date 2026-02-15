@@ -1,0 +1,475 @@
+paths:
+  /api/referrals:
+    post:
+      tags:
+        - Referrals
+      summary: Submit a new referral
+      description: Submit a referral for a candidate (employees only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitReferralRequest'
+      responses:
+        '201':
+          description: Referral submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Referral submitted successfully"
+                  referral:
+                    $ref: '#/components/schemas/Referral'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    get:
+      tags:
+        - Referrals
+      summary: List all referrals
+      description: List all referrals for the organization (recruiters/admins only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, accepted, rejected, application_submitted, hired, bonus_paid]
+        - in: query
+          name: job_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: referrer_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: candidate_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: referral_type
+          schema:
+            type: string
+            enum: [internal, external]
+        - in: query
+          name: date_from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Referrals retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  referrals:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Referral'
+                  total:
+                    type: integer
+                  pages:
+                    type: integer
+                  currentPage:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/referrals/my-referrals:
+    get:
+      tags:
+        - Referrals
+      summary: Get my referrals
+      description: Get all referrals submitted by or for the current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, accepted, rejected, application_submitted, hired, bonus_paid]
+      responses:
+        '200':
+          description: Referrals retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  referrals:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Referral'
+                  total:
+                    type: integer
+                  pages:
+                    type: integer
+                  currentPage:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/referrals/stats:
+    get:
+      tags:
+        - Referrals
+      summary: Get organization referral statistics
+      description: Get referral statistics for the organization (recruiters/admins only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferralStats'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /api/referrals/{id}:
+    get:
+      tags:
+        - Referrals
+      summary: Get referral details
+      description: Get detailed information about a specific referral
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Referral retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Referral'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/referrals/{id}/status:
+    put:
+      tags:
+        - Referrals
+      summary: Update referral status
+      description: Update the status of a referral (recruiters/admins only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReferralStatusRequest'
+      responses:
+        '200':
+          description: Referral status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Referral status updated successfully"
+                  referral:
+                    $ref: '#/components/schemas/Referral'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/referrals/{id}/approve:
+    post:
+      tags:
+        - Referrals
+      summary: Approve referral
+      description: Approve a pending referral (recruiters/admins only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: string
+                  maxLength: 500
+      responses:
+        '200':
+          description: Referral approved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Referral approved successfully"
+                  referral:
+                    $ref: '#/components/schemas/Referral'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/referrals/{id}/reject:
+    post:
+      tags:
+        - Referrals
+      summary: Reject referral
+      description: Reject a pending referral (recruiters/admins only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectReferralRequest'
+      responses:
+        '200':
+          description: Referral rejected successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Referral rejected successfully"
+                  referral:
+                    $ref: '#/components/schemas/Referral'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/referrals/{id}/pay-bonus:
+    post:
+      tags:
+        - Referrals
+      summary: Process bonus payment
+      description: Process bonus payment for a hired referral (admins only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessBonusRequest'
+      responses:
+        '200':
+          description: Bonus payment processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Bonus payment processed successfully"
+                  referral:
+                    $ref: '#/components/schemas/Referral'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/referrals/job/{jobId}:
+    get:
+      tags:
+        - Referrals
+      summary: Get referrals for a job
+      description: Get all referrals for a specific job (recruiters/admins only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, accepted, rejected, application_submitted, hired, bonus_paid]
+      responses:
+        '200':
+          description: Referrals retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  referrals:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Referral'
+                  total:
+                    type: integer
+                  pages:
+                    type: integer
+                  currentPage:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/referrals/job/{jobId}/stats:
+    get:
+      tags:
+        - Referrals
+      summary: Get referral statistics for a job
+      description: Get statistics for referrals to a specific job (recruiters/admins only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  byStatus:
+                    type: object
+                    additionalProperties:
+                      type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'

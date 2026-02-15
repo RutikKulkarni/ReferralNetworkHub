@@ -1,0 +1,433 @@
+# ==========================================
+# ADMIN MODULE API DOCUMENTATION
+# ==========================================
+# Platform Administration endpoints for super admins
+# All endpoints require super admin authentication
+# ==========================================
+
+paths:
+  /api/admin/dashboard:
+    get:
+      tags:
+        - Platform Administration
+      summary: Get platform dashboard statistics
+      description: Retrieve comprehensive platform metrics including user counts, organization stats, and growth metrics. Requires super admin access.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Platform dashboard statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PlatformDashboard'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/admin/analytics:
+    get:
+      tags:
+        - Platform Administration
+      summary: Get platform analytics
+      description: Retrieve detailed analytics including user growth, organization activity, job trends, and conversion rates for a specified date range.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Start date for analytics (ISO 8601 format)
+          example: "2024-01-01T00:00:00Z"
+        - in: query
+          name: endDate
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: End date for analytics (ISO 8601 format)
+          example: "2024-12-31T23:59:59Z"
+      responses:
+        '200':
+          description: Platform analytics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PlatformAnalytics'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/admin/audit-logs:
+    get:
+      tags:
+        - Platform Administration
+      summary: Get audit logs
+      description: Retrieve platform audit logs with optional filtering by user, action, entity type, and date range.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          description: Filter by user ID
+        - in: query
+          name: action
+          schema:
+            type: string
+          description: Filter by action type
+          example: "user.block"
+        - in: query
+          name: entityType
+          schema:
+            type: string
+          description: Filter by entity type
+          example: "user"
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date-time
+          description: Filter logs from this date
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          description: Filter logs until this date
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: Items per page
+      responses:
+        '200':
+          description: Audit logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AuditLog'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/admin/system-health:
+    get:
+      tags:
+        - Platform Administration
+      summary: Get system health status
+      description: Retrieve real-time system health metrics including database status, server uptime, and memory usage.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: System health status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/SystemHealth'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/admin/organizations:
+    get:
+      tags:
+        - Platform Administration
+      summary: List all organizations
+      description: Retrieve all organizations across the platform with optional filtering by status, industry, and company size.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+          description: Filter by organization status
+        - in: query
+          name: industry
+          schema:
+            type: string
+          description: Filter by industry
+        - in: query
+          name: minSize
+          schema:
+            type: integer
+            minimum: 1
+          description: Minimum company size
+        - in: query
+          name: maxSize
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximum company size
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Items per page
+      responses:
+        '200':
+          description: Organizations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Organization'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/admin/users:
+    get:
+      tags:
+        - Platform Administration
+      summary: List all users
+      description: Retrieve all users across all organizations with optional filtering by user type, status, and search term.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: userType
+          schema:
+            type: string
+            enum:
+              - PLATFORM_SUPER_ADMIN
+              - PLATFORM_ADMIN
+              - ORGANIZATION_ADMIN
+              - ORG_RECRUITER
+              - EMPLOYEE_REFERRER
+              - JOB_SEEKER
+              - REFERRAL_PROVIDER
+          description: Filter by user type
+        - in: query
+          name: isActive
+          schema:
+            type: boolean
+          description: Filter by active status
+        - in: query
+          name: isBlocked
+          schema:
+            type: boolean
+          description: Filter by blocked status
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by name or email
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Items per page
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/admin/users/{id}/block:
+    post:
+      tags:
+        - Platform Administration
+      summary: Block a user
+      description: Block a user platform-wide with a specified reason. Creates an audit log entry.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: User ID to block
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - reason
+              properties:
+                reason:
+                  type: string
+                  minLength: 10
+                  description: Reason for blocking the user
+                  example: "Violation of terms of service - spam activity detected"
+      responses:
+        '200':
+          description: User blocked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User blocked successfully"
+                  data:
+                    $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/admin/users/{id}/unblock:
+    post:
+      tags:
+        - Platform Administration
+      summary: Unblock a user
+      description: Unblock a previously blocked user. Creates an audit log entry.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: User ID to unblock
+      responses:
+        '200':
+          description: User unblocked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User unblocked successfully"
+                  data:
+                    $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'

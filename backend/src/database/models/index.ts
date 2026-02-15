@@ -11,6 +11,7 @@ import { UserProfile, initUserProfileModel } from "./UserProfile";
 import { Job, initJobModel } from "./Job";
 import { Referral, initReferralModel } from "./Referral";
 import { Application, initApplicationModel } from "./Application";
+import { AuditLog } from "./AuditLog";
 
 export interface DatabaseModels {
   User: typeof User;
@@ -22,6 +23,7 @@ export interface DatabaseModels {
   Job: typeof Job;
   Referral: typeof Referral;
   Application: typeof Application;
+  AuditLog: typeof AuditLog;
 }
 
 /**
@@ -39,6 +41,7 @@ export const initModels = (sequelize: Sequelize): DatabaseModels => {
     Job: initJobModel(sequelize),
     Referral: initReferralModel(sequelize),
     Application: initApplicationModel(sequelize),
+    AuditLog: AuditLog.initModel(sequelize),
   };
 
   // Set up associations
@@ -333,6 +336,7 @@ export {
   Job,
   Referral,
   Application,
+  AuditLog,
 };
 
 // Export attributes types
@@ -344,3 +348,4 @@ export type { UserProfileAttributes } from "./UserProfile";
 export type { JobAttributes } from "./Job";
 export type { ReferralAttributes } from "./Referral";
 export type { ApplicationAttributes } from "./Application";
+export type { AuditLogAttributes } from "./AuditLog";

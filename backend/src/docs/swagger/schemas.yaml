@@ -1092,3 +1092,223 @@ components:
           type: string
         data:
           type: object
+
+    # ==========================================
+    # PLATFORM ADMINISTRATION SCHEMAS
+    # ==========================================
+    PlatformDashboard:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+          description: Total number of users on the platform
+          example: 15420
+        totalOrganizations:
+          type: integer
+          description: Total number of organizations
+          example: 342
+        totalJobs:
+          type: integer
+          description: Total number of jobs posted
+          example: 1256
+        totalApplications:
+          type: integer
+          description: Total number of applications submitted
+          example: 8934
+        totalReferrals:
+          type: integer
+          description: Total number of referrals made
+          example: 3421
+        newUsersThisMonth:
+          type: integer
+          description: New users registered this month
+          example: 456
+        activeOrganizations:
+          type: integer
+          description: Number of active organizations
+          example: 298
+        platformGrowth:
+          type: object
+          properties:
+            usersGrowth:
+              type: number
+              format: float
+              description: Percentage growth in users
+              example: 12.5
+            organizationsGrowth:
+              type: number
+              format: float
+              description: Percentage growth in organizations
+              example: 8.3
+
+    PlatformAnalytics:
+      type: object
+      properties:
+        userGrowth:
+          type: array
+          description: Daily user growth data
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                example: "2024-01-15"
+              count:
+                type: integer
+                example: 42
+        organizationActivity:
+          type: array
+          description: Organization activity metrics
+          items:
+            type: object
+            properties:
+              organizationId:
+                type: string
+                format: uuid
+              name:
+                type: string
+                example: "Tech Corp"
+              activeJobs:
+                type: integer
+                example: 15
+              applications:
+                type: integer
+                example: 234
+        jobPostingTrends:
+          type: array
+          description: Daily job posting trends
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                example: "2024-01-15"
+              count:
+                type: integer
+                example: 8
+        conversionRates:
+          type: object
+          properties:
+            applicationToInterview:
+              type: number
+              format: float
+              description: Percentage of applications that reach interview stage
+              example: 23.5
+            referralToHire:
+              type: number
+              format: float
+              description: Percentage of referrals that result in hires
+              example: 15.2
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique audit log identifier
+        userId:
+          type: string
+          format: uuid
+          description: ID of user who performed the action
+        action:
+          type: string
+          description: Action performed
+          example: "user.block"
+        entityType:
+          type: string
+          description: Type of entity affected
+          example: "user"
+        entityId:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID of affected entity
+        changes:
+          type: object
+          nullable: true
+          description: JSON object containing the changes made
+        ipAddress:
+          type: string
+          nullable: true
+          description: IP address of the user
+          example: "192.168.1.1"
+        userAgent:
+          type: string
+          nullable: true
+          description: User agent string
+        user:
+          type: object
+          description: User who performed the action
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+            firstName:
+              type: string
+            lastName:
+              type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: When the action was performed
+
+    SystemHealth:
+      type: object
+      properties:
+        database:
+          type: object
+          properties:
+            connected:
+              type: boolean
+              description: Whether database is connected
+              example: true
+            responseTime:
+              type: integer
+              description: Database response time in milliseconds
+              example: 45
+        uptime:
+          type: number
+          description: Server uptime in seconds
+          example: 3600
+        memory:
+          type: object
+          properties:
+            used:
+              type: integer
+              description: Memory used in MB
+              example: 512
+            total:
+              type: integer
+              description: Total memory in MB
+              example: 2048
+            percentage:
+              type: number
+              format: float
+              description: Memory usage percentage
+              example: 25.0
+
+    PaginationInfo:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+          example: 150
+        pages:
+          type: integer
+          description: Total number of pages
+          example: 15
+        currentPage:
+          type: integer
+          description: Current page number
+          example: 1
+        limit:
+          type: integer
+          description: Items per page
+          example: 10

@@ -320,3 +320,35 @@ export const requireEmployeeAccess = async (
  * Alias for requireOrganizationAdmin for consistency
  */
 export const requireAdminAccess = requireOrganizationAdmin;
+
+/**
+ * Require super admin access
+ *
+ * Ensures user has PLATFORM_SUPER_ADMIN role for platform-wide administration
+ */
+export const requireSuperAdmin = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
+  if (!isAuthenticated(req)) {
+    res.status(401).json({
+      success: false,
+      message: "Authentication required",
+    });
+    return;
+  }
+
+  const user = req.user;
+
+  if (user.userType !== USER_TYPES.PLATFORM_SUPER_ADMIN) {
+    res.status(403).json({
+      success: false,
+      message: "Super admin access required",
+    });
+    return;
+  }
+
+  next();
+};
+

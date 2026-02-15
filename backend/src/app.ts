@@ -13,6 +13,7 @@ import jobRoutes from "./modules/job/routes/job.routes";
 import applicationRoutes from "./modules/application/routes/application.routes";
 import referralRoutes from "./modules/referral/routes/referral.routes";
 import userRoutes from "./modules/user/routes/user.routes";
+import adminRoutes from "./modules/admin/routes/admin.routes";
 import { errorHandler } from "./modules/auth/middleware";
 import { ResponseUtil } from "./shared/utils";
 import { globalRateLimiter } from "./shared/middleware/rateLimiter.middleware";
@@ -58,6 +59,18 @@ app.use(
   swaggerUi.setup(swaggerSpec, {
     customCss: ".swagger-ui .topbar { display: none }",
     customSiteTitle: "Referral Network Hub API Documentation",
+    swaggerOptions: {
+      persistAuthorization: true,
+      // layout: "BaseLayout",
+      displayRequestDuration: true,
+      docExpansion: "none",
+      filter: true,
+      operationsSorter: "alpha",
+      tagsSorter: "alpha",
+      defaultModelsExpandDepth: 1,
+      defaultModelExpandDepth: 1,
+    },
+    explorer: true,
   }),
 );
 
@@ -83,6 +96,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/referrals", referralRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/admin", adminRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

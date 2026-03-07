@@ -59,7 +59,7 @@ export class UserService {
     const limit = pagination.limit || 20;
     const offset = (page - 1) * limit;
 
-    const whereClause: any = {};
+    const whereClause: any = {}; // Keep any for symbols (Op.or)
 
     // Apply filters
     if (filters.userType) {
@@ -170,7 +170,7 @@ export class UserService {
     }
 
     // Only allow updating specific fields
-    const updateData: any = {};
+    const updateData: Partial<User> = {};
     if (data.firstName !== undefined) updateData.firstName = data.firstName;
     if (data.lastName !== undefined) updateData.lastName = data.lastName;
     if (data.isActive !== undefined) updateData.isActive = data.isActive;
@@ -279,12 +279,12 @@ export class UserService {
     }
 
     // Validate role
-    const validRoles = Object.values(USER_TYPES);
-    if (!validRoles.includes(data.newRole as any)) {
+    const validRoles = Object.values(USER_TYPES) as string[];
+    if (!validRoles.includes(data.newRole)) {
       throw new Error("Invalid user role");
     }
 
-    await user.update({ userType: data.newRole as any });
+    await user.update({ userType: data.newRole });
 
     return this.getUser(userId);
   }
@@ -296,7 +296,7 @@ export class UserService {
     role: string,
     organizationId?: string,
   ): Promise<User[]> {
-    const whereClause: any = { userType: role as any };
+    const whereClause: Record<string, unknown> = { userType: role };
 
     let users = await User.findAll({
       where: whereClause,

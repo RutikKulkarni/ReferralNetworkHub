@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { referralService } from "../services/referral.service";
+import { referralService, ReferralFilters } from "../services/referral.service";
+import { AuthRequest } from "../../../shared/types";
 
 // Type guard to check if user is authenticated
-function isAuthenticated(req: Request): req is Request & { user: { id: string; userType: string } } {
+function isAuthenticated(req: Request): req is AuthRequest {
   return !!req.user;
 }
 
 // Type guard to check if tenant context exists
-function hasTenantContext(req: Request): req is Request & { organizationId: string } {
-  return !!(req as any).organizationId;
+function hasTenantContext(req: Request): req is AuthRequest & { organizationId: string } {
+  return !!req.organizationId;
 }
 
 /**
@@ -34,9 +35,10 @@ export const submitReferral = async (req: Request, res: Response): Promise<void>
       message: "Referral submitted successfully",
       referral,
     });
-  } catch (error: any) {
-    console.error("Error submitting referral:", error);
-    res.status(400).json({ error: error.message || "Failed to submit referral" });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error submitting referral:", err);
+    res.status(400).json({ error: err.message || "Failed to submit referral" });
   }
 };
 
@@ -55,7 +57,7 @@ export const listReferrals = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const filters = {
+    const filters: ReferralFilters = {
       status: req.query.status as string,
       job_id: req.query.job_id as string,
       referrer_id: req.query.referrer_id as string,
@@ -78,8 +80,9 @@ export const listReferrals = async (req: Request, res: Response): Promise<void> 
     );
 
     res.json(result);
-  } catch (error: any) {
-    console.error("Error listing referrals:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error listing referrals:", err);
     res.status(500).json({ error: "Failed to list referrals" });
   }
 };
@@ -111,8 +114,9 @@ export const getMyReferrals = async (req: Request, res: Response): Promise<void>
     );
 
     res.json(result);
-  } catch (error: any) {
-    console.error("Error getting my referrals:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error getting my referrals:", err);
     res.status(500).json({ error: "Failed to get referrals" });
   }
 };
@@ -139,8 +143,9 @@ export const getReferral = async (req: Request, res: Response): Promise<void> =>
     }
 
     res.json(referral);
-  } catch (error: any) {
-    console.error("Error getting referral:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error getting referral:", err);
     res.status(500).json({ error: "Failed to get referral" });
   }
 };
@@ -185,8 +190,9 @@ export const updateReferralStatus = async (req: Request, res: Response): Promise
       message: "Referral status updated successfully",
       referral,
     });
-  } catch (error: any) {
-    console.error("Error updating referral status:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error updating referral status:", err);
     res.status(500).json({ error: "Failed to update referral status" });
   }
 };
@@ -230,8 +236,9 @@ export const approveReferral = async (req: Request, res: Response): Promise<void
       message: "Referral approved successfully",
       referral,
     });
-  } catch (error: any) {
-    console.error("Error approving referral:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error approving referral:", err);
     res.status(500).json({ error: "Failed to approve referral" });
   }
 };
@@ -276,8 +283,9 @@ export const rejectReferral = async (req: Request, res: Response): Promise<void>
       message: "Referral rejected successfully",
       referral,
     });
-  } catch (error: any) {
-    console.error("Error rejecting referral:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error rejecting referral:", err);
     res.status(500).json({ error: "Failed to reject referral" });
   }
 };
@@ -317,9 +325,10 @@ export const getReferralsByJob = async (req: Request, res: Response): Promise<vo
     );
 
     res.json(result);
-  } catch (error: any) {
-    console.error("Error getting referrals by job:", error);
-    res.status(400).json({ error: error.message || "Failed to get referrals" });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error getting referrals by job:", err);
+    res.status(400).json({ error: err.message || "Failed to get referrals" });
   }
 };
 
@@ -422,8 +431,9 @@ export const processBonusPayment = async (req: Request, res: Response): Promise<
       message: "Bonus payment processed successfully",
       referral,
     });
-  } catch (error: any) {
-    console.error("Error processing bonus payment:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Error processing bonus payment:", err);
     res.status(500).json({ error: "Failed to process bonus payment" });
   }
 };

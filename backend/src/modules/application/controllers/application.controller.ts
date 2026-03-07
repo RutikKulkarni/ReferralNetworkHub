@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
-import { applicationService } from "../services/application.service";
-import { AuthenticatedUser } from "../../../shared/types";
+import { applicationService, ApplicationFilters } from "../services/application.service";
+import { AuthRequest } from "../../../shared/types";
 
 // Type guard to check if request has authenticated user
-function isAuthenticated(req: Request): req is Request & { user: AuthenticatedUser } {
+function isAuthenticated(req: Request): req is AuthRequest {
   return !!req.user;
 }
 
@@ -47,15 +47,16 @@ export const submitApplication = async (
       message: "Application submitted successfully",
       data: application,
     });
-  } catch (error: any) {
-    if (error.message.includes("already applied") || error.message.includes("not found")) {
+  } catch (error: unknown) {
+    const err = error as Error;
+    if (err.message.includes("already applied") || err.message.includes("not found")) {
       res.status(400).json({
         success: false,
-        message: error.message,
+        message: err.message,
       });
       return;
     }
-    next(error);
+    next(err);
   }
 };
 
@@ -68,7 +69,7 @@ export const listApplications = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const filters = {
+    const filters: ApplicationFilters = {
       application_status: req.query.application_status as string,
       job_id: req.query.job_id as string,
       applicant_id: req.query.applicant_id as string,
@@ -311,15 +312,16 @@ export const getJobApplications = async (
       success: true,
       data: result,
     });
-  } catch (error: any) {
-    if (error.message === "Job not found") {
+  } catch (error: unknown) {
+    const err = error as Error;
+    if (err.message === "Job not found") {
       res.status(404).json({
         success: false,
-        message: error.message,
+        message: err.message,
       });
       return;
     }
-    next(error);
+    next(err);
   }
 };
 

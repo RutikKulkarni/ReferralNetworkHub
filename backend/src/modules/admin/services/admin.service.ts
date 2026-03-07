@@ -220,7 +220,7 @@ export class AdminService {
 
     const totalReferrals = await Referral.count();
     const hiredReferrals = await Referral.count({
-      where: { status: { [Op.in]: ["hired", "bonus_paid"] as any[] } },
+      where: { status: { [Op.in]: ["hired", "bonus_paid"] } },
     });
 
     return {
@@ -358,15 +358,15 @@ export class AdminService {
       whereClause.industry = filters.industry;
     }
 
-    if (filters.minSize !== undefined) {
-      whereClause.company_size = { [Op.gte]: filters.minSize };
-    }
-
-    if (filters.maxSize !== undefined) {
+    if (filters.minSize !== undefined && filters.maxSize !== undefined) {
       whereClause.company_size = {
-        ...whereClause.company_size,
+        [Op.gte]: filters.minSize,
         [Op.lte]: filters.maxSize,
       };
+    } else if (filters.minSize !== undefined) {
+      whereClause.company_size = { [Op.gte]: filters.minSize };
+    } else if (filters.maxSize !== undefined) {
+      whereClause.company_size = { [Op.lte]: filters.maxSize };
     }
 
     const { count, rows } = await Organization.findAndCountAll({

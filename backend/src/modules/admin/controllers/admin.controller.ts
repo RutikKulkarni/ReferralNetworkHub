@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { AdminService } from "../services/admin.service";
+import { 
+  AdminService, 
+  AuditLogFilters, 
+  OrganizationFilters, 
+  UserFilters 
+} from "../services/admin.service";
+import { AuthRequest } from "../../../shared/types";
 
 const adminService = new AdminService();
 
@@ -17,11 +23,12 @@ export const getDashboard = async (
       success: true,
       data: dashboard,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to retrieve platform dashboard",
-      error: error.message,
+      error: err.message,
     });
   }
 };
@@ -53,11 +60,12 @@ export const getAnalytics = async (
       success: true,
       data: analytics,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to retrieve platform analytics",
-      error: error.message,
+      error: err.message,
     });
   }
 };
@@ -72,7 +80,7 @@ export const getAuditLogs = async (
   try {
     const { userId, action, entityType, startDate, endDate, page, limit } = req.query;
 
-    const filters: any = {};
+    const filters: AuditLogFilters = {};
     if (userId) filters.userId = userId as string;
     if (action) filters.action = action as string;
     if (entityType) filters.entityType = entityType as string;
@@ -96,11 +104,12 @@ export const getAuditLogs = async (
         limit: pagination.limit,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to retrieve audit logs",
-      error: error.message,
+      error: err.message,
     });
   }
 };
@@ -119,11 +128,12 @@ export const getSystemHealth = async (
       success: true,
       data: health,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to retrieve system health",
-      error: error.message,
+      error: err.message,
     });
   }
 };
@@ -138,7 +148,7 @@ export const listOrganizations = async (
   try {
     const { status, industry, minSize, maxSize, page, limit } = req.query;
 
-    const filters: any = {};
+    const filters: OrganizationFilters = {};
     if (status) filters.status = status as string;
     if (industry) filters.industry = industry as string;
     if (minSize) filters.minSize = parseInt(minSize as string, 10);
@@ -161,11 +171,12 @@ export const listOrganizations = async (
         limit: pagination.limit,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to retrieve organizations",
-      error: error.message,
+      error: err.message,
     });
   }
 };
@@ -180,7 +191,7 @@ export const listUsers = async (
   try {
     const { userType, isActive, isBlocked, search, page, limit } = req.query;
 
-    const filters: any = {};
+    const filters: UserFilters = {};
     if (userType) filters.userType = userType as string;
     if (isActive !== undefined) filters.isActive = isActive === "true";
     if (isBlocked !== undefined) filters.isBlocked = isBlocked === "true";
@@ -203,11 +214,12 @@ export const listUsers = async (
         limit: pagination.limit,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to retrieve users",
-      error: error.message,
+      error: err.message,
     });
   }
 };
@@ -231,7 +243,7 @@ export const blockUser = async (
       return;
     }
 
-    const user = await adminService.blockUser(id as string, reason, (req as any).user.id);
+    const user = await adminService.blockUser(id as string, reason, (req as AuthRequest).user.id);
 
     if (!user) {
       res.status(404).json({
@@ -246,11 +258,12 @@ export const blockUser = async (
       message: "User blocked successfully",
       data: user,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to block user",
-      error: error.message,
+      error: err.message,
     });
   }
 };
@@ -265,7 +278,7 @@ export const unblockUser = async (
   try {
     const { id } = req.params;
 
-    const user = await adminService.unblockUser(id as string, (req as any).user.id);
+    const user = await adminService.unblockUser(id as string, (req as AuthRequest).user.id);
 
     if (!user) {
       res.status(404).json({
@@ -280,11 +293,12 @@ export const unblockUser = async (
       message: "User unblocked successfully",
       data: user,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     res.status(500).json({
       success: false,
       message: "Failed to unblock user",
-      error: error.message,
+      error: err.message,
     });
   }
 };

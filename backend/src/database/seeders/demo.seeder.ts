@@ -43,14 +43,14 @@ export const seedDemoData = async (): Promise<void> => {
     },
   ];
 
-  const createdOrgs: any[] = [];
+  const createdOrgs: Organization[] = [];
   for (const orgData of orgs) {
     const existing = await Organization.findOne({ where: { name: orgData.name } });
     if (existing) {
       console.log(`  ✓ Org already exists: ${orgData.name}`);
       createdOrgs.push(existing);
     } else {
-      const org = await Organization.create(orgData as any);
+      const org = await Organization.create(orgData);
       console.log(`  ✅ Created org: ${orgData.name}`);
       createdOrgs.push(org);
     }
@@ -74,7 +74,7 @@ export const seedDemoData = async (): Promise<void> => {
     },
   ];
 
-  const createdAdmins: any[] = [];
+  const createdAdmins: User[] = [];
   for (const adminData of orgAdmins) {
     const existing = await User.findOne({ where: { email: adminData.email } });
     if (existing) {
@@ -88,7 +88,7 @@ export const seedDemoData = async (): Promise<void> => {
         isActive: true,
         isBlocked: false,
         tokenVersion: 0,
-      } as any);
+      });
       console.log(`  ✅ Created org admin: ${adminData.email}`);
       createdAdmins.push(admin);
     }
@@ -114,7 +114,7 @@ export const seedDemoData = async (): Promise<void> => {
         isActive: true,
         isBlocked: false,
         tokenVersion: 0,
-      } as any);
+      });
       console.log(`  ✅ Created job seeker: ${seekerData.email}`);
     } else {
       console.log(`  ✓ Job seeker already exists: ${seekerData.email}`);
@@ -176,10 +176,12 @@ export const seedDemoData = async (): Promise<void> => {
       if (!existing) {
         await Job.create({
           ...jobTemplate,
+          job_type: jobTemplate.job_type as any,
+          experience_level: jobTemplate.experience_level as any,
           organization_id: org.id,
           posted_by: adminForOrg?.id || "system",
           posted_date: new Date(),
-        } as any);
+        });
         console.log(`  ✅ Created job: "${jobTemplate.title}" for ${org.name}`);
       } else {
         console.log(`  ✓ Job already exists: "${jobTemplate.title}" for ${org.name}`);

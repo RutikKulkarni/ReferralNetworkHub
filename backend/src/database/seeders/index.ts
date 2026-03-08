@@ -6,6 +6,7 @@ import {
 import { initAuthModels } from "../../modules/auth/models";
 import sequelize from "../../config/database";
 import { seedSuperAdmins } from "./superadmin.seeder";
+import { seedDemoData } from "./demo.seeder";
 
 const runSeeders = async (): Promise<void> => {
   try {
@@ -22,6 +23,11 @@ const runSeeders = async (): Promise<void> => {
 
     // Run seeders
     await seedSuperAdmins();
+
+    // Run demo data seeder in non-production environments
+    if (process.env.NODE_ENV !== "production") {
+      await seedDemoData();
+    }
 
     console.log("\n✓ All seeders completed successfully");
 

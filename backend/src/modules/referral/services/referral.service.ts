@@ -177,7 +177,7 @@ export class ReferralService {
     const limit = pagination.limit || 20;
     const offset = (page - 1) * limit;
 
-    const whereClause: any = {};
+    const whereClause: any = {}; // Keep any for symbols (Op.or)
 
     // Organization scoping
     if (organizationId) {

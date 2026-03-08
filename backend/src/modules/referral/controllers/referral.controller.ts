@@ -37,7 +37,6 @@ export const submitReferral = async (req: Request, res: Response): Promise<void>
     });
   } catch (error: unknown) {
     const err = error as Error;
-    console.error("Error submitting referral:", err);
     res.status(400).json({ error: err.message || "Failed to submit referral" });
   }
 };
@@ -80,9 +79,7 @@ export const listReferrals = async (req: Request, res: Response): Promise<void> 
     );
 
     res.json(result);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error listing referrals:", err);
+  } catch {
     res.status(500).json({ error: "Failed to list referrals" });
   }
 };
@@ -114,9 +111,7 @@ export const getMyReferrals = async (req: Request, res: Response): Promise<void>
     );
 
     res.json(result);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error getting my referrals:", err);
+  } catch {
     res.status(500).json({ error: "Failed to get referrals" });
   }
 };
@@ -143,9 +138,7 @@ export const getReferral = async (req: Request, res: Response): Promise<void> =>
     }
 
     res.json(referral);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error getting referral:", err);
+  } catch {
     res.status(500).json({ error: "Failed to get referral" });
   }
 };
@@ -190,9 +183,7 @@ export const updateReferralStatus = async (req: Request, res: Response): Promise
       message: "Referral status updated successfully",
       referral,
     });
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error updating referral status:", err);
+  } catch {
     res.status(500).json({ error: "Failed to update referral status" });
   }
 };
@@ -236,9 +227,7 @@ export const approveReferral = async (req: Request, res: Response): Promise<void
       message: "Referral approved successfully",
       referral,
     });
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error approving referral:", err);
+  } catch {
     res.status(500).json({ error: "Failed to approve referral" });
   }
 };
@@ -283,9 +272,7 @@ export const rejectReferral = async (req: Request, res: Response): Promise<void>
       message: "Referral rejected successfully",
       referral,
     });
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error rejecting referral:", err);
+  } catch {
     res.status(500).json({ error: "Failed to reject referral" });
   }
 };
@@ -431,9 +418,7 @@ export const processBonusPayment = async (req: Request, res: Response): Promise<
       message: "Bonus payment processed successfully",
       referral,
     });
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error processing bonus payment:", err);
+  } catch {
     res.status(500).json({ error: "Failed to process bonus payment" });
   }
 };

@@ -45,9 +45,7 @@ export const listUsers = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.json(result);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error listing users:", err);
+  } catch {
     res.status(500).json({ error: "Failed to list users" });
   }
 };
@@ -73,9 +71,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     res.json(user);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error getting user:", err);
+  } catch {
     res.status(500).json({ error: "Failed to get user" });
   }
 };
@@ -112,7 +108,6 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     });
   } catch (error: unknown) {
     const err = error as Error;
-    console.error("Error updating user:", err);
     res.status(500).json({ error: err.message || "Failed to update user" });
   }
 };
@@ -141,9 +136,7 @@ export const deactivateUser = async (req: Request, res: Response): Promise<void>
       message: "User deactivated successfully",
       user,
     });
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error deactivating user:", err);
+  } catch {
     res.status(500).json({ error: "Failed to deactivate user" });
   }
 };
@@ -172,9 +165,7 @@ export const activateUser = async (req: Request, res: Response): Promise<void> =
       message: "User activated successfully",
       user,
     });
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error activating user:", err);
+  } catch {
     res.status(500).json({ error: "Failed to activate user" });
   }
 };
@@ -200,9 +191,7 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
     }
 
     res.json(profile);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error getting user profile:", err);
+  } catch {
     res.status(500).json({ error: "Failed to get user profile" });
   }
 };
@@ -239,7 +228,6 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
     });
   } catch (error: unknown) {
     const err = error as Error;
-    console.error("Error updating user profile:", err);
     res.status(500).json({ error: err.message || "Failed to update profile" });
   }
 };
@@ -276,7 +264,6 @@ export const changeUserRole = async (req: Request, res: Response): Promise<void>
     });
   } catch (error: unknown) {
     const err = error as Error;
-    console.error("Error changing user role:", err);
     res.status(500).json({ error: err.message || "Failed to change user role" });
   }
 };
@@ -298,9 +285,7 @@ export const getUsersByRole = async (req: Request, res: Response): Promise<void>
     const users = await userService.getUsersByRole(roleStr, organizationId);
 
     res.json({ users });
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error getting users by role:", err);
+  } catch {
     res.status(500).json({ error: "Failed to get users by role" });
   }
 };
@@ -320,9 +305,7 @@ export const getUserStats = async (req: Request, res: Response): Promise<void> =
     const stats = await userService.getUserStats(organizationId);
 
     res.json(stats);
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error("Error getting user stats:", err);
+  } catch {
     res.status(500).json({ error: "Failed to get user statistics" });
   }
 };

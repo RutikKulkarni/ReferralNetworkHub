@@ -41,8 +41,10 @@ function validateEnv(): void {
   }
 }
 
-// Validate on module load
-validateEnv();
+// Validate on module load (except in test mode)
+if (process.env.NODE_ENV !== "test") {
+  validateEnv();
+}
 
 interface Config {
   env: string;

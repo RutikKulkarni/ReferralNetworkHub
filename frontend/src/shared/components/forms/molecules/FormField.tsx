@@ -8,7 +8,6 @@ export interface FormFieldProps {
   id?: string;
   label?: string | null;
   required?: boolean;
-  hideOptionalLabel?: boolean;
   helper?: string;
   error?: string;
   hidden?: boolean;
@@ -23,7 +22,6 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
       id,
       label,
       required,
-      hideOptionalLabel,
       helper,
       error,
       hidden,
@@ -55,11 +53,6 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
           >
             {label}
             {required && <span className="ml-1 text-destructive">*</span>}
-            {!required && !hideOptionalLabel && (
-              <span className="ml-1 text-muted-foreground font-normal">
-                (optional)
-              </span>
-            )}
           </Label>
         )}
 

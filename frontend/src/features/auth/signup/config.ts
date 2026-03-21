@@ -13,11 +13,9 @@ export const fieldTypeMappings: Partial<Record<keyof SignupData, FieldType>> = {
   email: "email",
   password: "password",
   confirmPassword: "password",
-  acceptTerms: "checkbox",
-  subscribeNewsletter: "checkbox",
 };
 
-export const optionalFields: (keyof SignupData)[] = ["subscribeNewsletter"];
+export const optionalFields: (keyof SignupData)[] = [];
 
 export const createSchemaOverrides = () => ({
   firstName: z
@@ -32,15 +30,8 @@ export const createSchemaOverrides = () => ({
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
-    .max(100, "Password is too long")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Password must contain uppercase, lowercase, and number",
-    ),
+    .max(100, "Password is too long"),
   confirmPassword: z.string(),
-  acceptTerms: z
-    .boolean()
-    .refine((val) => val === true, "You must accept the terms and conditions"),
 });
 
 export const createFieldConfigurations = (): Partial<
@@ -48,45 +39,33 @@ export const createFieldConfigurations = (): Partial<
 > => ({
   firstName: {
     label: "First Name",
-    placeholder: "Enter your first name",
+    placeholder: "Rutik",
     type: "text",
   },
   lastName: {
     label: "Last Name",
-    placeholder: "Enter your last name",
+    placeholder: "Kulkarni",
     type: "text",
   },
   email: {
-    label: "Email Address",
-    placeholder: "Enter your email",
+    label: "Email",
+    placeholder: "name@gmail.com",
     type: "email",
   },
   password: {
     label: "Password",
-    placeholder: "Create a password",
+    placeholder: "••••••••",
     type: "password",
   },
   confirmPassword: {
     label: "Confirm Password",
-    placeholder: "Re-enter your password",
+    placeholder: "••••••••",
     type: "password",
-  },
-  acceptTerms: {
-    type: "checkbox",
-    label: "I accept the terms and conditions",
-    description: "You must accept our terms to create an account",
-  },
-  subscribeNewsletter: {
-    type: "checkbox",
-    label: "Subscribe to newsletter",
-    description: "Receive updates and news about our platform",
   },
 });
 
 export const createFormSections = (): SectionConfig<SignupData>[] => [
   {
-    title: "Personal Information",
-    description: "Tell us about yourself",
     rows: [
       {
         fields: ["firstName", "lastName"],
@@ -95,28 +74,11 @@ export const createFormSections = (): SectionConfig<SignupData>[] => [
       {
         fields: ["email"],
       },
-    ],
-  },
-  {
-    title: "Security",
-    description: "Choose a strong password",
-    rows: [
       {
         fields: ["password"],
       },
       {
         fields: ["confirmPassword"],
-      },
-    ],
-  },
-  {
-    title: "Preferences",
-    rows: [
-      {
-        fields: ["acceptTerms"],
-      },
-      {
-        fields: ["subscribeNewsletter"],
       },
     ],
   },

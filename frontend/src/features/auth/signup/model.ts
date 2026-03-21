@@ -4,6 +4,4 @@ export interface SignupData {
   email: string;
   password: string;
   confirmPassword: string;
-  acceptTerms: boolean;
-  subscribeNewsletter?: boolean;
 }

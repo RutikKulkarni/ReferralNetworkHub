@@ -1,76 +1,89 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Suspense } from "react";
+import toast from "react-hot-toast";
 import { SignupForm } from "@/features/auth";
 import type { SignupData } from "@/features/auth";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/button/theme-toggle";
 
-/**
- * Signup Page
- *
- * Provides user registration interface
- */
-export default function SignupPage() {
-  const router = useRouter();
-
+function SignupContent() {
   const handleSignup = async (data: SignupData) => {
     try {
       // TODO: Replace with actual API call
-      // const response = await fetch('/api/auth/signup', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     firstName: data.firstName,
-      //     lastName: data.lastName,
-      //     email: data.email,
-      //     password: data.password,
-      //     subscribeNewsletter: data.subscribeNewsletter,
-      //   }),
-      // });
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
       console.log("Signup attempt:", {
         ...data,
         password: "***",
         confirmPassword: "***",
       });
-
-      // TODO: Handle successful signup
-      // - Store auth token (if auto-login after signup)
-      // - Send verification email
-      // - Redirect to dashboard or email verification page
-      alert(
-        `Account created successfully for ${data.firstName} ${data.lastName}! Please check your email to verify your account.`,
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      toast.success(
+        `Account created successfully for ${data.firstName} ${data.lastName}!`,
       );
-
-      // Redirect to login or dashboard
-      router.push("/login");
+      // TODO: Redirect after successful signup
+      // window.location.href = "/login";
     } catch (error) {
       console.error("Signup failed:", error);
-      alert("Signup failed. Please try again.");
+      toast.error("Signup failed. Please try again.");
     }
   };
 
-  const handleLoginClick = () => {
-    router.push("/login");
+  const handleSocialSignup = (provider: "github" | "linkedin") => {
+    // TODO: Implement OAuth flow for social signup
+    console.log(`Social signup with ${provider}`);
+    toast(
+      `${provider.charAt(0).toUpperCase() + provider.slice(1)} signup coming soon!`,
+      { icon: "🔜" },
+    );
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-secondary/20 px-4 py-12">
-      <div className="w-full max-w-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Create an Account</h1>
-          <p className="text-muted-foreground mt-2">
-            Join ReferralNetworkHub and start connecting with professionals
-          </p>
-        </div>
+    <>
+      <div className="flex flex-col space-y-2 text-center">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Create an account
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Enter your information to create an account
+        </p>
+      </div>
+      <SignupForm onSubmit={handleSignup} onSocialSignup={handleSocialSignup} />
+      <p className="px-8 text-center text-sm text-muted-foreground">
+        Already have an account?{" "}
+        <Link
+          href="/login"
+          className="underline underline-offset-4 hover:text-primary"
+        >
+          Log in
+        </Link>
+      </p>
+    </>
+  );
+}
 
-        <SignupForm
-          onSubmit={handleSignup}
-          showLoginLink={true}
-          onLoginClick={handleLoginClick}
-        />
+export default function SignupPage() {
+  return (
+    <div className="container flex h-screen w-screen flex-col items-center justify-center my-12">
+      <div className="absolute left-4 top-6">
+        <Button
+          variant="ghost"
+          onClick={() => window.history.back()}
+          className="flex items-center text-sm text-muted-foreground hover:text-primary cursor-pointer"
+        >
+          <Icons.arrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
+      </div>
+      <div className="absolute right-4 top-6">
+        <ModeToggle />
+      </div>
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <Suspense fallback={<div className="text-center">Loading...</div>}>
+          <SignupContent />
+        </Suspense>
       </div>
     </div>
   );

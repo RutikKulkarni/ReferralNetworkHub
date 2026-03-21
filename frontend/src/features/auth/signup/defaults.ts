@@ -6,6 +6,4 @@ export const defaultSignupData: SignupData = {
   email: "",
   password: "",
   confirmPassword: "",
-  acceptTerms: false,
-  subscribeNewsletter: false,
 };

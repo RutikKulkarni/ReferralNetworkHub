@@ -12,10 +12,9 @@ export const fieldTypeMappings: Partial<
 > = {
   email: "email",
   password: "password",
-  rememberMe: "checkbox",
 };
 
-export const optionalFields: (keyof LoginCredentials)[] = ["rememberMe"];
+export const optionalFields: (keyof LoginCredentials)[] = [];
 
 export const createSchemaOverrides = () => ({
   email: emailSchema(),
@@ -29,35 +28,25 @@ export const createFieldConfigurations = (): Partial<
   Record<keyof LoginCredentials, FieldConfig>
 > => ({
   email: {
-    label: "Email Address",
-    placeholder: "Enter your email",
+    label: "Email",
+    placeholder: "name@gmail.com",
     type: "email",
   },
   password: {
     label: "Password",
-    placeholder: "Enter your password",
+    placeholder: "••••••••",
     type: "password",
-  },
-  rememberMe: {
-    type: "checkbox",
-    label: "Remember me",
-    description: "Stay signed in for 30 days",
   },
 });
 
 export const createFormSections = (): SectionConfig<LoginCredentials>[] => [
   {
-    title: "Sign In",
-    description: "Enter your credentials to access your account",
     rows: [
       {
         fields: ["email"],
       },
       {
         fields: ["password"],
-      },
-      {
-        fields: ["rememberMe"],
       },
     ],
   },

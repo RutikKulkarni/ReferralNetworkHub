@@ -7,9 +7,6 @@ import { emailSchema } from "@/shared/utils/forms";
 import type { SignupData } from "./model";
 import { z } from "zod";
 
-/**
- * Field type mappings - defines which component renders each field
- */
 export const fieldTypeMappings: Partial<Record<keyof SignupData, FieldType>> = {
   firstName: "text",
   lastName: "text",
@@ -20,14 +17,8 @@ export const fieldTypeMappings: Partial<Record<keyof SignupData, FieldType>> = {
   subscribeNewsletter: "checkbox",
 };
 
-/**
- * Optional fields - fields that are not required
- */
 export const optionalFields: (keyof SignupData)[] = ["subscribeNewsletter"];
 
-/**
- * Schema overrides - custom validation rules for specific fields
- */
 export const createSchemaOverrides = () => ({
   firstName: z
     .string()
@@ -52,9 +43,6 @@ export const createSchemaOverrides = () => ({
     .refine((val) => val === true, "You must accept the terms and conditions"),
 });
 
-/**
- * Field configurations - UI settings for each field
- */
 export const createFieldConfigurations = (): Partial<
   Record<keyof SignupData, FieldConfig>
 > => ({
@@ -95,9 +83,6 @@ export const createFieldConfigurations = (): Partial<
   },
 });
 
-/**
- * Form sections - layout structure
- */
 export const createFormSections = (): SectionConfig<SignupData>[] => [
   {
     title: "Personal Information",

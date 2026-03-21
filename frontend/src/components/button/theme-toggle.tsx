@@ -11,6 +11,7 @@ export function ModeToggle() {
 
   // Ensure the component is mounted to avoid hydration issues
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

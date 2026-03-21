@@ -46,17 +46,42 @@ jobs:
       - name: Run ESLint
         working-directory: ./frontend
         run: npm run lint
-        continue-on-error: true
 
       - name: Run Type Check
         working-directory: ./frontend
-        run: npm run typecheck || npm run build
-        continue-on-error: true
+        run: npm run typecheck
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run Tests
+        working-directory: ./frontend
+        run: npm test
 
   build-check:
     name: Build Check
     runs-on: ubuntu-latest
-    needs: [lint-and-typecheck]
+    needs: [lint-and-typecheck, test]
 
     steps:
       - name: Checkout code
@@ -82,7 +107,7 @@ jobs:
   summary:
     name: CI Summary
     runs-on: ubuntu-latest
-    needs: [lint-and-typecheck, build-check]
+    needs: [lint-and-typecheck, test, build-check]
     if: always()
 
     steps:
@@ -91,11 +116,22 @@ jobs:
           echo "Frontend CI Pipeline Summary"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Lint & Type Check: ${{ needs.lint-and-typecheck.result }}"
+          echo "Tests: ${{ needs.test.result }}"
           echo "Build Check: ${{ needs.build-check.result }}"
 
-          if [ "${{ needs.build-check.result }}" != "success" ]; then
-            echo "CI Failed: Fix build errors before merging"
+          if [ "${{ needs.lint-and-typecheck.result }}" != "success" ]; then
+            echo "❌ CI Failed: Fix linting and type errors before merging"
             exit 1
           fi
 
-          echo "All checks passed! Ready to merge."
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "❌ CI Failed: Fix failing tests before merging"
+            exit 1
+          fi
+
+          if [ "${{ needs.build-check.result }}" != "success" ]; then
+            echo "❌ CI Failed: Fix build errors before merging"
+            exit 1
+          fi
+
+          echo "✅ All checks passed! Ready to merge."

@@ -28,8 +28,10 @@ export type CountryData = {
   status: string;
 };
 
-interface PhoneInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+interface PhoneInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "onChange"
+> {
   onCountryChange?: (data: CountryData | undefined) => void;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -51,7 +53,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       inline = false,
       ...props
     },
-    ref
+    ref,
   ) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [countryData, setCountryData] = useState<CountryData | undefined>();
@@ -63,6 +65,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
         const newCountryData = lookup.countries({
           alpha2: defaultCountry.toLowerCase(),
         })[0];
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Initialization effect
         setCountryData(newCountryData);
         setDisplayFlag(defaultCountry.toLowerCase());
 
@@ -154,7 +157,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
     const inputClasses = cn(
       "flex items-center gap-2 relative bg-transparent transition-colors text-base rounded-md border border-input pl-3 h-9 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed md:text-sm has-[input:focus]:outline-none has-[input:focus]:ring-1 has-[input:focus]:ring-ring [interpolate-size:allow-keywords]",
       inline && "rounded-l-none w-full",
-      className
+      className,
     );
 
     return (
@@ -178,13 +181,13 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
           name="phone"
           className={cn(
             "flex w-full border-none bg-transparent text-base transition-colors placeholder:text-muted-foreground outline-none h-9 py-1 p-0 leading-none md:text-sm [interpolate-size:allow-keywords]",
-            className
+            className,
           )}
           {...props}
         />
       </div>
     );
-  }
+  },
 );
 
 PhoneInput.displayName = "PhoneInput";

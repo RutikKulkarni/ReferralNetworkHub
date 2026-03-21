@@ -2,8 +2,14 @@
 
 import * as React from "react";
 
+interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 interface AuthContextType {
-  user: any;
+  user: User | null;
   loading: boolean;
   logout: () => Promise<void>;
 }

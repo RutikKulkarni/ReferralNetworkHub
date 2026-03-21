@@ -24,7 +24,10 @@ export function UserNav() {
       toast.promise(logout(), {
         loading: "Logging out...",
         success: "You have successfully logged out.",
-        error: (err: any) => err?.message || "Failed to log out. Please try again.",
+        error: (err: unknown) =>
+          err instanceof Error
+            ? err.message
+            : "Failed to log out. Please try again.",
       });
     } catch (error) {
       console.error("Logout error:", error);

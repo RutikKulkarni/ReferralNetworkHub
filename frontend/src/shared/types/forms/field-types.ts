@@ -15,7 +15,7 @@ export type FieldType =
   | "cardSelect"
   | "cardRadio";
 
-export interface FieldOption<T = any> {
+export interface FieldOption<T = string> {
   label: string;
   value: T;
   icon?: React.ReactNode;

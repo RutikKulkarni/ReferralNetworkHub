@@ -44,7 +44,6 @@ export interface JWTPayload {
   exp?: number;
 }
 
-
 export interface RefreshTokenPayload {
   userId: string;
   sessionId?: string;
@@ -180,6 +179,20 @@ export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   expiresIn: string | number;
+}
+
+export interface RegisterResponse {
+  user: {
+    id: string;
+    email: string;
+    userType: UserType;
+    firstName: string;
+    lastName: string;
+    emailVerified: boolean;
+    organizationId?: string;
+  };
+  message: string;
+  verificationToken?: string; // For testing purposes - remove in production
 }
 
 export interface RefreshTokenRequest {
@@ -401,11 +414,7 @@ export interface TenantContext {
   };
 }
 
-export type UserOrgRole =
-  | "platform_admin"
-  | "admin"
-  | "recruiter"
-  | "employee";
+export type UserOrgRole = "platform_admin" | "admin" | "recruiter" | "employee";
 
 // ==================== EXPRESS REQUEST EXTENSIONS ====================
 

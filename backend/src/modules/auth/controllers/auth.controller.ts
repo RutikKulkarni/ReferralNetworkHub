@@ -24,18 +24,14 @@ export class AuthController {
       // Register user
       const result = await AuthService.registerPublicUser(data, deviceInfo);
 
-      // Set refresh token cookie
-      CookieUtil.setRefreshTokenCookie(res, result.refreshToken);
-
-      // Return response without refresh token
+      // Do NOT set cookie or return tokens - email verification required
       return ResponseUtil.created(
         res,
         {
           user: result.user,
-          accessToken: result.accessToken,
-          expiresIn: result.expiresIn,
+          verificationToken: result.verificationToken, // For testing - remove in production
         },
-        SUCCESS_MESSAGES.USER_REGISTERED,
+        result.message,
       );
     } catch (error) {
       next(error);
@@ -94,7 +90,32 @@ export class AuthController {
       next(error);
     }
   }
+  public async verifyEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const { token } = req.body;
 
+      if (!token) {
+        throw new Error("Verification token is required");
+      }
+
+      // Verify email
+      const result = await AuthService.verifyEmail(token);
+
+      return ResponseUtil.success(
+        res,
+        {
+          user: result.user,
+        },
+        result.message,
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
   public async login(
     req: Request,
     res: Response,

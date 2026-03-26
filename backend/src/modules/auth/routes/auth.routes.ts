@@ -45,6 +45,13 @@ router.post(
 router.post("/login", authRateLimiter, validateLogin, AuthController.login);
 
 /**
+ * @route   POST /api/auth/verify-email
+ * @desc    Verify email address with token
+ * @access  Public
+ */
+router.post("/verify-email", authRateLimiter, AuthController.verifyEmail);
+
+/**
  * @route   POST /api/auth/refresh-token
  * @desc    Refresh access token
  * @access  Public

@@ -35,8 +35,8 @@ function validateEnv(): void {
     (process.env.JWT_ACCESS_TOKEN_SECRET?.includes("your_") ||
       process.env.JWT_REFRESH_TOKEN_SECRET?.includes("your_"))
   ) {
-    console.warn(
-      "WARNING: Using default JWT secrets in production! Please change them.",
+    throw new Error(
+      "FATAL: Using default JWT secrets in production is not allowed! Please set secure JWT_ACCESS_TOKEN_SECRET and JWT_REFRESH_TOKEN_SECRET in your environment.",
     );
   }
 }
@@ -49,6 +49,7 @@ if (process.env.NODE_ENV !== "test") {
 interface Config {
   env: string;
   port: number;
+  domain?: string;
   database: {
     host: string;
     port: number;
@@ -126,6 +127,7 @@ interface Config {
 const config: Config = {
   env: process.env.NODE_ENV || "development",
   port: parseInt(process.env.PORT || "5000", 10),
+  domain: process.env.COOKIE_DOMAIN || undefined,
 
   database: {
     host: process.env.DB_HOST || "localhost",
@@ -162,8 +164,12 @@ const config: Config = {
   },
 
   jwt: {
-    accessTokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET || "default_access_secret_for_testing_only",
-    refreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET || "default_refresh_secret_for_testing_only",
+    accessTokenSecret:
+      process.env.JWT_ACCESS_TOKEN_SECRET ||
+      "default_access_secret_for_testing_only",
+    refreshTokenSecret:
+      process.env.JWT_REFRESH_TOKEN_SECRET ||
+      "default_refresh_secret_for_testing_only",
     accessTokenExpiry: process.env.JWT_ACCESS_TOKEN_EXPIRY || "1h",
     refreshTokenExpiry: process.env.JWT_REFRESH_TOKEN_EXPIRY || "7d",
     issuer: process.env.JWT_ISSUER || "ReferralNetworkHub",

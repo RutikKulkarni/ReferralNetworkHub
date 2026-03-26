@@ -3,39 +3,86 @@ paths:
     post:
       tags:
         - Authentication
-      summary: Register a new user
+      summary: Register a new user (Job Seeker or Referral Provider)
+      description: |
+        Creates a new user account. Returns access token in response body 
+        and sets refresh token as HttpOnly cookie.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [email, password, firstName, lastName]
+              required: [email, password, firstName, lastName, userType]
               properties:
                 email:
                   type: string
                   format: email
+                  example: user@example.com
                 password:
                   type: string
                   format: password
                   minLength: 8
+                  description: Must contain uppercase, lowercase, number, and special character
+                  example: SecurePass@123
                 firstName:
                   type: string
+                  example: John
                 lastName:
                   type: string
+                  example: Doe
+                userType:
+                  type: string
+                  enum: [JOB_SEEKER, REFERRAL_PROVIDER]
+                  example: JOB_SEEKER
       responses:
         "201":
           description: User registered successfully
+          headers:
+            Set-Cookie:
+              description: HttpOnly cookie containing refresh token
+              schema:
+                type: string
+                example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User registered successfully
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/components/schemas/User"
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                      expiresIn:
+                        type: string
+                        example: 1h
         "400":
           $ref: "#/components/responses/ValidationError"
         "409":
           description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/auth/login:
     post:
       tags:
         - Authentication
       summary: Login user
+      description: |
+        Authenticates user with email and password. Returns access token in response 
+        body and sets refresh token as HttpOnly cookie.
       requestBody:
         required: true
         content:
@@ -46,35 +93,134 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
+                  example: user@example.com
                 password:
                   type: string
+                  format: password
+                  example: SecurePass@123
       responses:
         "200":
           description: Login successful
+          headers:
+            Set-Cookie:
+              description: HttpOnly cookie containing refresh token
+              schema:
+                type: string
+                example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Login successful
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/components/schemas/User"
+                      accessToken:
+                        type: string
+                        description: Short-lived JWT token (1 hour)
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                      expiresIn:
+                        type: string
+                        example: 1h
         "401":
           description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/auth/refresh-token:
     post:
       tags:
         - Authentication
       summary: Refresh access token
+      description: |
+        Generates a new access token using the refresh token stored in HttpOnly cookie.
+        No request body needed - refresh token is automatically sent via cookie.
+        Returns new access token and sets new refresh token cookie (token rotation).
+      parameters:
+        - in: cookie
+          name: refreshToken
+          required: true
+          schema:
+            type: string
+          description: Refresh token from HttpOnly cookie (automatically sent by browser)
       responses:
         "200":
-          description: Token refreshed
+          description: Token refreshed successfully
+          headers:
+            Set-Cookie:
+              description: New refresh token (token rotation)
+              schema:
+                type: string
+                example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Token refreshed
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         "401":
-          description: Invalid refresh token
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/auth/logout:
     post:
       tags:
         - Authentication
       summary: Logout user
+      description: |
+        Logs out the current user session and clears the refresh token cookie.
+        Requires valid access token in Authorization header.
       security:
         - bearerAuth: []
       responses:
         "200":
           description: Logout successful
+          headers:
+            Set-Cookie:
+              description: Clears the refresh token cookie
+              schema:
+                type: string
+                example: refreshToken=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Logout successful
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -82,12 +228,26 @@ paths:
     get:
       tags:
         - Authentication
-      summary: Get current user
+      summary: Get current authenticated user
+      description: Returns the profile of the currently authenticated user
       security:
         - bearerAuth: []
       responses:
         "200":
-          description: User profile
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Success
+                  data:
+                    $ref: "#/components/schemas/User"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -113,6 +273,9 @@ paths:
       tags:
         - Invites
       summary: Accept invite and register
+      description: |
+        Creates a new user account using an invite token. Returns access token 
+        in response body and sets refresh token as HttpOnly cookie.
       requestBody:
         required: true
         content:
@@ -123,17 +286,57 @@ paths:
               properties:
                 token:
                   type: string
+                  description: Invite token from email
+                  example: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
                 password:
                   type: string
+                  format: password
+                  minLength: 8
+                  description: Must contain uppercase, lowercase, number, and special character
+                  example: SecurePass@123
                 firstName:
                   type: string
+                  example: John
                 lastName:
                   type: string
+                  example: Doe
       responses:
         "201":
-          description: User created
+          description: User created successfully
+          headers:
+            Set-Cookie:
+              description: HttpOnly cookie containing refresh token
+              schema:
+                type: string
+                example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Invite accepted successfully
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: "#/components/schemas/User"
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                      expiresIn:
+                        type: string
+                        example: 1h
         "400":
-          description: Invalid token
+          description: Invalid or expired invite token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/auth/invite/platform-admin:
     post:

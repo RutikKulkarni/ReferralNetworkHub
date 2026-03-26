@@ -99,6 +99,34 @@ components:
           format: password
           example: SecurePassword123!
 
+    # ==========================================
+    # RESPONSE SCHEMAS
+    # ==========================================
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Error message
+        error:
+          type: string
+          example: Detailed error description
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+          example:
+            - field: email
+              message: Invalid email format
+
     LoginResponse:
       type: object
       properties:
@@ -1312,3 +1340,55 @@ components:
           type: integer
           description: Items per page
           example: 10
+
+  # ==========================================
+  # REUSABLE RESPONSES
+  # ==========================================
+  responses:
+    UnauthorizedError:
+      description: Unauthorized - Invalid or missing authentication token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Unauthorized
+            error: Invalid or expired access token
+
+    ForbiddenError:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Forbidden
+            error: You do not have permission to perform this action
+
+    ValidationError:
+      description: Validation error - Invalid input data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Validation failed
+            errors:
+              - field: email
+                message: Invalid email format
+              - field: password
+                message: Password must be at least 8 characters
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Not found
+            error: The requested resource was not found

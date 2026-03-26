@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import config from "./config";
 import { swaggerSpec } from "./config/swagger";
@@ -32,6 +33,9 @@ app.use(
     credentials: true,
   }),
 );
+
+// Cookie parser middleware
+app.use(cookieParser());
 
 // Body parsing middleware
 app.use(express.json({ limit: config.upload.maxFileSize }));

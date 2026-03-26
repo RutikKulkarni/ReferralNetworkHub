@@ -12,7 +12,12 @@ import {
   InviteToken,
   EmailVerification,
 } from "../models";
-import { JWTUtil, PasswordUtil, ValidationUtil } from "../../../shared/utils";
+import {
+  JWTUtil,
+  PasswordUtil,
+  ValidationUtil,
+  HashUtil,
+} from "../../../shared/utils";
 import {
   USER_TYPES,
   SESSION_TRACKED_USER_TYPES,
@@ -372,9 +377,10 @@ export class AuthService {
     // Verify refresh token
     const decoded = JWTUtil.verifyRefreshToken(refreshToken);
 
-    // Find refresh token in database
+    // Find refresh token in database (stored as SHA-256 hash)
+    const tokenHash = HashUtil.sha256(refreshToken);
     const storedToken = await RefreshToken.findOne({
-      where: { token: refreshToken },
+      where: { token: tokenHash },
       include: [{ model: User, as: "user" }],
     });
 
@@ -423,10 +429,10 @@ export class AuthService {
       await session.logout();
     }
 
-    // Revoke all refresh tokens for this session
+    // Revoke all refresh tokens for this session only
     await RefreshToken.update(
       { isRevoked: true, revokedAt: new Date() },
-      { where: { userId } },
+      { where: { userId, sessionId } },
     );
   }
 
@@ -510,7 +516,7 @@ export class AuthService {
       this.getUserPermissions(user.userType as UserType),
     );
 
-    // Store refresh token
+    // Store refresh token (hashed for security)
     const refreshTokenExpiry = new Date(
       Date.now() + this.parseExpiry(config.jwt.refreshTokenExpiry),
     );
@@ -518,7 +524,7 @@ export class AuthService {
     await RefreshToken.create({
       userId: user.id,
       sessionId: sessionId || "",
-      token: tokens.refreshToken,
+      token: HashUtil.sha256(tokens.refreshToken),
       expiresAt: refreshTokenExpiry,
       isRevoked: false,
     });

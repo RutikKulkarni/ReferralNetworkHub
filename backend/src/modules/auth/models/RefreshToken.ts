@@ -10,6 +10,7 @@ import {
 } from "sequelize";
 import { RefreshTokenAttributes } from "../../../shared/types";
 import { User } from "./User";
+import { HashUtil } from "../../../shared/utils";
 
 export class RefreshToken
   extends Model<
@@ -70,7 +71,7 @@ export class RefreshToken
     this.isRevoked = true;
     this.revokedAt = new Date();
     if (replacedBy) {
-      this.replacedByToken = replacedBy;
+      this.replacedByToken = HashUtil.sha256(replacedBy);
     }
     await this.save();
   }

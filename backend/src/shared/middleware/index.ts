@@ -13,4 +13,8 @@ export {
 
 // Other middleware
 export { cacheMiddleware } from "./cache.middleware";
-export { apiRateLimiter, authRateLimiter } from "./rateLimiter.middleware";
+export {
+  apiRateLimiter,
+  authRateLimiter,
+  loginRateLimiter,
+} from "./rateLimiter.middleware";

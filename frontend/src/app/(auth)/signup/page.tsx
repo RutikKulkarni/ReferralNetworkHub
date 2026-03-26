@@ -28,18 +28,22 @@ function SignupContent() {
         userType: UserType.JOB_SEEKER, // Default user type for public signup
       });
 
-      toast.success("Account created successfully!");
-      router.push("/dashboard"); // Redirect to dashboard after signup
+      toast.success("Account created successfully! Please check your email.");
+
+      // Redirect to email verification pending page
+      router.push(
+        `/verify-email-pending?email=${encodeURIComponent(data.email)}`,
+      );
     } catch (error) {
       const err = error as { message?: string };
       console.error("Signup failed:", error);
-      
+
       // Show error with line breaks for better readability
       const errorMessage = err.message || "Signup failed. Please try again.";
-      
+
       // If error has multiple lines (from backend errors array), show each on new line
-      if (errorMessage.includes('\n')) {
-        const errors = errorMessage.split('\n');
+      if (errorMessage.includes("\n")) {
+        const errors = errorMessage.split("\n");
         errors.forEach((errMsg, index) => {
           setTimeout(() => {
             toast.error(errMsg, { duration: 5000 });

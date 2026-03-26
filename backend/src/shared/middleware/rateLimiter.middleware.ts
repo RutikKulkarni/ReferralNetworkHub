@@ -42,6 +42,27 @@ export const authRateLimiter = rateLimit({
 });
 
 /**
+ * Moderate rate limiter specifically for login endpoint
+ * Allows more attempts than general auth (for legitimate users with typos)
+ */
+export const loginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 15, // Max 15 login attempts per 15 minutes
+  message: {
+    error:
+      "Too many login attempts. Please try again after 15 minutes or reset your password.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true, // Don't count successful logins
+  store: new RedisStore({
+    sendCommand: async (...args: string[]) =>
+      redisClient.call(args[0], ...args.slice(1)) as Promise<RedisReply>,
+    prefix: "rl:login:",
+  }),
+});
+
+/**
  * Moderate rate limiter for API endpoints
  */
 export const apiRateLimiter = rateLimit({

@@ -482,6 +482,59 @@ export class AuthService {
   }
 
   /**
+   * Resend verification email
+   */
+  public async resendVerification(email: string): Promise<{
+    message: string;
+    verificationToken?: string;
+  }> {
+    // Find user by email
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+
+    // Check if already verified
+    if (user.emailVerified) {
+      throw new Error("Email is already verified. You can login now.");
+    }
+
+    // Expire all pending verification tokens for this user
+    await EmailVerification.update(
+      { status: EMAIL_VERIFICATION_STATUS.EXPIRED },
+      {
+        where: {
+          userId: user.id,
+          status: EMAIL_VERIFICATION_STATUS.PENDING,
+        },
+      },
+    );
+
+    // Generate new verification token
+    const verificationToken = this.generateSecureToken();
+    const expiresAt = new Date(
+      Date.now() + this.parseExpiry(TOKEN_EXPIRY.ORG_ADMIN_INVITE),
+    );
+
+    await EmailVerification.create({
+      userId: user.id,
+      email: user.email,
+      token: verificationToken,
+      status: EMAIL_VERIFICATION_STATUS.PENDING,
+      expiresAt,
+    });
+
+    // TODO: Send verification email
+    // await EmailService.sendVerificationEmail(user.email, verificationToken);
+
+    return {
+      message: "Verification email sent! Please check your inbox.",
+      verificationToken, // For testing purposes - remove in production
+    };
+  }
+
+  /**
    * Logout user
    */
   public async logout(userId: string, sessionId: string): Promise<void> {

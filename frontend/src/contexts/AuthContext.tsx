@@ -118,11 +118,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = React.useCallback(
     async (userData: RegisterData) => {
       try {
-        const data = await registerMutation.mutateAsync(userData);
+        // Backend now returns message only (no tokens)
+        // User must verify email before they can login
+        await registerMutation.mutateAsync(userData);
 
-        // Update state
-        setUser(data.user);
-        setAccessTokenState(data.accessToken);
+        // Do NOT update state - user needs to verify email first
+        // User will login after verification
       } catch (error) {
         const err = error as { response?: { data?: { error?: string } } };
         throw new Error(err.response?.data?.error || "Registration failed");

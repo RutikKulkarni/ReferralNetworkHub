@@ -116,6 +116,34 @@ export class AuthController {
       next(error);
     }
   }
+
+  public async resendVerification(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        throw new Error("Email is required");
+      }
+
+      // Resend verification email
+      const result = await AuthService.resendVerification(email);
+
+      return ResponseUtil.success(
+        res,
+        {
+          verificationToken: result.verificationToken, // For testing - remove in production
+        },
+        result.message,
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
   public async login(
     req: Request,
     res: Response,

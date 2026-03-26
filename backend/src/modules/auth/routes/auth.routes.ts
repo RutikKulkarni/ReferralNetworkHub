@@ -18,6 +18,7 @@ import {
 } from "../middleware/validation.middleware";
 import {
   authRateLimiter,
+  loginRateLimiter,
   // sensitiveRateLimiter,
 } from "../../../shared/middleware/rateLimiter.middleware";
 
@@ -42,7 +43,7 @@ router.post(
  * @desc    Login user
  * @access  Public
  */
-router.post("/login", authRateLimiter, validateLogin, AuthController.login);
+router.post("/login", loginRateLimiter, validateLogin, AuthController.login);
 
 /**
  * @route   POST /api/auth/verify-email
@@ -50,6 +51,17 @@ router.post("/login", authRateLimiter, validateLogin, AuthController.login);
  * @access  Public
  */
 router.post("/verify-email", authRateLimiter, AuthController.verifyEmail);
+
+/**
+ * @route   POST /api/auth/resend-verification
+ * @desc    Resend email verification
+ * @access  Public
+ */
+router.post(
+  "/resend-verification",
+  authRateLimiter,
+  AuthController.resendVerification,
+);
 
 /**
  * @route   POST /api/auth/refresh-token

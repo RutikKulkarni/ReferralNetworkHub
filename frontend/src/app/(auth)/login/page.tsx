@@ -2,26 +2,42 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { LoginForm } from "@/features/auth";
 import type { LoginCredentials } from "@/features/auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/button/theme-toggle";
 
 function LoginContent() {
+  const { login } = useAuth();
+  const router = useRouter();
+
   const handleLogin = async (credentials: LoginCredentials) => {
     try {
-      // TODO: Replace with actual API call
-      console.log("Login attempt:", { ...credentials, password: "***" });
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await login(credentials);
       toast.success("Login successful!");
-      // TODO: Redirect after successful login
-      // window.location.href = "/profile";
+      router.push("/dashboard"); // Redirect to dashboard after login
     } catch (error) {
+      const err = error as { message?: string };
       console.error("Login failed:", error);
-      toast.error("Login failed. Please try again.");
+      
+      // Show error with line breaks for better readability
+      const errorMessage = err.message || "Login failed. Please try again.";
+      
+      // If error has multiple lines (from backend errors array), show each on new line
+      if (errorMessage.includes('\n')) {
+        const errors = errorMessage.split('\n');
+        errors.forEach((errMsg, index) => {
+          setTimeout(() => {
+            toast.error(errMsg, { duration: 5000 });
+          }, index * 100); // Stagger toasts slightly
+        });
+      } else {
+        toast.error(errorMessage, { duration: 5000 });
+      }
     }
   };
 

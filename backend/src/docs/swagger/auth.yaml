@@ -23,7 +23,9 @@ paths:
                   type: string
                   format: password
                   minLength: 8
-                  description: Must contain uppercase, lowercase, number, and special character
+                  description: |
+                    Must contain uppercase, lowercase, number, and special character.
+                    Cannot contain your email, first name, or last name.
                   example: SecurePass@123
                 firstName:
                   type: string
@@ -67,7 +69,36 @@ paths:
                         type: string
                         example: 1h
         "400":
-          $ref: "#/components/responses/ValidationError"
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                passwordTooWeak:
+                  summary: Password requirements not met
+                  value:
+                    success: false
+                    message: Registration failed
+                    errors:
+                      - Password must be at least 8 characters long
+                      - Password must contain at least one uppercase letter
+                      - Password must contain at least one number
+                passwordContainsPersonalInfo:
+                  summary: Password contains personal information
+                  value:
+                    success: false
+                    message: Registration failed
+                    errors:
+                      - Password should not contain your first name
+                      - Password should not contain your email address
+                commonPassword:
+                  summary: Password is too common
+                  value:
+                    success: false
+                    message: Registration failed
+                    errors:
+                      - Password is too common. Please choose a more unique password
         "409":
           description: User already exists
           content:

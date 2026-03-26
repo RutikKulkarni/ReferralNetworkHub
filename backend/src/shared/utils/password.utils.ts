@@ -222,35 +222,46 @@ export class PasswordUtil {
 
   /**
    * Check if password contains user info
+   * Returns specific error messages for better UX
    */
   public static containsUserInfo(
     password: string,
     userInfo: { email?: string; firstName?: string; lastName?: string },
-  ): boolean {
+  ): { hasUserInfo: boolean; errors: string[] } {
     const passwordLower = password.toLowerCase();
+    const errors: string[] = [];
 
+    // Check email (local part before @)
     if (userInfo.email) {
       const emailLocal = userInfo.email.split("@")[0].toLowerCase();
-      if (passwordLower.includes(emailLocal)) {
-        return true;
+      if (emailLocal.length >= 3 && passwordLower.includes(emailLocal)) {
+        errors.push("Password should not contain your email address");
       }
     }
 
-    if (
-      userInfo.firstName &&
-      passwordLower.includes(userInfo.firstName.toLowerCase())
-    ) {
-      return true;
+    // Check first name
+    if (userInfo.firstName) {
+      const firstNameLower = userInfo.firstName.toLowerCase();
+      if (
+        firstNameLower.length >= 3 &&
+        passwordLower.includes(firstNameLower)
+      ) {
+        errors.push("Password should not contain your first name");
+      }
     }
 
-    if (
-      userInfo.lastName &&
-      passwordLower.includes(userInfo.lastName.toLowerCase())
-    ) {
-      return true;
+    // Check last name
+    if (userInfo.lastName) {
+      const lastNameLower = userInfo.lastName.toLowerCase();
+      if (lastNameLower.length >= 3 && passwordLower.includes(lastNameLower)) {
+        errors.push("Password should not contain your last name");
+      }
     }
 
-    return false;
+    return {
+      hasUserInfo: errors.length > 0,
+      errors,
+    };
   }
 
   /**
@@ -273,8 +284,11 @@ export class PasswordUtil {
       );
     }
 
-    if (userInfo && this.containsUserInfo(password, userInfo)) {
-      errors.push("Password should not contain your personal information");
+    if (userInfo) {
+      const userInfoCheck = this.containsUserInfo(password, userInfo);
+      if (userInfoCheck.hasUserInfo) {
+        errors.push(...userInfoCheck.errors);
+      }
     }
 
     return {

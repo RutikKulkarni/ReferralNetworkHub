@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { QueryClientProvider } from "@/providers/QueryClientProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
@@ -12,7 +13,8 @@ const fontInter = Inter({
 
 export const metadata = {
   title: "Referral Network Hub",
-  description: "Connect with professionals and get referrals for your dream job",
+  description:
+    "Connect with professionals and get referrals for your dream job",
   icons: {
     icon: "/favicon.ico",
   },
@@ -28,7 +30,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          fontInter.variable
+          fontInter.variable,
         )}
         suppressHydrationWarning
       >
@@ -38,9 +40,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <QueryClientProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryClientProvider>
           <Toaster position="top-center" />
         </ThemeProvider>
       </body>

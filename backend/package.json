@@ -36,6 +36,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tanstack/react-query": "^5.95.2",
+    "axios": "^1.13.6",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "connect-redis": "^9.0.0",

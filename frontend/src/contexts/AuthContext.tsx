@@ -87,7 +87,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       setAccessTokenState(null);
       localStorage.removeItem("user");
-      router.push("/login");
+
+      // Only redirect to login from protected pages, not public ones
+      const publicPaths = ["/", "/login", "/signup", "/verify-email", "/verify-email-pending"];
+      const currentPath = window.location.pathname;
+      if (!publicPaths.includes(currentPath)) {
+        router.push("/login");
+      }
     };
 
     window.addEventListener("auth:logout", handleLogout);

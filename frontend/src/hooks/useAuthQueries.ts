@@ -175,6 +175,7 @@ export function useCurrentUser() {
 
       return data.data;
     },
+    enabled: false, // Only fetch via refetch() — prevents 401 cascade on public pages
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: false, // Don't retry if 401
   });

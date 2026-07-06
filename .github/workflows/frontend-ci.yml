@@ -2,136 +2,117 @@ name: Frontend CI
 
 on:
   pull_request:
-    branches:
-      - main
-      - master
-      - develop
+    branches: [main, master, develop]
     paths:
       - "frontend/**"
       - ".github/workflows/frontend-ci.yml"
   push:
-    branches:
-      - main
-      - master
-      - develop
+    branches: [main, master, develop]
     paths:
       - "frontend/**"
 
+concurrency:
+  group: frontend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lint-and-typecheck:
-    name: Lint & Type Check
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          node-version: 20
+          cache: npm
           cache-dependency-path: frontend/package-lock.json
-
-      - name: Install dependencies
+      - run: npm ci
         working-directory: ./frontend
-        run: npm ci
-
-      - name: Run ESLint
+      - run: npm run lint
         working-directory: ./frontend
-        run: npm run lint
 
-      - name: Run Type Check
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
         working-directory: ./frontend
-        run: npm run typecheck
+      - run: npm run typecheck
+        working-directory: ./frontend
 
   test:
-    name: Run Tests
+    name: Tests
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          node-version: 20
+          cache: npm
           cache-dependency-path: frontend/package-lock.json
-
-      - name: Install dependencies
+      - run: npm ci
         working-directory: ./frontend
-        run: npm ci
-
-      - name: Run Tests
+      - run: npm test
         working-directory: ./frontend
-        run: npm test
 
-  build-check:
-    name: Build Check
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    needs: [lint-and-typecheck, test]
-
+    needs: [lint, typecheck, test]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20.x
-          cache: "npm"
+          node-version: 20
+          cache: npm
           cache-dependency-path: frontend/package-lock.json
-
-      - name: Install dependencies
+      - run: npm ci
         working-directory: ./frontend
-        run: npm ci
-
-      - name: Build application
+      - run: npm run build
         working-directory: ./frontend
-        run: npm run build
         env:
           SKIP_ENV_VALIDATION: true
 
-  summary:
-    name: CI Summary
+  audit:
+    name: Security Audit
     runs-on: ubuntu-latest
-    needs: [lint-and-typecheck, test, build-check]
-    if: always()
-
     steps:
-      - name: Check CI Results
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm audit --audit-level=moderate
+        working-directory: ./frontend
+        continue-on-error: true
+
+  summary:
+    name: Frontend CI Summary
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck, test, build, audit]
+    if: always()
+    steps:
+      - name: Check results
         run: |
-          echo "Frontend CI Pipeline Summary"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Lint & Type Check: ${{ needs.lint-and-typecheck.result }}"
-          echo "Tests: ${{ needs.test.result }}"
-          echo "Build Check: ${{ needs.build-check.result }}"
+          echo "Frontend CI Results"
+          echo "━━━━━━━━━━━━━━━━━━"
+          echo "Lint:       ${{ needs.lint.result }}"
+          echo "Typecheck:  ${{ needs.typecheck.result }}"
+          echo "Tests:      ${{ needs.test.result }}"
+          echo "Build:      ${{ needs.build.result }}"
+          echo "Audit:      ${{ needs.audit.result }}"
 
-          if [ "${{ needs.lint-and-typecheck.result }}" != "success" ]; then
-            echo "❌ CI Failed: Fix linting and type errors before merging"
+          if [ "${{ needs.lint.result }}" != "success" ] || \
+             [ "${{ needs.typecheck.result }}" != "success" ] || \
+             [ "${{ needs.test.result }}" != "success" ] || \
+             [ "${{ needs.build.result }}" != "success" ]; then
+            echo "CI failed"
             exit 1
           fi
 
-          if [ "${{ needs.test.result }}" != "success" ]; then
-            echo "❌ CI Failed: Fix failing tests before merging"
-            exit 1
-          fi
-
-          if [ "${{ needs.build-check.result }}" != "success" ]; then
-            echo "❌ CI Failed: Fix build errors before merging"
-            exit 1
-          fi
-
-          echo "✅ All checks passed! Ready to merge."
+          echo "All checks passed"

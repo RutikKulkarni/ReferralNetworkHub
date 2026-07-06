@@ -1,6 +1,13 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosError } from "axios";
 import type { ApiResponse } from "@/types/auth.types";
 
+// Helper to read CSRF token from cookie
+function getCsrfToken(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const match = document.cookie.match(/csrf-token=([^;]+)/);
+  return match?.[1];
+}
+
 // Create axios instance
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
@@ -25,11 +32,18 @@ export const clearAccessToken = () => {
   accessToken = null;
 };
 
-// Request interceptor - Add access token to headers
+// Request interceptor - Add access token and CSRF token to headers
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (accessToken && config.headers) {
       config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    // Add CSRF token for state-changing requests
+    if (config.method && ["post", "put", "delete", "patch"].includes(config.method)) {
+      const csrfToken = getCsrfToken();
+      if (csrfToken) {
+        config.headers["X-CSRF-Token"] = csrfToken;
+      }
     }
     return config;
   },

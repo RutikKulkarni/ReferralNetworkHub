@@ -18,3 +18,6 @@ export {
   authRateLimiter,
   loginRateLimiter,
 } from "./rateLimiter.middleware";
+
+// CSRF middleware
+export { csrfSetCookie, csrfValidate } from "./csrf.middleware";

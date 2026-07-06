@@ -18,6 +18,7 @@ import adminRoutes from "./modules/admin/routes/admin.routes";
 import { errorHandler } from "./modules/auth/middleware";
 import { ResponseUtil } from "./shared/utils";
 import { globalRateLimiter } from "./shared/middleware/rateLimiter.middleware";
+import { csrfSetCookie, csrfValidate } from "./shared/middleware/csrf.middleware";
 
 const app: Application = express();
 
@@ -36,6 +37,9 @@ app.use(
 
 // Cookie parser middleware
 app.use(cookieParser());
+
+// CSRF protection - set cookie on every response
+app.use(csrfSetCookie);
 
 // Body parsing middleware
 app.use(express.json({ limit: config.upload.maxFileSize }));
@@ -92,6 +96,9 @@ app.get("/health", (req: Request, res: Response) => {
     environment: config.env,
   });
 });
+
+// CSRF validation for state-changing API requests
+app.use("/api", csrfValidate);
 
 // API routes
 app.use("/api/auth", authRoutes);

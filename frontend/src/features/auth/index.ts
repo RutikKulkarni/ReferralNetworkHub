@@ -19,6 +19,16 @@ export { SignupForm } from "./signup";
 export type { SignupFormProps, SignupData } from "./signup";
 export { defaultSignupData } from "./signup";
 
+// Forgot Password exports
+export { ForgotPasswordForm } from "./forgot-password";
+export type { ForgotPasswordFormProps, ForgotPasswordData } from "./forgot-password";
+export { defaultForgotPasswordData } from "./forgot-password";
+
+// Reset Password exports
+export { ResetPasswordForm } from "./reset-password";
+export type { ResetPasswordFormProps, ResetPasswordData } from "./reset-password";
+export { defaultResetPasswordData } from "./reset-password";
+
 // Re-export config functions with namespaced names to avoid conflicts
 export {
   fieldTypeMappings as loginFieldTypeMappings,
@@ -35,3 +45,19 @@ export {
   createFieldConfigurations as createSignupFieldConfigurations,
   createFormSections as createSignupFormSections,
 } from "./signup";
+
+export {
+  fieldTypeMappings as forgotPasswordFieldTypeMappings,
+  optionalFields as forgotPasswordOptionalFields,
+  createSchemaOverrides as createForgotPasswordSchemaOverrides,
+  createFieldConfigurations as createForgotPasswordFieldConfigurations,
+  createFormSections as createForgotPasswordFormSections,
+} from "./forgot-password";
+
+export {
+  fieldTypeMappings as resetPasswordFieldTypeMappings,
+  optionalFields as resetPasswordOptionalFields,
+  createSchemaOverrides as createResetPasswordSchemaOverrides,
+  createFieldConfigurations as createResetPasswordFieldConfigurations,
+  createFormSections as createResetPasswordFormSections,
+} from "./reset-password";

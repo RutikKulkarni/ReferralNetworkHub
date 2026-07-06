@@ -1,13 +1,35 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Icons } from "@/components/icons";
+
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // TODO: Add authentication redirect logic like legacy
-  // const { user, loading } = useAuth();
-  // Redirect authenticated users away from auth pages
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  if (isLoading) {
+    return (
+      <div className="relative flex min-h-screen flex-col items-center justify-center">
+        <Icons.spinner className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="relative flex min-h-screen flex-col">

@@ -124,6 +124,14 @@ function LoginContent() {
           </Link>
         </p>
         <p className="px-8 text-center text-sm text-muted-foreground">
+          <Link
+            href="/forgot-password"
+            className="underline underline-offset-4 hover:text-primary"
+          >
+            Forgot password?
+          </Link>
+        </p>
+        <p className="px-8 text-center text-sm text-muted-foreground">
           Need to verify your email?{" "}
           <Link
             href="/verify-email"

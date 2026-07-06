@@ -158,6 +158,62 @@ export function useRefreshToken() {
 }
 
 /**
+ * Forgot Password Mutation
+ */
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      try {
+        const { data } = await api.post<ApiResponse<{ message: string }>>(
+          "/auth/forgot-password",
+          { email },
+        );
+
+        if (!data.success) {
+          throw new Error(data.error || "Failed to send reset email");
+        }
+
+        return data.message;
+      } catch (error) {
+        throw new Error(formatApiError(error));
+      }
+    },
+  });
+}
+
+/**
+ * Reset Password Mutation
+ */
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: async ({
+      token,
+      email,
+      newPassword,
+    }: {
+      token: string;
+      email: string;
+      newPassword: string;
+    }) => {
+      try {
+        const { data } = await api.post<ApiResponse<{ message: string }>>(
+          "/auth/reset-password",
+          { token, email, newPassword },
+        );
+
+        if (!data.success) {
+          throw new Error(data.error || "Failed to reset password");
+        }
+
+        return data.message;
+      } catch (error) {
+        throw new Error(formatApiError(error));
+      }
+    },
+  });
+}
+
+/**
  * Get Current User Query
  */
 export function useCurrentUser() {

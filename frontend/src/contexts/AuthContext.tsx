@@ -8,6 +8,8 @@ import {
   useLogout as useLogoutMutation,
   useRefreshToken,
   useCurrentUser,
+  useForgotPassword as useForgotPasswordMutation,
+  useResetPassword as useResetPasswordMutation,
 } from "@/hooks/useAuthQueries";
 import { setAccessToken, clearAccessToken } from "@/lib/axios";
 import type {
@@ -22,6 +24,12 @@ interface AuthContextType extends AuthState {
   register: (userData: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<string>;
+  resetPassword: (
+    token: string,
+    email: string,
+    newPassword: string,
+  ) => Promise<string>;
 }
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
@@ -39,6 +47,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const registerMutation = useRegisterMutation();
   const logoutMutation = useLogoutMutation();
   const refreshTokenMutation = useRefreshToken();
+  const forgotPasswordMutation = useForgotPasswordMutation();
+  const resetPasswordMutation = useResetPasswordMutation();
   const { refetch: refetchUser } = useCurrentUser();
 
   // Derived state
@@ -89,7 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem("user");
 
       // Only redirect to login from protected pages, not public ones
-      const publicPaths = ["/", "/login", "/signup", "/verify-email", "/verify-email-pending"];
+      const publicPaths = ["/", "/login", "/signup", "/verify-email", "/verify-email-pending", "/forgot-password", "/reset-password"];
       const currentPath = window.location.pathname;
       if (!publicPaths.includes(currentPath)) {
         router.push("/login");
@@ -177,6 +187,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [refreshTokenMutation, refetchUser]);
 
+  // Forgot password function
+  const forgotPassword = React.useCallback(
+    async (email: string) => {
+      try {
+        const message = await forgotPasswordMutation.mutateAsync(email);
+        return message;
+      } catch (error) {
+        const err = error as { message?: string };
+        throw new Error(err.message || "Failed to send reset email");
+      }
+    },
+    [forgotPasswordMutation],
+  );
+
+  // Reset password function
+  const resetPassword = React.useCallback(
+    async (token: string, email: string, newPassword: string) => {
+      try {
+        const message = await resetPasswordMutation.mutateAsync({
+          token,
+          email,
+          newPassword,
+        });
+        return message;
+      } catch (error) {
+        const err = error as { message?: string };
+        throw new Error(err.message || "Failed to reset password");
+      }
+    },
+    [resetPasswordMutation],
+  );
+
   const value = React.useMemo(
     () => ({
       user,
@@ -187,6 +229,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       register,
       logout,
       refreshAuth,
+      forgotPassword,
+      resetPassword,
     }),
     [
       user,
@@ -197,6 +241,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       register,
       logout,
       refreshAuth,
+      forgotPassword,
+      resetPassword,
     ],
   );
 

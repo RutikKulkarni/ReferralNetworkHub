@@ -30,10 +30,8 @@ function SignupContent() {
 
       toast.success("Account created successfully! Please check your email.");
 
-      // Redirect to email verification pending page
-      router.push(
-        `/verify-email-pending?email=${encodeURIComponent(data.email)}`,
-      );
+      // Redirect to email verification page
+      router.push("/verify-email");
     } catch (error) {
       const err = error as { message?: string };
       console.error("Signup failed:", error);

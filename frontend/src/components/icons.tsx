@@ -37,6 +37,7 @@ import {
   FiGithub,
   FiLinkedin,
   FiUserPlus,
+  FiRefreshCw,
 } from "react-icons/fi";
 import { FaRegUser, FaGlobeAmericas } from "react-icons/fa";
 import { TbBuildingSkyscraper } from "react-icons/tb";
@@ -97,4 +98,5 @@ export const Icons = {
   upload: LuCloudUpload,
   globe: FaGlobeAmericas,
   file: FiFile,
+  refresh: FiRefreshCw,
 };

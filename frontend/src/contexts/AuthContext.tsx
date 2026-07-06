@@ -99,7 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem("user");
 
       // Only redirect to login from protected pages, not public ones
-      const publicPaths = ["/", "/login", "/signup", "/verify-email", "/verify-email-pending", "/forgot-password", "/reset-password"];
+      const publicPaths = ["/", "/login", "/signup", "/verify-email", "/forgot-password", "/reset-password"];
       const currentPath = window.location.pathname;
       if (!publicPaths.includes(currentPath)) {
         router.push("/login");

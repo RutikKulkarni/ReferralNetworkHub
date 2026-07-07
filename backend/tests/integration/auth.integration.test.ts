@@ -4,12 +4,39 @@
  * All database models are mocked — no real DB connection required.
  */
 
-// ---- Mock rate limiter FIRST to prevent Redis initialisation at module load ----
+// ---- Mock CSRF middleware FIRST (before app import) ----
+jest.mock("../../src/shared/middleware/csrf.middleware", () => {
+  const noop = (_req: any, _res: any, next: any) => next();
+  return {
+    csrfSetCookie: noop,
+    csrfValidate: noop,
+  };
+});
+
+// ---- Mock cookie utils to avoid COOKIE_ENCRYPTION_KEY requirement ----
+jest.mock("../../src/shared/utils/cookie.utils", () => {
+  return {
+    CookieUtil: {
+      setRefreshTokenCookie: jest.fn(),
+      clearRefreshTokenCookie: jest.fn(),
+      getRefreshTokenFromCookie: jest.fn().mockReturnValue(undefined),
+    },
+    __esModule: true,
+    default: {
+      setRefreshTokenCookie: jest.fn(),
+      clearRefreshTokenCookie: jest.fn(),
+      getRefreshTokenFromCookie: jest.fn().mockReturnValue(undefined),
+    },
+  };
+});
+
+// ---- Mock rate limiter to prevent Redis initialisation at module load ----
 jest.mock("../../src/shared/middleware/rateLimiter.middleware", () => {
   const noop = (_req: any, _res: any, next: any) => next();
   return {
     globalRateLimiter: noop,
     authRateLimiter: noop,
+    loginRateLimiter: noop,
     apiRateLimiter: noop,
     sensitiveRateLimiter: noop,
     profileUpdateRateLimiter: noop,

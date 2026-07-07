@@ -47,11 +47,11 @@ app.use(
   express.urlencoded({ extended: true, limit: config.upload.maxFileSize }),
 );
 
-// CSRF protection - validate token on incoming state-changing requests
-app.use(csrfValidate);
-
 // Rate limiting (global)
 app.use(globalRateLimiter);
+
+// CSRF protection - validate token on incoming state-changing requests
+app.use(csrfValidate);
 
 // Request logging in development
 if (config.env === "development") {

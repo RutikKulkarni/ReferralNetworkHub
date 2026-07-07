@@ -1,11 +1,6 @@
-/**
- * Authentication Controller
- * Handles all authentication-related HTTP requests
- */
-
 import { Request, Response, NextFunction } from "express";
 import { AuthService, InviteService } from "../services";
-import { DeviceUtil, ResponseUtil } from "../../../shared/utils";
+import { DeviceUtil, ResponseUtil, CookieUtil } from "../../../shared/utils";
 import {
   RegisterRequest,
   LoginRequest,
@@ -29,10 +24,14 @@ export class AuthController {
       // Register user
       const result = await AuthService.registerPublicUser(data, deviceInfo);
 
+      // Do NOT set cookie or return tokens - email verification required
       return ResponseUtil.created(
         res,
-        result,
-        SUCCESS_MESSAGES.USER_REGISTERED,
+        {
+          user: result.user,
+          verificationToken: result.verificationToken, // For testing - remove in production
+        },
+        result.message,
       );
     } catch (error) {
       next(error);
@@ -53,9 +52,17 @@ export class AuthController {
       // Register with invite
       const result = await AuthService.registerWithInvite(data, deviceInfo);
 
+      // Set refresh token cookie
+      CookieUtil.setRefreshTokenCookie(res, result.refreshToken);
+
+      // Return response without refresh token
       return ResponseUtil.created(
         res,
-        result,
+        {
+          user: result.user,
+          accessToken: result.accessToken,
+          expiresIn: result.expiresIn,
+        },
         SUCCESS_MESSAGES.INVITE_ACCEPTED,
       );
     } catch (error) {
@@ -83,6 +90,59 @@ export class AuthController {
       next(error);
     }
   }
+  public async verifyEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const { token } = req.body;
+
+      if (!token) {
+        throw new Error("Verification token is required");
+      }
+
+      // Verify email
+      const result = await AuthService.verifyEmail(token);
+
+      return ResponseUtil.success(
+        res,
+        {
+          user: result.user,
+        },
+        result.message,
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async resendVerification(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response | void> {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        throw new Error("Email is required");
+      }
+
+      // Resend verification email
+      const result = await AuthService.resendVerification(email);
+
+      return ResponseUtil.success(
+        res,
+        {
+          verificationToken: result.verificationToken, // For testing - remove in production
+        },
+        result.message,
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 
   public async login(
     req: Request,
@@ -98,7 +158,19 @@ export class AuthController {
       // Login
       const result = await AuthService.login(data, deviceInfo);
 
-      return ResponseUtil.success(res, result, SUCCESS_MESSAGES.LOGIN_SUCCESS);
+      // Set refresh token cookie
+      CookieUtil.setRefreshTokenCookie(res, result.refreshToken);
+
+      // Return response without refresh token
+      return ResponseUtil.success(
+        res,
+        {
+          user: result.user,
+          accessToken: result.accessToken,
+          expiresIn: result.expiresIn,
+        },
+        SUCCESS_MESSAGES.LOGIN_SUCCESS,
+      );
     } catch (error) {
       next(error);
     }
@@ -118,7 +190,19 @@ export class AuthController {
       // OAuth login/register
       const result = await AuthService.oauthLogin(data, deviceInfo);
 
-      return ResponseUtil.success(res, result, SUCCESS_MESSAGES.LOGIN_SUCCESS);
+      // Set refresh token cookie
+      CookieUtil.setRefreshTokenCookie(res, result.refreshToken);
+
+      // Return response without refresh token
+      return ResponseUtil.success(
+        res,
+        {
+          user: result.user,
+          accessToken: result.accessToken,
+          expiresIn: result.expiresIn,
+        },
+        SUCCESS_MESSAGES.LOGIN_SUCCESS,
+      );
     } catch (error) {
       next(error);
     }
@@ -130,10 +214,11 @@ export class AuthController {
     next: NextFunction,
   ): Promise<Response | void> {
     try {
-      const { refreshToken } = req.body;
+      // Get refresh token from cookie (not body)
+      const refreshToken = CookieUtil.getRefreshTokenFromCookie(req);
 
       if (!refreshToken) {
-        return ResponseUtil.badRequest(
+        return ResponseUtil.unauthorized(
           res,
           ERROR_MESSAGES.REFRESH_TOKEN_REQUIRED,
         );
@@ -148,9 +233,13 @@ export class AuthController {
         deviceInfo,
       );
 
+      // Set new refresh token cookie
+      CookieUtil.setRefreshTokenCookie(res, result.refreshToken);
+
+      // Return response without refresh token
       return ResponseUtil.success(
         res,
-        result,
+        { accessToken: result.accessToken },
         SUCCESS_MESSAGES.TOKEN_REFRESHED,
       );
     } catch (error) {
@@ -175,6 +264,9 @@ export class AuthController {
       }
 
       await AuthService.logout(String(userId), sessionId);
+
+      // Clear refresh token cookie
+      CookieUtil.clearRefreshTokenCookie(res);
 
       return ResponseUtil.success(res, null, SUCCESS_MESSAGES.LOGOUT_SUCCESS);
     } catch (error) {

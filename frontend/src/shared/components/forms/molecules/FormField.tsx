@@ -45,18 +45,23 @@ export const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
         {label !== null && label !== undefined && (
           <Label
             htmlFor={actualId}
-            className={cn(
-              "text-sm font-medium leading-none",
-              error && "text-destructive",
-              labelClassName,
-            )}
+            className={cn("text-sm font-medium leading-none", labelClassName)}
           >
             {label}
-            {required && <span className="ml-1 text-destructive">*</span>}
+            {required && (
+              <span
+                className={cn(
+                  "ml-1",
+                  error ? "text-destructive" : "text-foreground",
+                )}
+              >
+                *
+              </span>
+            )}
           </Label>
         )}
 
-        <div>
+        <div className="mt-1">
           {React.isValidElement(children)
             ? React.cloneElement(
                 children as React.ReactElement<Record<string, unknown>>,

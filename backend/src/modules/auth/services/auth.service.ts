@@ -12,7 +12,12 @@ import {
   InviteToken,
   EmailVerification,
 } from "../models";
-import { JWTUtil, PasswordUtil, ValidationUtil } from "../../../shared/utils";
+import {
+  JWTUtil,
+  PasswordUtil,
+  ValidationUtil,
+  HashUtil,
+} from "../../../shared/utils";
 import {
   USER_TYPES,
   SESSION_TRACKED_USER_TYPES,
@@ -21,12 +26,14 @@ import {
   EMAIL_VERIFICATION_STATUS,
   TOKEN_EXPIRY,
   SESSION_CONFIG,
+  SESSION_STATUS,
   ERROR_MESSAGES,
 } from "../../../constants";
 import {
   RegisterRequest,
   LoginRequest,
   LoginResponse,
+  RegisterResponse,
   DeviceInfo,
   AcceptInviteRequest,
   OAuthCallbackRequest,
@@ -40,8 +47,8 @@ export class AuthService {
    */
   public async registerPublicUser(
     data: RegisterRequest,
-    deviceInfo: DeviceInfo,
-  ): Promise<LoginResponse> {
+    _deviceInfo: DeviceInfo,
+  ): Promise<RegisterResponse> {
     const { email, password, firstName, lastName, phone, userType } = data;
 
     // Validate user type is public
@@ -71,7 +78,7 @@ export class AuthService {
     // Hash password
     const hashedPassword = await PasswordUtil.hashPassword(password);
 
-    // Create user
+    // Create user (inactive until email verified)
     const user = await User.create({
       userType,
       email,
@@ -80,19 +87,34 @@ export class AuthService {
       lastName,
       phone: phone || null,
       emailVerified: false,
-      isActive: true,
+      emailVerificationStatus: EMAIL_VERIFICATION_STATUS.PENDING,
+      isActive: false,
       isBlocked: false,
       tokenVersion: 0,
     });
 
-    // Generate access and refresh tokens
-    const tokens = await this.generateTokensForUser(user, deviceInfo);
+    // Generate verification token
+    const verificationToken = this.generateSecureToken();
+    const expiresAt = new Date(
+      Date.now() + this.parseExpiry(TOKEN_EXPIRY.ORG_ADMIN_INVITE),
+    );
+
+    await EmailVerification.create({
+      userId: user.id,
+      email: user.email,
+      token: verificationToken,
+      status: EMAIL_VERIFICATION_STATUS.PENDING,
+      expiresAt,
+    });
+
+    // TODO: Send verification email
+    // await EmailService.sendVerificationEmail(user.email, verificationToken);
 
     return {
       user: this.userToLoginResponseUser(user),
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
-      expiresIn: config.jwt.accessTokenExpiry,
+      message:
+        "Registration successful! Please check your email to verify your account.",
+      verificationToken, // For testing purposes - remove in production
     };
   }
 
@@ -372,9 +394,10 @@ export class AuthService {
     // Verify refresh token
     const decoded = JWTUtil.verifyRefreshToken(refreshToken);
 
-    // Find refresh token in database
+    // Find refresh token in database (stored as SHA-256 hash)
+    const tokenHash = HashUtil.sha256(refreshToken);
     const storedToken = await RefreshToken.findOne({
-      where: { token: refreshToken },
+      where: { token: tokenHash },
       include: [{ model: User, as: "user" }],
     });
 
@@ -411,6 +434,107 @@ export class AuthService {
   }
 
   /**
+   * Verify email address
+   */
+  public async verifyEmail(token: string): Promise<{
+    user: User;
+    message: string;
+  }> {
+    // Find verification token
+    const verification = await EmailVerification.findOne({
+      where: {
+        token,
+        status: EMAIL_VERIFICATION_STATUS.PENDING,
+      },
+      include: [{ model: User, as: "user" }],
+    });
+
+    if (!verification) {
+      throw new Error("Invalid or expired verification token");
+    }
+
+    // Check if expired
+    if (verification.isExpired()) {
+      await verification.expire();
+      throw new Error(
+        "Verification token has expired. Please request a new one.",
+      );
+    }
+
+    // Verify the email
+    await verification.verify();
+
+    // Update user
+    const user = await User.findByPk(verification.userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    user.emailVerified = true;
+    user.emailVerificationStatus = EMAIL_VERIFICATION_STATUS.VERIFIED;
+    user.isActive = true; // Activate user after email verification
+    await user.save();
+
+    return {
+      user,
+      message: "Email verified successfully! You can now login.",
+    };
+  }
+
+  /**
+   * Resend verification email
+   */
+  public async resendVerification(email: string): Promise<{
+    message: string;
+    verificationToken?: string;
+  }> {
+    // Find user by email
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      throw new Error(ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+
+    // Check if already verified
+    if (user.emailVerified) {
+      throw new Error("Email is already verified. You can login now.");
+    }
+
+    // Expire all pending verification tokens for this user
+    await EmailVerification.update(
+      { status: EMAIL_VERIFICATION_STATUS.EXPIRED },
+      {
+        where: {
+          userId: user.id,
+          status: EMAIL_VERIFICATION_STATUS.PENDING,
+        },
+      },
+    );
+
+    // Generate new verification token
+    const verificationToken = this.generateSecureToken();
+    const expiresAt = new Date(
+      Date.now() + this.parseExpiry(TOKEN_EXPIRY.ORG_ADMIN_INVITE),
+    );
+
+    await EmailVerification.create({
+      userId: user.id,
+      email: user.email,
+      token: verificationToken,
+      status: EMAIL_VERIFICATION_STATUS.PENDING,
+      expiresAt,
+    });
+
+    // TODO: Send verification email
+    // await EmailService.sendVerificationEmail(user.email, verificationToken);
+
+    return {
+      message: "Verification email sent! Please check your inbox.",
+      verificationToken, // For testing purposes - remove in production
+    };
+  }
+
+  /**
    * Logout user
    */
   public async logout(userId: string, sessionId: string): Promise<void> {
@@ -423,10 +547,10 @@ export class AuthService {
       await session.logout();
     }
 
-    // Revoke all refresh tokens for this session
+    // Revoke all refresh tokens for this session only
     await RefreshToken.update(
       { isRevoked: true, revokedAt: new Date() },
-      { where: { userId } },
+      { where: { userId, sessionId } },
     );
   }
 
@@ -453,7 +577,7 @@ export class AuthService {
       const activeSessions = await UserSession.count({
         where: {
           userId: user.id,
-          status: "active",
+          status: SESSION_STATUS.ACTIVE,
           expiresAt: { [Op.gt]: new Date() },
         },
       });
@@ -463,7 +587,7 @@ export class AuthService {
         const oldestSession = await UserSession.findOne({
           where: {
             userId: user.id,
-            status: "active",
+            status: SESSION_STATUS.ACTIVE,
           },
           order: [["lastActivityAt", "ASC"]],
         });
@@ -491,7 +615,7 @@ export class AuthService {
         userAgent: deviceInfo.userAgent,
         deviceId: `${deviceInfo.browser}-${deviceInfo.os}-${deviceInfo.deviceType}`,
         loginAt: new Date(),
-        status: "active",
+        status: SESSION_STATUS.ACTIVE,
         lastActivityAt: new Date(),
         expiresAt,
       });
@@ -510,7 +634,7 @@ export class AuthService {
       this.getUserPermissions(user.userType as UserType),
     );
 
-    // Store refresh token
+    // Store refresh token (hashed for security)
     const refreshTokenExpiry = new Date(
       Date.now() + this.parseExpiry(config.jwt.refreshTokenExpiry),
     );
@@ -518,7 +642,7 @@ export class AuthService {
     await RefreshToken.create({
       userId: user.id,
       sessionId: sessionId || "",
-      token: tokens.refreshToken,
+      token: HashUtil.sha256(tokens.refreshToken),
       expiresAt: refreshTokenExpiry,
       isRevoked: false,
     });

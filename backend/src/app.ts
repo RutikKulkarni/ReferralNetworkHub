@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import config from "./config";
 import { swaggerSpec } from "./config/swagger";
@@ -17,6 +18,7 @@ import adminRoutes from "./modules/admin/routes/admin.routes";
 import { errorHandler } from "./modules/auth/middleware";
 import { ResponseUtil } from "./shared/utils";
 import { globalRateLimiter } from "./shared/middleware/rateLimiter.middleware";
+import { csrfSetCookie, csrfValidate } from "./shared/middleware/csrf.middleware";
 
 const app: Application = express();
 
@@ -33,6 +35,12 @@ app.use(
   }),
 );
 
+// Cookie parser middleware
+app.use(cookieParser());
+
+// CSRF protection - set cookie on every response
+app.use(csrfSetCookie);
+
 // Body parsing middleware
 app.use(express.json({ limit: config.upload.maxFileSize }));
 app.use(
@@ -41,6 +49,9 @@ app.use(
 
 // Rate limiting (global)
 app.use(globalRateLimiter);
+
+// CSRF protection - validate token on incoming state-changing requests
+app.use(csrfValidate);
 
 // Request logging in development
 if (config.env === "development") {

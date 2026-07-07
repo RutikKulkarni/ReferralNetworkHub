@@ -20,6 +20,7 @@ export const BaseTextarea = React.forwardRef<
       ref={ref}
       rows={rows}
       className={className}
+      error={error}
       aria-invalid={error}
       {...props}
     />

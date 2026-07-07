@@ -65,7 +65,6 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
         const newCountryData = lookup.countries({
           alpha2: defaultCountry.toLowerCase(),
         })[0];
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- Initialization effect
         setCountryData(newCountryData);
         setDisplayFlag(defaultCountry.toLowerCase());
 

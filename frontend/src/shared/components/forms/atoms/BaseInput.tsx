@@ -21,6 +21,7 @@ export const BaseInput = React.forwardRef<HTMLInputElement, BaseInputProps>(
           ref={ref}
           type={type}
           className={className}
+          error={error}
           aria-invalid={error}
           {...props}
         />
@@ -38,6 +39,7 @@ export const BaseInput = React.forwardRef<HTMLInputElement, BaseInputProps>(
           ref={ref}
           type={type}
           className={`${prefix ? "pl-10" : ""} ${suffix ? "pr-10" : ""} ${className || ""}`}
+          error={error}
           aria-invalid={error}
           {...props}
         />

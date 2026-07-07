@@ -35,7 +35,12 @@ export const BaseSelect = React.forwardRef<HTMLButtonElement, BaseSelectProps>(
   ) => {
     return (
       <Select value={value} onValueChange={onValueChange} disabled={disabled}>
-        <SelectTrigger ref={ref} className={className} aria-invalid={error}>
+        <SelectTrigger
+          ref={ref}
+          className={className}
+          error={error}
+          aria-invalid={error}
+        >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

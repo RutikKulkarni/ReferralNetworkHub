@@ -142,11 +142,16 @@ export class User
       return { allowed: false, reason: "Account is blocked" };
     }
 
+    // Require email verification for all users except Platform admins
     if (
       !this.emailVerified &&
-      this.userType === USER_TYPES.ORGANIZATION_ADMIN
+      this.userType !== USER_TYPES.PLATFORM_SUPER_ADMIN &&
+      this.userType !== USER_TYPES.PLATFORM_ADMIN
     ) {
-      return { allowed: false, reason: "Email verification required" };
+      return {
+        allowed: false,
+        reason: "Email verification required. Please check your email.",
+      };
     }
 
     return { allowed: true };

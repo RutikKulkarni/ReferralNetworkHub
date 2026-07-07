@@ -2,32 +2,54 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { SignupForm } from "@/features/auth";
 import type { SignupData } from "@/features/auth";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserType } from "@/types/auth.types";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/button/theme-toggle";
 
 function SignupContent() {
+  const { register } = useAuth();
+  const router = useRouter();
+
   const handleSignup = async (data: SignupData) => {
     try {
-      // TODO: Replace with actual API call
-      console.log("Signup attempt:", {
-        ...data,
-        password: "***",
-        confirmPassword: "***",
+      // Call register with proper type conversion
+      // Default to JOB_SEEKER for public registration
+      await register({
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        userType: UserType.JOB_SEEKER, // Default user type for public signup
       });
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      toast.success(
-        `Account created successfully for ${data.firstName} ${data.lastName}!`,
-      );
-      // TODO: Redirect after successful signup
-      // window.location.href = "/login";
+
+      toast.success("Account created successfully! Please check your email.");
+
+      // Redirect to email verification page
+      router.push("/verify-email");
     } catch (error) {
+      const err = error as { message?: string };
       console.error("Signup failed:", error);
-      toast.error("Signup failed. Please try again.");
+
+      // Show error with line breaks for better readability
+      const errorMessage = err.message || "Signup failed. Please try again.";
+
+      // If error has multiple lines (from backend errors array), show each on new line
+      if (errorMessage.includes("\n")) {
+        const errors = errorMessage.split("\n");
+        errors.forEach((errMsg, index) => {
+          setTimeout(() => {
+            toast.error(errMsg, { duration: 5000 });
+          }, index * 100); // Stagger toasts slightly
+        });
+      } else {
+        toast.error(errorMessage, { duration: 5000 });
+      }
     }
   };
 

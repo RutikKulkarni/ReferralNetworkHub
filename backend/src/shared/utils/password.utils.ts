@@ -101,9 +101,11 @@ export class PasswordUtil {
 
   /**
    * Check for common passwords
+   * Expanded list of 100+ common passwords for better security
    */
   public static isCommonPassword(password: string): boolean {
     const commonPasswords = [
+      // Top 20 most common
       "password",
       "password123",
       "12345678",
@@ -124,6 +126,95 @@ export class PasswordUtil {
       "welcome",
       "login",
       "passw0rd",
+      "123456",
+      "password1",
+      "12345",
+      "123456789",
+      "111111",
+      "1234567890",
+      "1234567",
+      "qwerty123",
+      "000000",
+      "1234",
+      "123123",
+      "987654321",
+      "qwertyuiop",
+      "mynoob",
+      "123321",
+      "666666",
+      "18atcskd2w",
+      "7777777",
+      "1q2w3e4r",
+      "654321",
+      "555555",
+      "3rjs1la7qe",
+      "google",
+      "1q2w3e4r5t",
+      "123qwe",
+      "zxcvbnm",
+      "1q2w3e",
+      "Password",
+      "PASSWORD",
+      "pass",
+      "admin123",
+      "root",
+      "test",
+      "test123",
+      "user",
+      "default",
+      "guest",
+      "changeme",
+      "letmein",
+      "welcome123",
+      "football",
+      "soccer",
+      "basketball",
+      "superman",
+      "batman",
+      "michael",
+      "jennifer",
+      "jordan",
+      "michelle",
+      "daniel",
+      "charlie",
+      "starwars",
+      "princess",
+      "freedom",
+      "whatever",
+      "secret",
+      "ginger",
+      "summer",
+      "shadow",
+      "killer",
+      "hello",
+      "chocolate",
+      "pussy",
+      "access",
+      "ninja",
+      "mustang",
+      "computer",
+      "ranger",
+      "chicken",
+      "buster",
+      "hunter",
+      "soccer1",
+      "thomas",
+      "tigger",
+      "robert",
+      "pepper",
+      "1111",
+      "2222",
+      "11111111",
+      "winner",
+      "thunder",
+      "maggie",
+      "pepper",
+      "orange",
+      "copper",
+      "coffee",
+      "diamond",
+      "cookie",
+      "banana",
     ];
 
     return commonPasswords.includes(password.toLowerCase());
@@ -131,35 +222,46 @@ export class PasswordUtil {
 
   /**
    * Check if password contains user info
+   * Returns specific error messages for better UX
    */
   public static containsUserInfo(
     password: string,
     userInfo: { email?: string; firstName?: string; lastName?: string },
-  ): boolean {
+  ): { hasUserInfo: boolean; errors: string[] } {
     const passwordLower = password.toLowerCase();
+    const errors: string[] = [];
 
+    // Check email (local part before @)
     if (userInfo.email) {
       const emailLocal = userInfo.email.split("@")[0].toLowerCase();
-      if (passwordLower.includes(emailLocal)) {
-        return true;
+      if (emailLocal.length >= 3 && passwordLower.includes(emailLocal)) {
+        errors.push("Password should not contain your email address");
       }
     }
 
-    if (
-      userInfo.firstName &&
-      passwordLower.includes(userInfo.firstName.toLowerCase())
-    ) {
-      return true;
+    // Check first name
+    if (userInfo.firstName) {
+      const firstNameLower = userInfo.firstName.toLowerCase();
+      if (
+        firstNameLower.length >= 3 &&
+        passwordLower.includes(firstNameLower)
+      ) {
+        errors.push("Password should not contain your first name");
+      }
     }
 
-    if (
-      userInfo.lastName &&
-      passwordLower.includes(userInfo.lastName.toLowerCase())
-    ) {
-      return true;
+    // Check last name
+    if (userInfo.lastName) {
+      const lastNameLower = userInfo.lastName.toLowerCase();
+      if (lastNameLower.length >= 3 && passwordLower.includes(lastNameLower)) {
+        errors.push("Password should not contain your last name");
+      }
     }
 
-    return false;
+    return {
+      hasUserInfo: errors.length > 0,
+      errors,
+    };
   }
 
   /**
@@ -182,8 +284,11 @@ export class PasswordUtil {
       );
     }
 
-    if (userInfo && this.containsUserInfo(password, userInfo)) {
-      errors.push("Password should not contain your personal information");
+    if (userInfo) {
+      const userInfoCheck = this.containsUserInfo(password, userInfo);
+      if (userInfoCheck.hasUserInfo) {
+        errors.push(...userInfoCheck.errors);
+      }
     }
 
     return {

@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint
+    name: "[FE] Lint"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +35,7 @@ jobs:
         working-directory: ./frontend
 
   typecheck:
-    name: Type Check
+    name: "[FE] Type Check"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
         working-directory: ./frontend
 
   test:
-    name: Tests
+    name: "[FE] Tests"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,7 +65,7 @@ jobs:
         working-directory: ./frontend
 
   build:
-    name: Build
+    name: "[FE] Build"
     runs-on: ubuntu-latest
     needs: [lint, typecheck, test]
     steps:
@@ -83,7 +83,7 @@ jobs:
           SKIP_ENV_VALIDATION: true
 
   audit:
-    name: Security Audit
+    name: "[FE] Security Audit"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -94,28 +94,33 @@ jobs:
         working-directory: ./frontend
         continue-on-error: true
 
-  summary:
-    name: Frontend CI Summary
+  ci:
+    name: "[Frontend] CI"
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, test, build, audit]
     if: always()
+    needs: [lint, typecheck, test, build, audit]
     steps:
-      - name: Check results
+      - name: Verify all checks passed
         run: |
-          echo "Frontend CI Results"
-          echo "━━━━━━━━━━━━━━━━━━"
-          echo "Lint:       ${{ needs.lint.result }}"
-          echo "Typecheck:  ${{ needs.typecheck.result }}"
-          echo "Tests:      ${{ needs.test.result }}"
-          echo "Build:      ${{ needs.build.result }}"
-          echo "Audit:      ${{ needs.audit.result }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo " Frontend CI Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "  Lint:       ${{ needs.lint.result }}"
+          echo "  Typecheck:  ${{ needs.typecheck.result }}"
+          echo "  Tests:      ${{ needs.test.result }}"
+          echo "  Build:      ${{ needs.build.result }}"
+          echo "  Audit:      ${{ needs.audit.result }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
           if [ "${{ needs.lint.result }}" != "success" ] || \
              [ "${{ needs.typecheck.result }}" != "success" ] || \
              [ "${{ needs.test.result }}" != "success" ] || \
              [ "${{ needs.build.result }}" != "success" ]; then
-            echo "CI failed"
+            echo ""
+            echo "One or more checks failed."
             exit 1
           fi
 
-          echo "All checks passed"
+          echo ""
+          echo "All checks passed."

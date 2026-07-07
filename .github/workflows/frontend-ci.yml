@@ -11,6 +11,9 @@ on:
     paths:
       - "frontend/**"
 
+permissions:
+  contents: read
+
 concurrency:
   group: frontend-ci-${{ github.ref }}
   cancel-in-progress: true

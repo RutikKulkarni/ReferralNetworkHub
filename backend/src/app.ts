@@ -47,6 +47,9 @@ app.use(
   express.urlencoded({ extended: true, limit: config.upload.maxFileSize }),
 );
 
+// CSRF protection - validate token on incoming state-changing requests
+app.use(csrfValidate);
+
 // Rate limiting (global)
 app.use(globalRateLimiter);
 
@@ -96,9 +99,6 @@ app.get("/health", (req: Request, res: Response) => {
     environment: config.env,
   });
 });
-
-// CSRF validation for state-changing API requests
-app.use("/api", csrfValidate);
 
 // API routes
 app.use("/api/auth", authRoutes);
